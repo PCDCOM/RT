@@ -1,0 +1,75 @@
+.CSSEditTableGenerator {
+	margin:0px;padding:0px;
+	width:100%;
+	
+	-moz-border-radius-bottomleft:0px;
+	-webkit-border-bottom-left-radius:0px;
+	border-bottom-left-radius:0px;
+	
+	-moz-border-radius-bottomright:0px;
+	-webkit-border-bottom-right-radius:0px;
+	border-bottom-right-radius:0px;
+	
+	-moz-border-radius-topright:0px;
+	-webkit-border-top-right-radius:0px;
+	border-top-right-radius:0px;
+	
+	-moz-border-radius-topleft:0px;
+	-webkit-border-top-left-radius:0px;
+	border-top-left-radius:0px;
+}.CSSEditTableGenerator table{
+	width:50%;
+	height:100%;
+	margin:0px;padding:0px;
+}.CSSEditTableGenerator tr:last-child td:last-child {
+	-moz-border-radius-bottomright:0px;
+	-webkit-border-bottom-right-radius:0px;
+	border-bottom-right-radius:0px;
+}
+.CSSEditTableGenerator table tr:first-child td:first-child {
+	-moz-border-radius-topleft:0px;
+	-webkit-border-top-left-radius:0px;
+	border-top-left-radius:0px;
+}
+.CSSEditTableGenerator table tr:first-child td:last-child {
+	-moz-border-radius-topright:0px;
+	-webkit-border-top-right-radius:0px;
+	border-top-right-radius:0px;
+}.CSSEditTableGenerator tr:last-child td:first-child{
+	-moz-border-radius-bottomleft:0px;
+	-webkit-border-bottom-left-radius:0px;
+	border-bottom-left-radius:0px;
+}.CSSEditTableGenerator tr:hover td{
+	
+}
+.CSSEditTableGenerator tr:nth-child(odd){ background-color:#aad4ff; }
+.CSSEditTableGenerator tr:nth-child(even)    { background-color:#cde2f7; }.CSSEditTableGenerator td{
+	vertical-align:middle;
+	
+	
+	
+	border-width:0px 1px 1px 0px;
+	text-align:left;
+	padding:7px;
+	font-size:10px;
+	font-family:Arial;
+	font-weight:normal;
+	color:#000000;
+}.CSSEditTableGenerator tr:last-child td{
+	border-width:0px 1px 0px 0px;
+}.CSSEditTableGenerator tr td:last-child{
+	border-width:0px 0px 1px 0px;
+}.CSSEditTableGenerator tr:last-child td:last-child{
+	border-width:0px 0px 0px 0px;
+}
+.CSSEditTableGenerator tr:first-child td:first-child{
+	border-width:0px 0px 1px 0px;
+}
+.CSSEditTableGenerator tr:first-child td:last-child{
+	border-width:0px 0px 1px 1px;
+}
+.CSSEditTableGenerator tr td:first-child{
+	font-size:13px;
+	font-family:Arial;
+	font-weight:bold;
+}

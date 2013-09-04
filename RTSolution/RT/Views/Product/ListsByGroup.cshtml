@@ -1,0 +1,21 @@
+﻿@model IEnumerable<RT.Models.Product>
+
+@{
+    Layout = null;
+}
+
+  @foreach (var item in Model.Where(i => i.MasterProductID == null))
+  {
+      <li class="color-1" onclick="addRowRecord('@item.Name,@item.ActualPrice,@item.SecondSellingPrice' ,@item.Id) ;return false;">
+         @item.Name
+      </li>
+
+    foreach (var inneritem in Model.Where(j => j.MasterProductID == item.Id))
+    {
+        //TODO: Need to parse as two decimal place strings
+    <li class="color-4" onclick="addRowRecord('@inneritem.Name,@inneritem.ActualPrice,@inneritem.SecondSellingPrice' ,@inneritem.Id) ;return false;">
+        @inneritem.Name
+    </li>
+
+    }
+  }

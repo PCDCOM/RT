@@ -1,0 +1,407 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="RestaurantModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityContainer Name="RestaurantModelStoreContainer">
+          <EntitySet Name="Bill" EntityType="RestaurantModel.Store.Bill" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Order" EntityType="RestaurantModel.Store.Order" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="OrderedProduct" EntityType="RestaurantModel.Store.OrderedProduct" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Product" EntityType="RestaurantModel.Store.Product" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="ProductGroup" EntityType="RestaurantModel.Store.ProductGroup" store:Type="Tables" Schema="dbo" />
+          <AssociationSet Name="FK_Bill_Order" Association="RestaurantModel.Store.FK_Bill_Order">
+            <End Role="Order" EntitySet="Order" />
+            <End Role="Bill" EntitySet="Bill" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderedProducts_Order" Association="RestaurantModel.Store.FK_OrderedProducts_Order">
+            <End Role="Order" EntitySet="Order" />
+            <End Role="OrderedProduct" EntitySet="OrderedProduct" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderedProducts_Product" Association="RestaurantModel.Store.FK_OrderedProducts_Product">
+            <End Role="Product" EntitySet="Product" />
+            <End Role="OrderedProduct" EntitySet="OrderedProduct" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Product_ProductGroup" Association="RestaurantModel.Store.FK_Product_ProductGroup">
+            <End Role="ProductGroup" EntitySet="ProductGroup" />
+            <End Role="Product" EntitySet="Product" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Bill">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="OrderId" Type="bigint" />
+          <Property Name="TotalAmount" Type="money" />
+          <Property Name="PaidAmount" Type="money" />
+          <Property Name="BalanceAmount" Type="money" />
+          <Property Name="CreatedBy" Type="uniqueidentifier" />
+          <Property Name="CreatedDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Order">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="Status" Type="tinyint" />
+          <Property Name="TotalAmount" Type="money" />
+          <Property Name="Seats" Type="varchar" MaxLength="200" />
+          <Property Name="CreatedBy" Type="uniqueidentifier" />
+        </EntityType>
+        <EntityType Name="OrderedProduct">
+          <Key>
+            <PropertyRef Name="OrderId" />
+            <PropertyRef Name="ProductId" />
+            <PropertyRef Name="Type" />
+          </Key>
+          <Property Name="OrderId" Type="bigint" Nullable="false" />
+          <Property Name="ProductId" Type="bigint" Nullable="false" />
+          <Property Name="Quantity" Type="int" />
+          <Property Name="Price" Type="money" />
+          <Property Name="Type" Type="int" Nullable="false" />
+          <Property Name="CreatedBy" Type="uniqueidentifier" />
+        </EntityType>
+        <EntityType Name="Product">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="ProductGroupID" Type="bigint" Nullable="false" />
+          <Property Name="MasterProductID" Type="bigint" />
+          <Property Name="Name" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="Details" Type="text" Nullable="false" />
+          <Property Name="ExpiryDate" Type="date" />
+          <Property Name="Stock" Type="int" />
+          <Property Name="LowStockRange" Type="int" />
+          <Property Name="ActualPrice" Type="money" />
+          <Property Name="FirstSellingPrice" Type="money" />
+          <Property Name="SecondSellingPrice" Type="money" />
+          <Property Name="ThirdSellingPrice" Type="money" />
+          <Property Name="FourthSellingPrice" Type="money" />
+          <Property Name="CreatedBy" Type="varchar" Nullable="false" MaxLength="25" />
+          <Property Name="CreatedDate" Type="date" Nullable="false" />
+          <Property Name="ModifiedDate" Type="date" Nullable="false" />
+          <Property Name="IsQuickProduct" Type="bit" Nullable="false" />
+          <Property Name="Remarks" Type="text" />
+        </EntityType>
+        <EntityType Name="ProductGroup">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="Details" Type="text" />
+          <Property Name="Status" Type="bit" Nullable="false" />
+          <Property Name="CreatedBy" Type="varchar" Nullable="false" MaxLength="25" />
+          <Property Name="CreatedDate" Type="date" Nullable="false" />
+          <Property Name="ModifiedDate" Type="date" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Bill_Order">
+          <End Role="Order" Type="RestaurantModel.Store.Order" Multiplicity="0..1" />
+          <End Role="Bill" Type="RestaurantModel.Store.Bill" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Order">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Bill">
+              <PropertyRef Name="OrderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderedProducts_Order">
+          <End Role="Order" Type="RestaurantModel.Store.Order" Multiplicity="1" />
+          <End Role="OrderedProduct" Type="RestaurantModel.Store.OrderedProduct" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Order">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="OrderedProduct">
+              <PropertyRef Name="OrderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderedProducts_Product">
+          <End Role="Product" Type="RestaurantModel.Store.Product" Multiplicity="1" />
+          <End Role="OrderedProduct" Type="RestaurantModel.Store.OrderedProduct" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="OrderedProduct">
+              <PropertyRef Name="ProductId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Product_ProductGroup">
+          <End Role="ProductGroup" Type="RestaurantModel.Store.ProductGroup" Multiplicity="1" />
+          <End Role="Product" Type="RestaurantModel.Store.Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProductGroup">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Product">
+              <PropertyRef Name="ProductGroupID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="RestaurantModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="RestaurantEntities" p1:LazyLoadingEnabled="true">
+          <EntitySet Name="Bills" EntityType="RestaurantModel.Bill" />
+          <EntitySet Name="Orders" EntityType="RestaurantModel.Order" />
+          <EntitySet Name="OrderedProducts" EntityType="RestaurantModel.OrderedProduct" />
+          <EntitySet Name="Products" EntityType="RestaurantModel.Product" />
+          <EntitySet Name="ProductGroups" EntityType="RestaurantModel.ProductGroup" />
+          <AssociationSet Name="FK_Bill_Order" Association="RestaurantModel.FK_Bill_Order">
+            <End Role="Order" EntitySet="Orders" />
+            <End Role="Bill" EntitySet="Bills" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderedProducts_Order" Association="RestaurantModel.FK_OrderedProducts_Order">
+            <End Role="Order" EntitySet="Orders" />
+            <End Role="OrderedProduct" EntitySet="OrderedProducts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderedProducts_Product" Association="RestaurantModel.FK_OrderedProducts_Product">
+            <End Role="Product" EntitySet="Products" />
+            <End Role="OrderedProduct" EntitySet="OrderedProducts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Product_ProductGroup" Association="RestaurantModel.FK_Product_ProductGroup">
+            <End Role="ProductGroup" EntitySet="ProductGroups" />
+            <End Role="Product" EntitySet="Products" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Bill">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="OrderId" Type="Int64" />
+          <Property Name="TotalAmount" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="PaidAmount" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="BalanceAmount" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="CreatedBy" Type="Guid" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Order" Relationship="RestaurantModel.FK_Bill_Order" FromRole="Bill" ToRole="Order" />
+        </EntityType>
+        <EntityType Name="Order">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="Status" Type="Byte" />
+          <Property Name="TotalAmount" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="Seats" Type="String" MaxLength="200" Unicode="false" FixedLength="false" />
+          <Property Name="CreatedBy" Type="Guid" />
+          <NavigationProperty Name="Bills" Relationship="RestaurantModel.FK_Bill_Order" FromRole="Order" ToRole="Bill" />
+          <NavigationProperty Name="OrderedProducts" Relationship="RestaurantModel.FK_OrderedProducts_Order" FromRole="Order" ToRole="OrderedProduct" />
+        </EntityType>
+        <EntityType Name="OrderedProduct">
+          <Key>
+            <PropertyRef Name="OrderId" />
+            <PropertyRef Name="ProductId" />
+            <PropertyRef Name="Type" />
+          </Key>
+          <Property Name="OrderId" Type="Int64" Nullable="false" />
+          <Property Name="ProductId" Type="Int64" Nullable="false" />
+          <Property Name="Quantity" Type="Int32" />
+          <Property Name="Price" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="Type" Type="Int32" Nullable="false" />
+          <Property Name="CreatedBy" Type="Guid" />
+          <NavigationProperty Name="Order" Relationship="RestaurantModel.FK_OrderedProducts_Order" FromRole="OrderedProduct" ToRole="Order" />
+          <NavigationProperty Name="Product" Relationship="RestaurantModel.FK_OrderedProducts_Product" FromRole="OrderedProduct" ToRole="Product" />
+        </EntityType>
+        <EntityType Name="Product">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="ProductGroupID" Type="Int64" Nullable="false" />
+          <Property Name="MasterProductID" Type="Int64" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="Details" Type="String" Nullable="false" MaxLength="Max" Unicode="false" FixedLength="false" />
+          <Property Name="ExpiryDate" Type="DateTime" Precision="0" />
+          <Property Name="Stock" Type="Int32" />
+          <Property Name="LowStockRange" Type="Int32" />
+          <Property Name="ActualPrice" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="FirstSellingPrice" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="SecondSellingPrice" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="ThirdSellingPrice" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="FourthSellingPrice" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="CreatedBy" Type="String" Nullable="false" MaxLength="25" Unicode="false" FixedLength="false" />
+          <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="ModifiedDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="IsQuickProduct" Type="Boolean" Nullable="false" />
+          <Property Name="Remarks" Type="String" MaxLength="Max" Unicode="false" FixedLength="false" />
+          <NavigationProperty Name="OrderedProducts" Relationship="RestaurantModel.FK_OrderedProducts_Product" FromRole="Product" ToRole="OrderedProduct" />
+          <NavigationProperty Name="ProductGroup" Relationship="RestaurantModel.FK_Product_ProductGroup" FromRole="Product" ToRole="ProductGroup" />
+        </EntityType>
+        <EntityType Name="ProductGroup">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="Details" Type="String" MaxLength="Max" Unicode="false" FixedLength="false" />
+          <Property Name="Status" Type="Boolean" Nullable="false" />
+          <Property Name="CreatedBy" Type="String" Nullable="false" MaxLength="25" Unicode="false" FixedLength="false" />
+          <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="ModifiedDate" Type="DateTime" Nullable="false" Precision="0" />
+          <NavigationProperty Name="Products" Relationship="RestaurantModel.FK_Product_ProductGroup" FromRole="ProductGroup" ToRole="Product" />
+        </EntityType>
+        <Association Name="FK_Bill_Order">
+          <End Role="Order" Type="RestaurantModel.Order" Multiplicity="0..1" />
+          <End Role="Bill" Type="RestaurantModel.Bill" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Order">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Bill">
+              <PropertyRef Name="OrderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderedProducts_Order">
+          <End Role="Order" Type="RestaurantModel.Order" Multiplicity="1" />
+          <End Role="OrderedProduct" Type="RestaurantModel.OrderedProduct" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Order">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="OrderedProduct">
+              <PropertyRef Name="OrderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderedProducts_Product">
+          <End Role="Product" Type="RestaurantModel.Product" Multiplicity="1" />
+          <End Role="OrderedProduct" Type="RestaurantModel.OrderedProduct" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="OrderedProduct">
+              <PropertyRef Name="ProductId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Product_ProductGroup">
+          <End Role="ProductGroup" Type="RestaurantModel.ProductGroup" Multiplicity="1" />
+          <End Role="Product" Type="RestaurantModel.Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProductGroup">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Product">
+              <PropertyRef Name="ProductGroupID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="RestaurantModelStoreContainer" CdmEntityContainer="RestaurantEntities">
+          <EntitySetMapping Name="Bills">
+            <EntityTypeMapping TypeName="RestaurantModel.Bill">
+              <MappingFragment StoreEntitySet="Bill">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="OrderId" ColumnName="OrderId" />
+                <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
+                <ScalarProperty Name="PaidAmount" ColumnName="PaidAmount" />
+                <ScalarProperty Name="BalanceAmount" ColumnName="BalanceAmount" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Orders">
+            <EntityTypeMapping TypeName="RestaurantModel.Order">
+              <MappingFragment StoreEntitySet="Order">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
+                <ScalarProperty Name="Seats" ColumnName="Seats" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OrderedProducts">
+            <EntityTypeMapping TypeName="RestaurantModel.OrderedProduct">
+              <MappingFragment StoreEntitySet="OrderedProduct">
+                <ScalarProperty Name="OrderId" ColumnName="OrderId" />
+                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Products">
+            <EntityTypeMapping TypeName="RestaurantModel.Product">
+              <MappingFragment StoreEntitySet="Product">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="ProductGroupID" ColumnName="ProductGroupID" />
+                <ScalarProperty Name="MasterProductID" ColumnName="MasterProductID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Details" ColumnName="Details" />
+                <ScalarProperty Name="ExpiryDate" ColumnName="ExpiryDate" />
+                <ScalarProperty Name="Stock" ColumnName="Stock" />
+                <ScalarProperty Name="LowStockRange" ColumnName="LowStockRange" />
+                <ScalarProperty Name="ActualPrice" ColumnName="ActualPrice" />
+                <ScalarProperty Name="FirstSellingPrice" ColumnName="FirstSellingPrice" />
+                <ScalarProperty Name="SecondSellingPrice" ColumnName="SecondSellingPrice" />
+                <ScalarProperty Name="ThirdSellingPrice" ColumnName="ThirdSellingPrice" />
+                <ScalarProperty Name="FourthSellingPrice" ColumnName="FourthSellingPrice" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="IsQuickProduct" ColumnName="IsQuickProduct" />
+                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ProductGroups">
+            <EntityTypeMapping TypeName="RestaurantModel.ProductGroup">
+              <MappingFragment StoreEntitySet="ProductGroup">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Details" ColumnName="Details" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

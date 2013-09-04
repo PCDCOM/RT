@@ -1,0 +1,114 @@
+﻿@model RT.Models.Order
+@{
+    Layout = null;
+}
+@{Int32 inx = 0;}
+<table class="invoice-form-table">
+    <tbody>
+        <tr>
+            <td>
+                <div style="min-height: 275px; position: inherit;">
+
+                    <table id="dataTable">
+                        <tbody id="tBodyOrders">
+
+                            <tr>
+                                <th>
+                                    <input type="checkbox" name="allbox" class="csChkAll" style="margin: 0 0 0 4px" checked="checked">
+                                    S.No
+                </th>
+                                <th>Name</th>
+                                <th>Unit</th>
+                                <th>Qty</th>
+                                <th>Total</th>
+                                <th>
+                                    <img class="button-icon" src="./images/button-remove.png" onclick="removeAll();">
+                                </th>
+                            </tr>
+                            @if (Model.OrderedProducts.Count > 0)
+                            {
+                                foreach (var item in Model.OrderedProducts)
+                                {
+                                    //Todo: if it is a parcel row then change this TR class to parcellrow else nonparcelrow
+                                    inx++;
+                                    <tr class="old-order nonParcelRow plist_@inx">
+                                        <td>
+                                            @if(item.Type == 1){
+                                                <input disabled="disabled" type="checkbox" checked="checked" class="p_1 csChkParcel" id="parcelid"@inx />
+                                            }
+                                            else{
+                                                <input disabled="disabled" type="checkbox" class="p_1 csChkParcel" id="parcelid"@inx /> 
+                                            }
+                                        
+                                        </td>
+                                        <td>
+                                            <span style="text-decoration: line-through">
+                                                @Html.DisplayFor(modelItem => item.Product.Name)
+                                            </span>
+
+                                        </td>
+                                        <td>
+                                            <a href="#" class="number_button_unit_price">
+                                                @Html.DisplayFor(modelItem => item.Price)
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <a href="#" class="number_button_qty">
+                                                @Html.DisplayFor(modelItem => item.Quantity)
+                                            </a>
+                                        </td>
+                                        <td id='unitTotal'>
+                                           
+                                            <span> @(item.Price * item.Quantity) </span>
+                                        </td>
+                                        <td>
+                                            @{
+                                    /*Todo: Need to implement: when wiater clicks this images , he will see the popup with 'reason' message. and should hide this row from the table. Later cahsier will review and save or delete in bill page */
+                                            }
+                                            <a href='javascript:deleteDataRow("row-id-TEHC-176",1);'>
+                                                <img class="button-icon" src="images/button-remove.png"></a>
+                                        </td>
+                                    </tr>
+    
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+            </td>
+        </tr>
+        
+        <tr>
+            <td>
+                <div id="invoice-payment-form">
+                     <table class="invoice-payment-table" id="invoice-payment-table">
+                        <tbody>
+                            <tr>
+                                <td></td>
+                                <td>
+
+                                </td>
+                                <td></td>
+                                <td>
+                                    Total:
+                                    
+                                    @if (Model != null)
+                                    {
+                                        //Need to change total as read only
+                                        @Html.TextBoxFor(mode => Model.TotalAmount);
+                                        @Html.HiddenFor(model => Model.Id);
+                                        @Html.HiddenFor(model => Model.Seats);  
+                                    }
+                                </td>
+                            </tr>
+                            <tr>
+                                <td id="tdSeat" align="left" colspan="4"><label id="lblSeat"><font size="2">@Model.Seats</font></label></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </td>
+        </tr>
+    </tbody>
+</table>

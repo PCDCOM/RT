@@ -1,0 +1,101 @@
+*{
+margin:0;
+padding:0;
+}
+
+.waal-of-buttons{
+margin:10px auto;
+width:600px;
+}
+.cButton{
+float:left;
+width:110px;
+padding:0 10px 0 0;
+font:normal 11px trebuchet ms;
+margin:0;
+word-wrap:break-word;
+}
+.cButton li{
+list-style:none;
+padding:5px;
+color:#fff;
+text-transform:uppercase;
+margin:7px 0;
+border-radius:5px;
+font-weight:bold;
+text-align:center;
+cursor:pointer;
+box-shadow:2px 2px 2px #b295a2;
+-moz-box-shadow: 2px 2px 2px #b295a2;
+-webkit-box-shadow: 2px 2px 2px #b295a2;
+-o-box-shadow: 2px 2px 2px #b295a2;
+-ms-box-shadow: 2px 2px 2px #b295a2;
+filter: progid:DXImageTransform.Microsoft.Shadow(Strength=4, Direction=120, Color='#b295a2');
+text-shadow:3px 2px 3px #222;
+-moz-text-shadow:3px 2px 3px #222;
+-webkit-text-shadow:3px 2px 3px #222;
+filter: progid:DXImageTransform.Microsoft.DropShadow(OffX=3, OffY=2, Color='#555555');
+transition:all 1s;
+-moz-transition:all 1s; /* Firefox 4 */
+-webkit-transition:all 1s; /* Safari and Chrome */
+-o-transition:all 1s; /* Opera */
+}
+.cButton li:hover{
+box-shadow:2px 2px 5px #333;
+-moz-box-shadow: 2px 2px 5px #333;
+-webkit-box-shadow: 2px 2px 5px #333;
+-o-box-shadow: 2px 2px 5px #333;
+-ms-box-shadow: 2px 2px 5px #333;
+filter: progid:DXImageTransform.Microsoft.Shadow(Strength=4, Direction=120, Color='#333333');
+}
+.color-1{
+background:#1e1c68;
+font-size:12px;
+}
+.color-1:hover{
+background:#0a0944;
+}
+.color-2{
+background:#ff6d00;
+}
+.color-2:hover{
+background:#d75c01;
+}
+.color-3{
+background:#24b6aa;
+}
+.color-3:hover{
+background:#colorBt;
+}
+.color-4{
+background:#b60055;
+}
+.color-4:hover{
+background:#84003e;
+}
+.color-5{
+background:#92b600;
+}
+.color-5:hover{
+background:#6c8600;
+}
+
+.quantityButton li{
+list-style:none;
+padding:1px;
+color:#6c8600;
+text-transform:uppercase;
+margin:1px 0;
+text-align:center;
+cursor:pointer;
+
+}
+
+.quantityButton li:hover{
+box-shadow:1px 1px 2px #333;
+-moz-box-shadow: 1px 1px 2px #333;
+-webkit-box-shadow: 1px 1px 2px #333;
+-o-box-shadow: 1px 1px 2px #333;
+-ms-box-shadow: 1px 1px 2px #333;
+filter: progid:DXImageTransform.Microsoft.Shadow(Strength=4, Direction=120, Color='#6c8600');
+}

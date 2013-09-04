@@ -1,0 +1,67 @@
+﻿@model RT.Models.ProductGroup
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+    <h3>ProductGroup</h3>
+    <div class="CSSEditTableGenerator">
+    <table>
+        <tr>
+            <td>
+                <div class="display-label">Product Group</div>
+            </td>
+            <td>
+                <div class="display-field">
+                    @Html.DisplayFor(model => Model.Name)
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div class="display-label">ProductGroupDetails</div>
+            </td>
+            <td>
+                <div class="display-field">
+                    @Html.DisplayFor(model => Model.Details)
+                </div>
+            </td>
+        </tr>
+   
+        <tr>
+            <td>
+                <div class="display-label">CreatedBy</div>
+            </td>
+            <td>
+                <div class="display-field">
+                   @Html.DisplayFor(model => Model.CreatedBy) 
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div class="display-label">CreatedDate</div>
+            </td>
+            <td>
+                    <div class="display-field">
+                @Model.CreatedDate.ToShortDateString()</div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div class="display-label">ModifiedDate</div>
+            </td>
+            <td>
+                <div class="display-field">
+                    @Model.ModifiedDate.ToShortDateString()
+                </div>
+            </td>
+        </tr>
+        </table>
+    </div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id=Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

@@ -1,0 +1,46 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>@ViewBag.Title - My ASP.NET MVC Application</title>
+        <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+        <meta name="viewport" content="width=device-width" />
+        @Styles.Render("~/Content/css")
+        @Scripts.Render("~/bundles/modernizr")
+
+    </head>
+    <body>
+<div class="page">
+        <header>
+            <div id="title">
+                <h1>Hotel Ohmsakthi Bhavan</h1>
+            </div>
+            <div id="logindisplay">
+                @Html.Partial("_LogOnPartial")
+            </div>
+            <nav>
+                <ul id="menu">
+                    @if (Context.User.IsInRole("Admin") || Context.User.IsInRole("Manager"))
+                    {
+                    <li>@Html.ActionLink("Product group", "Index", "ProductGroup")</li>
+                    <li>@Html.ActionLink("Product sub group", "Index", "ProductSubGroup")</li>
+                    <li>@Html.ActionLink("Product", "Index", "Product")</li>
+                    }
+                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                    
+                </ul>
+            </nav>
+        </header>
+        <section id="main">
+            @RenderBody()
+        </section>
+        <footer>
+        </footer>
+    </div>
+
+
+
+
+        @RenderSection("scripts", required: false)
+    </body>
+</html>

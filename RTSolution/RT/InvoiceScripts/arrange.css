@@ -1,0 +1,135 @@
+.csHolderBlk{	
+	 width:580px;	 
+	 margin-left:10px;	
+	}
+	 .csSeatList {
+	 position:relative;
+	 margin:7px;
+	 }
+	 .p_left{
+	 	float: left;
+	 }
+	 .p_right{
+	 	float: left;
+	 }
+     .csSeatList a{
+	 	position: absolute;
+	 	font-size: 12px;
+	 	margin:26px 0 0 10px;
+	 }
+     .csSeatList li
+     {
+         list-style: none outside none;
+         position: absolute;   
+     }    
+     .csSeatList li:hover
+     {
+        background-color:yellow;      
+     } 
+	.csSeatList .seat{
+	 background:url("../images/available_seat_img.gif") no-repeat scroll 0 0 transparent;
+	 height:33px;
+	 width:33px;
+	 display:block;	 
+	 }
+      .csSeatList .selectedSeat
+      { 
+		background-image:url("../images/booked_seat_img.gif");      	 
+      }
+	   .csSeatList .selectingSeat
+      { 
+		background-image:url("../images/selected_seat_img.gif");      	 
+      }
+       .csSeatList .payingSeat,
+       .csSeatList .payingSeat1,
+       .csSeatList .payingSeat2,
+       .csSeatList .payingSeat3,
+       .csSeatList .payingSeat4,
+       .csSeatList .payingSeat5,
+       .csSeatList .payingSeat6,
+       .csSeatList .payingSeat7,
+       .csSeatList .payingSeat8
+      { 
+		background-image:url("../images/seats_set.png");
+		background-position: 0 -421px;      	 
+      }
+       .csSeatList .payingSeat2{
+       	background-position: 0 -526px; 
+       }
+        .csSeatList .payingSeat3{
+       	background-position: 0 -631px; 
+       }
+        .csSeatList .payingSeat4{
+       	background-position: 0 -736px; 
+       }
+        .csSeatList .payingSeat5{
+       	background-position: 0 -841px; 
+       }
+        .csSeatList .payingSeat6{
+       	background-position: 0 -946px; 
+       }
+        .csSeatList .payingSeat7{
+       	background-position: 0 -1051px; 
+       }
+        .csSeatList .payingSeat8{
+       	background-position: 0 -1156px; 
+       }
+       .csSeatList .csShowReorder
+      { 
+		background-image:url("../images/active_seat_img.gif");      	 
+      }
+	  .csSeatList .row-4, .csSeatList .row-3{
+		margin-top:px;
+	  }
+	 #seatDescription{
+	 padding:0px;
+	 }
+	  #seatDescription li{
+	  verticle-align:middle;	  
+	  list-style: none outside none;
+	   padding-left:35px;
+	  height:35px;
+	  float:left;
+	  }
+	  .csSeatWrapper{
+	  	background-color:#E0FDF5;
+	 	border:1px solid #eee;
+	 	padding:10px;
+	 	margin:0 10px 10px 0;
+	 	position: relative;
+	 	-webkit-box-shadow: 0 0 6px rgba(0,0,0,0.3) inset;
+	 	-moz-box-shadow: 0 0 6px rgba(0,0,0,0.3) inset;
+	 	box-shadow: 0 0 6px rgba(0,0,0,0.3) inset;
+	 	-webkit-border-radius: 4px;
+	 	-moz-border-radius: 4px;
+	 	border-radius: 4px;
+	  }
+	  .csSeatWrapper .csCheckAll{
+	  	position: absolute;
+	  	top: 10px;
+	  	right: 12px;
+	  	border:0;
+	  }
+	  .csSeatWrapper .csCheckAll input{
+	  	border: 0;
+	  	padding: 0;
+	  	margin: 0;
+	  }
+	  
+	   .csAddParcelWrapper{
+	  	padding:10px 5px;
+	  	margin-right:8px;
+	  	margin-left: 10px;
+	  }
+	  
+	  .csAddBillWrapper .csSeatWrapper{
+	  	padding:10px 5px;
+	  	margin-right:8px;
+	  }
+	  .csAddBillWrapper .p_left2 .csSeatWrapper,  .csAddBillWrapper .p_left3 .csSeatWrapper{
+	  	padding:10px 5px;
+	  	margin-right:8px;
+	  	background:#e6e6e6;
+	  }
+	  
+	
