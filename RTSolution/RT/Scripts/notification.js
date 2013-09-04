@@ -6,7 +6,7 @@ $(function () {
     connection.received(function (data) {
         
         var objData = jQuery.parseJSON(data);
-        objData.Key, objData.Value);
+        jQuery.channel('publish', objData.Key, objData.Value);
     });
 
     connection.start().done(function (param) {
