@@ -21,14 +21,14 @@ namespace RT.ReturnObjects
     {
         public string Name { get; set; }
         public long UserId { get; set; }
-        public SeatStatus Status { get; set; }
+        public SeatType Status { get; set; }
         public long OrderId { get; set; }
     }
 }
 
 namespace RT
 {
-    public enum SeatStatus
+    public enum SeatType
     {
         Vacant = 0, 
         Selecting = 1,
@@ -37,11 +37,12 @@ namespace RT
 
     public enum StatusType { 
         New = 0,
-        Paid = 1
+        Bill = 1,
+        Paid = 2
     }
     public static class EntityHelpers
     {
-        public static ArrayList SeatArray(this RT.Models.Order order,SeatStatus seatstatus) {
+        public static ArrayList SeatArray(this RT.Models.Order order,SeatType seatstatus) {
             //Todo: Need to implement userid here
             //IEnumerable<string> SeatList = order.Seats.Split(',').Select(st => string.Format("{{userid:\"{0}\",\"status\":\"{1}\",\"seat\":\"{2}\"}}", 1.ToString(), seatstatus.ToString(), st)).ToList();
             List<ReturnObjects.Seat> SeatList = new List<ReturnObjects.Seat>();

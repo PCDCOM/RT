@@ -22,17 +22,6 @@
                         <div class="clsMain">
                             <div>&nbsp;</div>
                             <div class="clsPrimary">
-
-
-                                <script type="text/javascript">
-                                    //$(function () {
-                                    //    $.notify().onload(function () {
-                                    //        alert('extended');
-                                    //    });
-                                    //});
-
-                                </script>
-
                                 <div id="invoice-wrapper" style="height: auto;">
                                     <table class="invoice-wrapper-table">
                                         <tbody>
@@ -56,7 +45,8 @@
                                                     <table  style="width:100%;" >
                                                         <tr>
                                                             <td style="white-space:nowrap; min-height:25px;position:relative"  class="csInvoiceReorder">
-                                                                <div id="invoiceReorderBlk" style="overflow:hidden;width:510px;"></div>
+                                                                <div id="orderedNumbers" style="overflow:hidden;width:510px;"></div>
+                                                                <div id="billedNumbers" style="overflow:hidden;width:510px;"></div>
                                                             </td>
                                                         </tr>
                                                         <tr>
@@ -153,12 +143,12 @@
                                                         //Need to change total as read only
                                                                                                     }
                                     <input type="text" value="" name="TotalAmount" id="TotalAmount">
-                                    <input type="hidden" value="" name="Seats" id="Seats">
+                                    <input type="text" value="" name="Seats" id="Seats" class="text-box single-line">
+                                    
                                                                                             </td>
                                                                                         </tr>
                                                                                         <tr>
-                                                                                            <td id="tdSeat" align="left" colspan="4"><label id="lblSeat"><font size="2"></font></label></td>
-                                                                                        </tr>
+
                                                                                     </tbody>
                                                                                 </table>
                                                                             </div>
@@ -167,7 +157,9 @@
                                                                 </tbody>
                                                             </table>
                                                         </div>
-                                                        <input type="submit" value="Order" class="button">  
+                                                        <input type="submit" value="Order" id="saveOrder" class="button">
+                                                        <input type="submit" value="Bill" id="saveBill" class="button">
+                                                          
                                                     }
 
                                                 </td>
@@ -186,13 +178,6 @@
                                             <tbody>
                                                 <tr>
                                                     <td>
-                                                        <div style="width: 100%; text-align: right;">
-                                                            <span id="bala">Welcome bala</span>
-                                                            &nbsp;|  &nbsp;&nbsp;
-						
-                                                                    <a href="javascript:logoutApp()">Logout</a>
-
-                                                        </div>
                                                         <div style="width: 500px">
 
                                                             @Html.Action("ButtonMenu", "ProductGroup")

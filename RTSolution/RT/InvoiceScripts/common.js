@@ -1195,18 +1195,7 @@ alert("data is Not Value");
 	billNo = "";
 
 }
-function logoutApp(){
 
-	$.ajax({
-		type : "POST",
-		url : "logout.htm",
-		success : function(responseoutput) {
-			location.href = "redirect.jsp";
-			return false;
-		}
-	});
-	
-}
 function placeBillParcel() {
 	var tablesetup;
 	var responsedata;

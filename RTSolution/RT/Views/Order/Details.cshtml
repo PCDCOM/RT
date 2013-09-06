@@ -95,16 +95,16 @@
                                     
                                     @if (Model != null)
                                     {
-                                        //Need to change total as read only
+                                        //Tod: Need to change total and seats as read only
                                         @Html.TextBoxFor(mode => Model.TotalAmount);
+                                        <br />
                                         @Html.HiddenFor(model => Model.Id);
-                                        @Html.HiddenFor(model => Model.Seats);  
+                                        @Html.EditorFor(model => Model.Seats);
+                                         
                                     }
                                 </td>
                             </tr>
-                            <tr>
-                                <td id="tdSeat" align="left" colspan="4"><label id="lblSeat"><font size="2">@Model.Seats</font></label></td>
-                            </tr>
+
                         </tbody>
                     </table>
                 </div>

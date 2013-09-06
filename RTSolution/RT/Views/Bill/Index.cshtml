@@ -1,16 +1,281 @@
-﻿@model RT.Models.Order
-@{
+﻿@{
     Layout = "~/Views/Shared/_OrderLayout.cshtml";
-    
 }
 
-<h2>Bill</h2>
-    
-  <input type="text" id="msg" />
-  <input type="button" id="broadcast" value="broadcast" />
-
-  <ul id="messages">
-  </ul>
 
 
+<div id="wrapper">
+    <div class="container">
+        <!-- Begin: Header-->
+        <div id="header" style="bottom: top;">
+            <div class="clsHeadLeft">
+                <div class="clsHeadRight">
+                    <div class="clsTopContent">
+                        <div id="header">
+                        </div>
+                    </div>
+                </div> 
+            </div>
+            <div id="content">
+                <div class="clsContentLeft">
+                    <div class="clsContentRight">
+                        <div class="clsMain">
+                            <div>&nbsp;</div>
+                            <div class="clsPrimary">
 
+                                <div id="invoice-wrapper" style="height: auto;">
+                                    <table class="invoice-wrapper-table">
+                                        <tbody>
+                                            <tr>
+                                                <td align="left">
+                                                    <table>
+                                                        <tbody>
+                                                            <tr>
+                                                                <td style="padding-bottom:10px;">
+                                                                    <input id="product" placeholder="Search products" type="text" class="ui-autocomplete-input" autocomplete="off" role="textbox" aria-autocomplete="list" aria-haspopup="true">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+								                                    <input type="text" size="11" name="barcodereader" placeholder="ScanBarcode" id="prodnameid" class="clsTextBox" onkeypress="searchByEnterKey(event)">
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="text-align: left;">
+                                                    <!--*****recent-bills**********-->
+                                                    <table  style="width:100%;" >
+                                                        <tr>
+                                                            <td style="white-space:nowrap; min-height:25px;position:relative"  class="csInvoiceReorder">
+                                                                <div id="orderedNumbers" style="overflow:hidden;width:510px;"></div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <input type="text" id="txtOrderId" name="invoicereorderID" size="5">&nbsp;&nbsp;
+                                                                <input type="button" value="Load" id="btnLoadOrder" class="button" size="5">&nbsp;&nbsp;
+                                                                <input type="checkbox" name="parceloption" class="csChkParceloption" id="parceloptionID" style="margin: 0 0 0 4px">
+                                                                &nbsp;Parcel
+                                                                <input type="checkbox" name="takeaway" class="csChkTakewayoption" id="takeawayoptionID" style="margin: 0 0 0 4px">
+                                                                &nbsp;TakeAway
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+					                            </td>
+                                                <td align="left">&nbsp;</td>
+                                            </tr>
+                                            <tr align="left">
+                                                <td colspan="2">
+                                                    <input type="hidden" id="current-item-id">
+                                                    <input type="hidden" id="current-item-name">
+                                                    <input type="hidden" id="prev-added-item-id">
+                                                    <input type="hidden" id="current-item-unitprice">
+                                                    <table id="product-adder" style="margin-top: 0;">
+                                                        <tbody>
+                                                            <tr>
+                                                                <td nowrap="nowrap">
+                                                                    <a class="number_button" href="http://localhost:8080/addinvoice.htm#">0</a>
+                                                                    <a class="number_button" href="http://localhost:8080/addinvoice.htm#">1</a>
+                                                                    <a class="number_button" href="http://localhost:8080/addinvoice.htm#">2</a>
+                                                                    <a class="number_button" href="http://localhost:8080/addinvoice.htm#">3</a>
+                                                                    <a class="number_button" href="http://localhost:8080/addinvoice.htm#">4</a>
+                                                                    <a class="number_button" href="http://localhost:8080/addinvoice.htm#">5</a>
+                                                                    <a class="number_button" href="http://localhost:8080/addinvoice.htm#">6</a>
+                                                                    <a class="number_button" href="http://localhost:8080/addinvoice.htm#">7</a>
+                                                                    <a class="number_button" href="http://localhost:8080/addinvoice.htm#">8</a>
+                                                                    <a class="number_button" href="http://localhost:8080/addinvoice.htm#">9</a>
+                                                                    <a class="number_button" href="http://localhost:8080/addinvoice.htm#">C</a>
+                                                                </td>
+                                                                <td nowrap="nowrap">
+                                                                    <input id="quantity" name="quantity" size="2">
+                                                                    <input type="button" onclick="addProductsWithQuantitySelection();" name="add-product" id="add-product" value="+"></td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="2">
+
+                                                    @using (Html.BeginForm("Save", "Bill", FormMethod.Post))
+                                                    {
+                                                        <div id="divBillDetails">
+                                                            <table class="invoice-form-table">
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td>
+                                                                            <div style="min-height: 275px; position: inherit;">
+
+                                                                                <table id="dataTable">
+                                                                                    <tbody id="tBodyOrders">
+
+                                                                                        <tr>
+                                                                                            <th>
+                                                                                                <input type="checkbox" name="allbox" class="csChkAll" style="margin: 0 0 0 4px" checked="checked">
+                                                                                                S.No
+                </th>
+                                                                                            <th>Name</th>
+                                                                                            <th>Unit</th>
+                                                                                            <th>Qty</th>
+                                                                                            <th>Total</th>
+                                                                                            <th>
+                                                                                                <img class="button-icon" src="./images/button-remove.png" onclick="removeAll();">
+                                                                                            </th>
+                                                                                        </tr>
+
+                                                                                    </tbody>
+                                                                                </table>
+                                                                            </div>
+
+                                                                        </td>
+                                                                    </tr>
+                                                                    
+                                                                    <tr>
+                                                                        <td>
+                                                                            <div id="invoice-payment-form">
+                                                                                <table id="invoice-payment-table">
+                                                                                    <tbody>
+                                                                                        <tr>
+                                                                                            <td></td>
+                                                                                            <td></td>
+                                                                                            <td></td>
+                                                                                            <td>Total:
+                                                                                                @{
+                                                        //Need to change total as read only
+                                                                                                    }
+                                    <input type="text" value="" name="TotalAmount" id="TotalAmount">
+                                    <input type="text" value="" name="Seats" id="Seats" class="text-box single-line">
+                                    
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                        <tr>
+
+                                                                                    </tbody>
+                                                                                </table>
+                                                                            </div>
+                                                                        </td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                        <input type="submit" value="Order" id="saveOrder" class="button">
+                                                        <input type="submit" value="Bill" id="saveBill" class="button">
+                                                          
+                                                    }
+
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div id="items-wrapper" style="height: auto;">
+                                    <div id="product-Group">
+                                        <!--  **************************************** PRODUCT and GROUP DETAIL ********************************************** -->
+
+
+                                        <script type="text/javascript">
+</script>
+                                        <table border="0">
+                                            <tbody>
+                                                <tr>
+                                                    <td>
+                                                        <div style="width: 500px">
+
+                                                            
+                                                        </div>
+                                                    </td>
+
+                                                </tr>
+                                            </tbody>
+                                        </table>
+
+
+                                    </div>
+
+
+
+                                    <!--  barcode setup required -->
+                                    <div id="externalbox" style="width: 5cm; display: none;">
+                                        <div id="inputdata"></div>
+                                    </div>
+                                    <div id="generator">
+                                        <input type="hidden" id="barcodeValue"><br>
+                                        <div id="config">
+                                            <div>
+                                                <input type="hidden" name="btype" id="code128" value="code128"><br>
+                                            </div>
+                                            <div class="config" hidden="">
+                                                <div class="title">Misc</div>
+                                                Background :
+                                                        <input type="hidden" id="bgColor" value="#FFFFFF" size="7"><br>
+                                                "1" Bars :
+                                                        <input type="text" id="color" value="#000000" size="7"><br>
+                                                <div class="barcode1D">
+                                                    bar width:
+                                                            <input type="text" id="barWidth" value="1" size="3"><br>
+                                                    bar height:
+                                                            <input type="text" id="barHeight" value="20" size="3"><br>
+                                                </div>
+                                                <div class="barcode2D">
+                                                    Module Size:
+                                                            <input type="text" id="moduleSize" value="5" size="3"><br>
+                                                    Quiet Zone Modules:
+                                                            <input type="text" id="quietZoneSize" value="1" size="3"><br>
+                                                    Form:
+                                                            <input type="checkbox" name="rectangular" id="rectangular"><label for="rectangular">Rectangular</label><br>
+                                                </div>
+                                                <div id="miscCanvas">
+                                                    x :
+                                                            <input type="text" id="posX" value="10" size="3"><br>
+                                                    y :
+                                                            <input type="text" id="posY" value="20" size="3"><br>
+                                                </div>
+                                            </div>
+
+                                            <div class="config" hidden="">
+                                                <div class="title">Format</div>
+                                                <input type="radio" id="css" name="renderer" value="css" checked="checked"><label for="css">CSS</label><br>
+                                                <input type="radio" id="bmp" name="renderer" value="bmp"><label for="bmp">BMP (not usable in IE)</label><br>
+                                                <input type="radio" id="svg" name="renderer" value="svg"><label for="svg">SVG
+					(not usable in IE)</label><br>
+                                                <input type="radio" id="canvas" name="renderer" value="canvas"><label for="canvas">Canvas
+					(not usable in IE)</label><br>
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+
+                                    <div id="barcodeTarget" class="barcodeTarget" hidden="" style="display: block;"></div>
+                                    <canvas id="canvasTarget" width="150" height="150" hidden="" style="display: none;"></canvas>
+
+
+
+
+                                </div>
+
+                                <div class="clearOne"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Begin: Footer-->
+                <div id="footer">
+                    <div class="clsFooterLeft">
+                        <div class="clsFooterRight">
+                            <div class="clsFooterContent">
+                                <!-- <div align="center">&copy; Copyright © 2012,All Rights Reserved.</div> -->
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- End: Footer-->
+
+            </div>
+        </div>
+
+
+
+    </div>
+</div>

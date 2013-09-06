@@ -25,7 +25,7 @@ namespace RT.Server.Response
             ArrayList seatsArray = new ArrayList();
             //Todo: need to solve the unrecognised StatusType issue
             //IEnumerable<RT.Order> newOrders = db.Orders.Where(i => i.GetStatusType() == StatusType.New);
-            IEnumerable<Order> newOrders = db.Orders.Where(i => i.Status == (byte)StatusType.New);
+            IEnumerable<Order> newOrders = db.Orders.Where(i => (i.Status == (byte)StatusType.New || i.Status == (byte)StatusType.Bill));
 
             //Todo: need to optimise this code and do it in lamda expression
             foreach (Order item in newOrders)
@@ -34,7 +34,7 @@ namespace RT.Server.Response
                 notifyorders.Add(new ReturnObjects.NotifyOrder() { OrderId = item.Id, CreatedDate = item.CreatedDate, Status = item.GetStatusType(), User = "1", Total = 23 });
                 //seats.Add(item.SeatJson(SeatStatus.Locked));
                 //Todo: need to optimise this code
-                ArrayList seatGroup = item.SeatArray(SeatStatus.Locked);
+                ArrayList seatGroup = item.SeatArray(SeatType.Locked);
                 foreach (object itembyord in seatGroup)
 	            {
                     seatsArray.Add(itembyord);

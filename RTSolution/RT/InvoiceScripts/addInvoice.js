@@ -1,8 +1,8 @@
 
 var JSON_seats = '';
-var filename = "productdata.xml";
-var customerfile = "customerdetails.xml";
+
 var tr_current = "";
+
 /**
  * ******************************* LOAD JSP CONTENT
  * *********************************
@@ -17,28 +17,7 @@ var billNo = "";
 var currentInvoiceNo;
 var nextInvoiceNo;
 var invoice_bill_no = invoiceIDsetup;
-// first time loading bill no
 
-/**
- * *************************** BOOKED SEAT COLOR CHANGE.. NEEED TO TUNING for
- * better performance- seats booked setting ***
- */
-
-// json ibnput..
-// /{"invoiceid":101,"seatname":"A1","tablename":"Table A","seatno":1},
-// {"invoiceid":101,"seatname":"A2","tablename":"Table A","seatno":2},
-// {"invoiceid":102,"seatname":"B7","tablename":"Table B","seatno":7},
-// {"invoiceid":103,"seatname":"F1","tablename":"Table F","seatno":1},
-// {"invoiceid":104,"seatname":"F2","tablename":"Table F","seatno":2}]
-// output:::::::::::[{"invoiceid":101,"seatname":"A1","tablename":"Table
-// A","seatno":1},{"invoiceid":101,"seatname":"A2","tablename":"Table
-// A","seatno":2},{"invoiceid":102,"seatname":"B7","tablename":"Table
-// B","seatno":7},{"invoiceid":102,"seatname":"F1","tablename":"Table
-// F","seatno":1},{"invoiceid":105,"seatname":"F2","tablename":"Table
-// F","seatno":2}]
-
-
-// collapse others
 function collapseOthers(currentID, type, setCookieVal) {
     $("[id^='itm-btn']").addClass("none");
     $('#itm-btn-' + currentID).removeClass("none");
@@ -93,8 +72,8 @@ function seatSettingDetails() {
     seatArrangmentSetB();
     seatArrangmentSetC();
 
-    $('#invoiceReorderBlk a').live('click', function () {
-        $('#invoiceReorderBlk a').removeClass('selected');
+    $('#orderedNumbers a').live('click', function () {
+        $('#orderedNumbers a').removeClass('selected');
         $(this).addClass('selected');
     });
 
@@ -112,7 +91,7 @@ $(function () {
                 alert(xhr.status);
             },
             success: function (result) {
-                $('#invoiceReorderBlk a').removeClass("selected");
+                $('#orderedNumbers a').removeClass("selected");
                 $('#ord' + ordId).addClass('selected');
                 $("#divOrderDetails").html(result);
             }
@@ -131,18 +110,11 @@ $(document).ready(function () {
             $.loadOrder(ordId);
     });
 
-    $('input[type=submit]').click(function (e) {
+    $('#saveOrder').click(function (e) {
         e.preventDefault();
-        //var seats = "A1,A2";
-        var seats = $('.selectingSeat a').map(function () {
-            return $(this).html();
-        }).get().join(',')
-        
-        $("#Seats").html(seats).val(seats);
-            //$("#Seats").val(); 
         $.ajax({
             type: "POST",
-            url: "/Order/Save",
+            url: "/Order/SaveOrder",
             data: $('form').serialize(),
             success: function (result) {
                 $("#divOrderDetails").html(result);
@@ -155,6 +127,22 @@ $(document).ready(function () {
         });
     });
 
+    $('#saveBill').click(function (e) {
+        e.preventDefault();
+        $.ajax({
+            type: "POST",
+            url: "/Order/SaveBill",
+            data: $('form').serialize(),
+            success: function (result) {
+                $("#divOrderDetails").html(result);
+                //loadOrders(result);
+
+            },
+            error: function (e) {
+                alert(e);
+            }
+        });
+    });
 });
 
 /**
@@ -354,127 +342,7 @@ function addNewDataRow(name, unitprice, parcelPrice, productId) {
 
 }
 
-//--Un used functions 
-function receipt() {
-    window.open("/WEB-INF/jsp/receiptprint.jsp", "mywindow",
-			"menubar=1,resizable=1,width=250,height=150");
-}
 
-/**
- * *********************************************************** ORDER FOOD ITEMS
- * *************************************
- */
-
-function removeOldOrderAddNewOrder(data) {
-
-    var $container = $('#invoiceReorderBlk');
-    // var availLink = $('a',$container).length;
-    // alert("availLink::::"+availLink);
-    var reorderLink = parseInt($.trim($('a:first', $container).text()));
-    // alert("reorderLink::::"+reorderLink);
-    // alert(data);
-    if (data && (data > reorderLink)) {
-
-        // if(availLink == 4){
-        $('a:last', $container).remove();
-        // }
-
-        $container.prepend('<a href="javascript:loadOrderDetails(\'' + data
-				+ '\')">' + data + '</a>');
-    }
-
-}
-
-function loadOrder() {
-    var queryString = $('#invoiceForm').serialize();
-    removeAll();
-    $.post('loadviewinvoice.htm?invoiceID=' + ordervalue, function (xmldata) {
-        var invoiceID = $(xmldata).find("invoiceID").text();
-        billNo = invoiceID;
-        // ////////////////////////////alert("billNo::::::::in
-        // loadOrder"+billNo);
-        $(xmldata).find('saleorder').each(
-				function () {
-				    var productName = $(this).find('productName').text();
-				    var productId = $(this).find('productId').text();
-				    var unitPrice = $(this).find('unitPrice').text();
-				    var quantity = $(this).find('Quantity').text();
-				    var saleorderid = $(this).find('saleorderID').text();
-				    var parcelprice = $(this).find('parcelPrice').text();
-				    /*
-					 * // ---barcode scanner processing var barcode =
-					 * $(this).find('barcode').text();
-					 * ////////////alert("barcode >>>>>>>>>>>"+barcode);
-					 */
-
-				    addNewDataRowQuantity(productName, unitPrice, productId,
-							quantity, saleorderid, parcelprice);
-				});
-
-    });
-    // seatSettingDetails();
-}
-
-/**
- * ********************* LOAD existing order for Reprint using click invoiceno
- * and seat clicks *************
- */
-/**
- * ********************* RESPONSE received as XML DATA
- * ******************************************************
- */
-function loadOldOrderDetails2() { // working fine
-    var reorderid = document.getElementById("invoicereorderID").value;
-    if (reorderid == undefined) {
-        // //////////////////////////////alert("please enter the bill no");
-        document.getElementById("invoicereorderID").focus();
-        return;
-    }
-    invoice_bill_no = reorderid;
-    removeAll();
-    var d = new Date();
-    var n = d.getMilliseconds();
-    // $.post('loadviewinvoice.htm?invoiceID='+invoice_bill_no +'&nocache=' +
-    // n,function(xmldata){
-    $.ajax({
-        type: "GET",
-        url: "loadviewinvoice.htm?invoiceID=" + invoice_bill_no + "&nocache="
-				+ n,
-        data: queryString,
-        success: function (xmldata) {
-            var invoiceID = $(xmldata).find("invoiceID").text();
-            billNo = invoiceID;
-            invoice_bill_no = invoiceID;
-            var index = 0;
-            $(xmldata).find('saleorder').each(
-					function () {
-					    index++;
-					    var productName = $(this).find('productName').text();
-					    var productId = $(this).find('productId').text();
-					    var unitPrice = $(this).find('unitPrice').text();
-					    var quantity = $(this).find('Quantity').text();
-					    var saleorderid = $(this).find('saleorderID').text();
-					    var parcelprice = $(this).find('parcel').text();
-					    addNewDataRowQuantity(productName, unitPrice,
-								productId, quantity, saleorderid, parcelprice);
-					});
-            return false;
-        }
-
-    });
-    $('.csChkAll').removeAttr('checked');
-}
-
-
-
-/**
- * ********************* LOAD existing order for Reprint using click invoiceno
- * and seat clicks *************
- */
-/**
- * ********************* RESPONSE received as json DATA
- * ******************************************************
- */
 
 
 
@@ -613,53 +481,7 @@ $(function () {
         return false;
     });
 
-    $("#paymenttype")
-			.dialog(
-					{
-					    autoOpen: false,
-					    height: 275,
-					    width: 400,
-					    modal: true,
-					    buttons: {
-					        "Pay": function () {
-					            var bValid = false;
-					            allFields.removeClass("ui-state-error");
-					            bValid = bValid
-										&& checkLength(topay, "topay", 3, 16);
-					            bValid = bValid
-										&& checkLength(amounttendered,
-												"amounttendered", 6, 80);
-					            $(this).dialog("close");
-					            // placeBill();
-					            // alert("calc_result >>>>>> "+
-					            // $("#calc_result").val());
-					            $('#paidamount').val($("#calc_result").val());
-					            setBalance();
-					            placePayBill();
-					            removeAll();
-					            var takeaway = '<label id="lblSeat"><font size="2">Take Away</font></label>';
-					            $('.csSelectAllTable').removeAttr('checked');
-					            if ($('.csChkAll').attr('checked')) {
-					                alert("Enter Parcelling ::::");
-					                collapseOthers(0, 7);
-					            } else {
-					                alert("Enter Seat Values ::::");
-					                collapseOthers(9, 10);
-					            }
-					            $("#tdSeat").html(takeaway);
-					            // later will be change, automatically closed
-					            // this alert message
-					            // alert("You have Paid Successfully");
-					        },
-					        Cancel: function () {
-					            $(this).dialog("close");
-					        }
-					    },
-					    close: function () {
-					        allFields.val("").removeClass("ui-state-error");
 
-					    }
-					});
 
     $("#payment").button().click(function () {
         var topay = document.getElementById("TotalAmount").value;
@@ -1474,7 +1296,7 @@ function getSelectedSeats() {
     }
     // console.log(arrSeats);
     showSeats = showSeats.join(',');
-    $("#tdSeat").html("<font size='2'>" + showSeats + "</font>");
+    $("#Seats").val(showSeats);
     $('#printSeatNo').val(str1);
     $('#showSeatNo').val(showSeats);
     if (arrSeats.length) {
@@ -1504,36 +1326,4 @@ function uncheckSelectedSeats($this) {
     }
 }
 
-// Barcode Scanner
 
-function readBarocde() {
-    // $("#dataTable").append("<ul></ul>");
-    var barcodeValue = document.getElementById("barcodeReader").value;
-    // //////////alert("barcodeValue ::::"+barcodeValue);
-
-    $.ajax({
-        type: "GET",
-        url: filename,
-        dataType: "xml",
-        success: function (xml) {
-            $(xml).find('product').each(function () {
-                var name = $(this).find('name').text();
-                var productid = $(this).find('productid').text();
-                var unitprice = $(this).find('unitprice').text();
-                var parcelprice = $(this).find('groupB').text();
-                var barcode = $(this).find('barcode').text();
-
-                if (barcode == barcodeValue) {
-                    // //////////alert("sBarcode ::::::"+name + ", " +productid+
-                    // ", " + unitprice+","+barcode);
-                    addNewDataRow(name, unitprice, parcelprice, productid);
-
-                }
-
-            });
-        },
-        error: function () {
-            // //////////alert("An error occurred while processing XML file.");
-        }
-    });
-}

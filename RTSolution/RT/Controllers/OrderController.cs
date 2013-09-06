@@ -56,16 +56,39 @@ namespace RT.Controllers
 
 
         }
+        [HttpPost]
+        public ActionResult SaveBill(long Id, OrderedProductModel[] orderedproducts)
+        {
+            //return SaveOrder(Id, formcollection, orderedproducts, Seats, TotalAmount, 1);
+            Order orderToUpdate = null;
+            MembershipUser user = Membership.GetUser(HttpContext.User.Identity.Name);
+            orderToUpdate = db.Orders.Where(i => i.Id == Id).Single();
+            if (TryUpdateModel(orderToUpdate, "", new string[] { "Status" }
+               )) {
+                   if (orderedproducts != null)
+                   {
+                       UpdateOrderedProducts(orderedproducts, orderToUpdate);
+                   }
+                   orderToUpdate.SetStatusType(StatusType.Bill);
+            }
+            db.Entry(orderToUpdate).State = EntityState.Modified;
+            db.SaveChanges();
+            long newId = db.Entry(orderToUpdate).Entity.Id;
+            NotificationEngine notificationengine = new NotificationEngine();
+            //notificationengine.PushFromServer(string.Format("{{'Key':'order','Value':'{0}'}}", newId.ToString()));
+            KeyValuePair<string, string> dictOrder = new KeyValuePair<string, string>("order", newId.ToString());
+            notificationengine.PushFromServer(dictOrder);
+            return View("Details", new Order());
+        }
 
         [HttpPost]
-        public ActionResult Save(long Id, FormCollection formcollection, OrderedProductModel[] orderedproducts, string Seats, decimal TotalAmount)
+        public ActionResult SaveOrder(long Id, FormCollection formcollection, OrderedProductModel[] orderedproducts, string Seats, decimal TotalAmount, int Status = 0)
         {
 
             Order orderToUpdate = null;
             MembershipUser user = Membership.GetUser(HttpContext.User.Identity.Name);
             if (Id == 0)
             {
-                
                 orderToUpdate = new Order() { CreatedBy = (Guid)user.ProviderUserKey,CreatedDate= DateTime.Now};
             }
             else
@@ -77,9 +100,10 @@ namespace RT.Controllers
             if (TryUpdateModel(orderToUpdate, "", new string[] { "Status","Seats","TotalAmount" }
                ))
             {
-                try
-                {
-                    UpdateOrderedProducts(orderedproducts, orderToUpdate);
+                    if (orderedproducts != null)
+                    {
+                        UpdateOrderedProducts(orderedproducts, orderToUpdate);
+                    }
                     orderToUpdate.TotalAmount = TotalAmount;
                     orderToUpdate.Seats = Seats;
                     orderToUpdate.SetStatusType(StatusType.New);
@@ -106,22 +130,15 @@ namespace RT.Controllers
                         KeyValuePair<string, string> dictOrder = new KeyValuePair<string, string>("order", newId.ToString());
                         notificationengine.PushFromServer(dictOrder);
 
-                        ArrayList SeatArray = orderToUpdate.SeatArray(SeatStatus.Locked);
+                        ArrayList SeatArray = orderToUpdate.SeatArray(SeatType.Locked);
                         string jsonSeats = JsonConvert.SerializeObject(SeatArray);
                         KeyValuePair<string, string> dictSeats = new KeyValuePair<string, string>("seats", jsonSeats);
                         notificationengine.PushFromServer(dictSeats);
                     }
-                    
-                }
-                catch (DataException dex)
-                {
-                    //Log the error (uncomment dex variable name after DataException and add a line here to write a log.
-                    ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator." + dex.Message);
-                }
             }
-            PopulateOrderedProduct(orderToUpdate);
-            Order order = new Order();
-            return View("Details", order);
+            //PopulateOrderedProduct(orderToUpdate);
+
+            return View("Details", new Order());
             //return View("Details", db.Orders.Where(x => x.Id == Id).Single());
         }
 
