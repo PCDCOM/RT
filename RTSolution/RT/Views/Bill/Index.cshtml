@@ -14,7 +14,7 @@
                         <div id="header">
                         </div>
                     </div>
-                </div> 
+                </div>
             </div>
             <div id="content">
                 <div class="clsContentLeft">
@@ -31,7 +31,7 @@
                                                     <table>
                                                         <tbody>
                                                             <tr>
-                                                                <td style="padding-bottom:10px;">
+                                                                <td style="padding-bottom: 10px;">
                                                                     <input id="product" placeholder="Search products" type="text" class="ui-autocomplete-input" autocomplete="off" role="textbox" aria-autocomplete="list" aria-haspopup="true">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 								                                    <input type="text" size="11" name="barcodereader" placeholder="ScanBarcode" id="prodnameid" class="clsTextBox" onkeypress="searchByEnterKey(event)">
                                                                 </td>
@@ -43,11 +43,11 @@
                                             <tr>
                                                 <td style="text-align: left;">
                                                     <!--*****recent-bills**********-->
-                                                    <table  style="width:100%;" >
+                                                    <table style="width: 100%;">
                                                         <tr>
-                                                            <td style="white-space:nowrap; min-height:25px;position:relative"  class="csInvoiceReorder">
-                                                                <div id="orderedNumbers" style="overflow:hidden;width:510px;"></div>
-                                                                <div id="billedNumbers" style="overflow:hidden;width:510px;"></div>
+                                                            <td style="white-space: nowrap; min-height: 25px; position: relative" class="csInvoiceReorder">
+                                                                <div id="orderedNumbers" style="overflow: hidden; width: 510px;"></div>
+                                                                <div id="billedNumbers" style="overflow: hidden; width: 510px;"></div>
                                                             </td>
                                                         </tr>
                                                         <tr>
@@ -61,7 +61,7 @@
                                                             </td>
                                                         </tr>
                                                     </table>
-					                            </td>
+                                                </td>
                                                 <td align="left">&nbsp;</td>
                                             </tr>
                                             <tr align="left">
@@ -102,115 +102,55 @@
                                         </tbody>
                                     </table>
                                 </div>
-                                <div id="items-wrapper" style="height: auto;">
+                                <div style="height: auto;" id="items-wrapper">
                                     <div id="product-Group">
-                                        <!--  **************************************** PRODUCT and GROUP DETAIL ********************************************** -->
+                                        <div style="display: block" id="items-bottom0" class="csProdutGroupBlk">
+                                            <div class="wall-of-buttons">
 
-
-                                        <script type="text/javascript">
-</script>
-                                        <table border="0">
-                                            <tbody>
-                                                <tr>
-                                                    <td>
-                                                        <div style="width: 500px">
-
+                                                <table class="table-grid" style="WIDTH: 100%;" id="invoice">
+                                                    <thead>
+                                                        <tr>
                                                             
-                                                        </div>
-                                                    </td>
+                                                            <th>Time</th>
+                                                            <th>Table Details</th>
+                                                            <th>Bill Amount</th>
+                                                            <!-- <th>ORDER STATUS</th> -->
+                                                            <th>Action Item</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="tblBilled">
 
-                                                </tr>
-                                            </tbody>
-                                        </table>
-
-
-                                    </div>
-
-
-
-                                    <!--  barcode setup required -->
-                                    <div id="externalbox" style="width: 5cm; display: none;">
-                                        <div id="inputdata"></div>
-                                    </div>
-                                    <div id="generator">
-                                        <input type="hidden" id="barcodeValue"><br>
-                                        <div id="config">
-                                            <div>
-                                                <input type="hidden" name="btype" id="code128" value="code128"><br>
-                                            </div>
-                                            <div class="config" hidden="">
-                                                <div class="title">Misc</div>
-                                                Background :
-                                                        <input type="hidden" id="bgColor" value="#FFFFFF" size="7"><br>
-                                                "1" Bars :
-                                                        <input type="text" id="color" value="#000000" size="7"><br>
-                                                <div class="barcode1D">
-                                                    bar width:
-                                                            <input type="text" id="barWidth" value="1" size="3"><br>
-                                                    bar height:
-                                                            <input type="text" id="barHeight" value="20" size="3"><br>
-                                                </div>
-                                                <div class="barcode2D">
-                                                    Module Size:
-                                                            <input type="text" id="moduleSize" value="5" size="3"><br>
-                                                    Quiet Zone Modules:
-                                                            <input type="text" id="quietZoneSize" value="1" size="3"><br>
-                                                    Form:
-                                                            <input type="checkbox" name="rectangular" id="rectangular"><label for="rectangular">Rectangular</label><br>
-                                                </div>
-                                                <div id="miscCanvas">
-                                                    x :
-                                                            <input type="text" id="posX" value="10" size="3"><br>
-                                                    y :
-                                                            <input type="text" id="posY" value="20" size="3"><br>
-                                                </div>
+                                                    </tbody>
+                                                </table>
                                             </div>
 
-                                            <div class="config" hidden="">
-                                                <div class="title">Format</div>
-                                                <input type="radio" id="css" name="renderer" value="css" checked="checked"><label for="css">CSS</label><br>
-                                                <input type="radio" id="bmp" name="renderer" value="bmp"><label for="bmp">BMP (not usable in IE)</label><br>
-                                                <input type="radio" id="svg" name="renderer" value="svg"><label for="svg">SVG
-					(not usable in IE)</label><br>
-                                                <input type="radio" id="canvas" name="renderer" value="canvas"><label for="canvas">Canvas
-					(not usable in IE)</label><br>
-                                            </div>
+
                                         </div>
-
-
                                     </div>
 
-                                    <div id="barcodeTarget" class="barcodeTarget" hidden="" style="display: block;"></div>
-                                    <canvas id="canvasTarget" width="150" height="150" hidden="" style="display: none;"></canvas>
+                                    <div class="clearOne"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-
-
+                    <!-- Begin: Footer-->
+                    <div id="footer">
+                        <div class="clsFooterLeft">
+                            <div class="clsFooterRight">
+                                <div class="clsFooterContent">
+                                    <!-- <div align="center">&copy; Copyright © 2012,All Rights Reserved.</div> -->
 
                                 </div>
-
-                                <div class="clearOne"></div>
                             </div>
                         </div>
                     </div>
+                    <!-- End: Footer-->
+
                 </div>
-
-                <!-- Begin: Footer-->
-                <div id="footer">
-                    <div class="clsFooterLeft">
-                        <div class="clsFooterRight">
-                            <div class="clsFooterContent">
-                                <!-- <div align="center">&copy; Copyright © 2012,All Rights Reserved.</div> -->
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- End: Footer-->
-
             </div>
+
+
+
         </div>
-
-
-
     </div>
-</div>

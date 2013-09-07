@@ -69,7 +69,9 @@ namespace RT.Controllers
         [HttpPost]
         public ActionResult Pay(long Id, OrderedProductModel[] orderedproducts, decimal TotalAmount, decimal PaidAmount, decimal BalanceAmount)
         {
+            
             Order orderToUpdate = null;
+
             MembershipUser user = Membership.GetUser(HttpContext.User.Identity.Name);
             orderToUpdate = db.Orders.Where(i => i.Id == Id).Single();
             if (TryUpdateModel(orderToUpdate, "", new string[] { "Status", "TotalAmount" }

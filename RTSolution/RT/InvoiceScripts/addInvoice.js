@@ -86,6 +86,7 @@ $(function () {
             success: function (result) {
                 $(".csSeatList .seat a").parent().removeClass("selectingSeat");
                 $('#orderedNumbers a').removeClass("selected");
+                $('#billedNumbers a').removeClass("selected");
                 $('#ord' + ordId).addClass('selected');
                 $("#divOrderDetails").html(result);
                 $.setOrderedProductEvents();
@@ -133,6 +134,17 @@ $(function () {
         });
         $('#savePayment').click(function (e) {
             e.preventDefault();
+            var paidAmt=0, totAmount = 0;
+            if ($.isNumeric($("#PaidAmount").val()))
+                paidAmt = parseFloat( $("#PaidAmount").val());
+            if ($.isNumeric($("#TotalAmount").val()))
+                totAmount = parseFloat($("#TotalAmount").val());
+            if (paidAmt < totAmount) {
+                alert("Please enter paid amount greater than or equal to total amount");
+                $("#PaidAmount").focus();
+                return;
+            }
+            
             $.ajax({
                 type: "POST",
                 url: "/Bill/Pay",

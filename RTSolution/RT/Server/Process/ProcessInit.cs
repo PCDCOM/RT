@@ -31,7 +31,13 @@ namespace RT.Server.Response
             foreach (Order item in newOrders)
             {
                 //Todo: Need to add total in DB and retrieve here
-                notifyorders.Add(new ReturnObjects.NotifyOrder() { OrderId = item.Id, CreatedDate = item.CreatedDate, Status = item.GetStatusType(), User = "1", Total = 23 });
+                notifyorders.Add(new ReturnObjects.NotifyOrder() { 
+                    OrderId = item.Id, 
+                    CreatedDate = item.CreatedDate.Value.ToString("HH : mm tt"), 
+                    Status = item.GetStatusType(), User = "1",
+                    Seats = item.Seats,
+                    Total = item.TotalAmount
+                });
                 //seats.Add(item.SeatJson(SeatStatus.Locked));
                 //Todo: need to optimise this code
                 ArrayList seatGroup = item.SeatArray(SeatType.Locked);

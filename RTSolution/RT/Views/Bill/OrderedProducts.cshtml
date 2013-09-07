@@ -81,8 +81,10 @@
             </tbody>
         </table>
 
-
-        <input type="button" value="Order" id="saveOrder" class="button">
+        @if (Model.Status != (byte)RT.StatusType.Bill)
+        {
+            <input type="button" value="Order" id="saveOrder" class="button">
+        }
        <input type="button" value="Pay" id="savePayment" class="button">
     </div>
 }

@@ -12,9 +12,10 @@ namespace RT.ReturnObjects
     class NotifyOrder
     {
         public long OrderId { get; set; }
-        public Nullable<System.DateTime> CreatedDate { get; set; }
+        public string CreatedDate { get; set; }
         public StatusType Status { get; set; }
         public string User { get; set; }
+        public string Seats { get; set; }
         public Nullable<decimal> Total { get; set; }
     }
     class Seat
@@ -63,6 +64,8 @@ namespace RT
         //Todo: change this two methods to propery
         public static StatusType  GetStatusType(this Order order)
         {
+            if (order == null)
+                return StatusType.New;
             return (StatusType)order.Status;
         }
         public static void SetStatusType(this Order order, StatusType statustype)
