@@ -95,6 +95,7 @@ $(function () {
 
 
     $.setOrderedProductEvents = function () {
+        
         $('#saveOrder').click(function (e) {
             
             e.preventDefault();
@@ -104,7 +105,7 @@ $(function () {
                 data: $('form').serialize(),
                 success: function (result) {
                     $("#divOrderDetails").html(result);
-
+                    $.setOrderedProductEvents();
                     setFloor();
                 },
                 error: function (e) {
@@ -113,7 +114,7 @@ $(function () {
             });
         });
 
-        $('#saveBill1').click(function (e) {
+        $('#saveBill').click(function (e) {
             
             e.preventDefault();
             $.ajax({
@@ -122,6 +123,7 @@ $(function () {
                 data: $('form').serialize(),
                 success: function (result) {
                     $("#divOrderDetails").html(result);
+                    $.setOrderedProductEvents();
                     setFloor();
                 },
                 error: function (e) {
@@ -138,7 +140,7 @@ $(function () {
                 success: function (result) {
                     $("#divOrderDetails").html(result);
                     //loadOrders(result);
-
+                    $.setOrderedProductEvents();
                 },
                 error: function (e) {
                     alert(e);

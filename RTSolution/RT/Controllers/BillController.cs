@@ -78,8 +78,8 @@ namespace RT.Controllers
                 if (orderedproducts != null)
                 {
                     UpdateOrderedProducts(orderedproducts, orderToUpdate);
-                    UpdateBillForOrder(orderedproducts,TotalAmount,PaidAmount,BalanceAmount,orderToUpdate);
                 }
+                UpdateBillForOrder(orderedproducts, TotalAmount, PaidAmount, BalanceAmount, orderToUpdate);
                 orderToUpdate.TotalAmount = TotalAmount;
                 orderToUpdate.SetStatusType(StatusType.Paid);
             }

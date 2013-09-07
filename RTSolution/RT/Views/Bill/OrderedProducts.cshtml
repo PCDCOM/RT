@@ -65,7 +65,7 @@
                                         @Html.TextBoxFor(model => Model.Seats, new { @readonly = "true" });
                                         <br />
                                         @Html.TextBoxFor(mode => Model.TotalAmount, new { @readonly = "true" });
-                                        <input type="text" onkeydown="setBalanceAmountValue()" onkeyup="setBalanceAmount()" onkeypress="enterPlaceBill(event)" onclick="setBalanceAmount()" value="" id="PaidAmount" name="PaidAmount" />
+                                        <input type="text"  onclick="setBalanceAmount()" onkeypress="enterPlaceBill(event)" onkeyup="setBalanceAmount()" onkeydown="setBalanceAmountValue()" value="" id="PaidAmount" name="PaidAmount" />
                                         
                                         <input type="text" value="" id="BalanceAmount" name="BalanceAmount" readonly="true"/>
                                         

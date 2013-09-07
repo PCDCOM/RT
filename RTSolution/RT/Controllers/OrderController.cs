@@ -56,36 +56,72 @@ namespace RT.Controllers
 
 
         }
-        [HttpPost]
-        public ActionResult SaveBill(long Id, OrderedProductModel[] orderedproducts,decimal TotalAmount)
+        private long Save(long Id, Order orderToUpdate, StatusType statustype, FormCollection formcollection, OrderedProductModel[] orderedproducts, string Seats, decimal TotalAmount, int Status = 0)
         {
+            long newId = 0;
             MembershipUser user = Membership.GetUser(HttpContext.User.Identity.Name);
-
-            Order orderToUpdate = null;
             if (Id == 0)
+            {
                 orderToUpdate = new Order() { CreatedBy = (Guid)user.ProviderUserKey, CreatedDate = DateTime.Now };
-            else
-                orderToUpdate = db.Orders.Where(i => i.Id == Id).Single();
-            
-
-            
-            
-            if (TryUpdateModel(orderToUpdate, "", new string[] { "Status", "TotalAmount" }
-               )) {
-                   if (orderedproducts != null)
-                   {
-                       UpdateOrderedProducts(orderedproducts, orderToUpdate);
-                       
-                   }
-                   orderToUpdate.TotalAmount = TotalAmount;
-                   orderToUpdate.SetStatusType(StatusType.Bill);
             }
-            db.Entry(orderToUpdate).State = EntityState.Modified;
-            db.SaveChanges();
-            long newId = db.Entry(orderToUpdate).Entity.Id;
-            NotificationEngine notificationengine = new NotificationEngine();
-            KeyValuePair<string, string> dictOrder = new KeyValuePair<string, string>("order", newId.ToString());
-            notificationengine.PushFromServer(dictOrder);
+            else
+            {
+                orderToUpdate = db.Orders.Where(i => i.Id == Id).Single();
+            }
+
+
+            if (TryUpdateModel(orderToUpdate, "", new string[] { "Status", "Seats", "TotalAmount" }
+               ))
+            {
+                if (orderedproducts != null)
+                {
+                    UpdateOrderedProducts(orderedproducts, orderToUpdate);
+                }
+                orderToUpdate.TotalAmount = TotalAmount;
+                orderToUpdate.Seats = Seats;
+                orderToUpdate.SetStatusType(statustype);
+                if (Id == 0)
+                {
+
+                    db.Entry(orderToUpdate).State = EntityState.Added;
+                }
+                else
+                {
+                    db.Entry(orderToUpdate).State = EntityState.Modified;
+                }
+
+                db.SaveChanges();
+                newId = db.Entry(orderToUpdate).Entity.Id;
+
+            }
+
+
+            return newId;
+        }
+        private void PushToClient(long Id)
+        {
+            if (Id != 0)
+            {
+                Order orderToUpdate = db.Orders.Where(i => i.Id == Id).Single();
+
+                NotificationEngine notificationengine = new NotificationEngine();
+                //notificationengine.PushFromServer(string.Format("{{'Key':'order','Value':'{0}'}}", newId.ToString()));
+                KeyValuePair<string, string> dictOrder = new KeyValuePair<string, string>("order", Id.ToString());
+                notificationengine.PushFromServer(dictOrder);
+
+                ArrayList SeatArray = orderToUpdate.SeatArray(SeatType.Locked);
+                string jsonSeats = JsonConvert.SerializeObject(SeatArray);
+                KeyValuePair<string, string> dictSeats = new KeyValuePair<string, string>("seats", jsonSeats);
+                notificationengine.PushFromServer(dictSeats);
+            }
+        }
+        [HttpPost]
+        public ActionResult SaveBill(long Id, FormCollection formcollection, OrderedProductModel[] orderedproducts, string Seats, decimal TotalAmount, int Status = 0)
+        {
+            Order orderToUpdate = null;
+            long newId = Save(Id, orderToUpdate, StatusType.Bill, formcollection, orderedproducts, Seats, TotalAmount, Status);
+            //Todo: Need to pass userid here
+            PushToClient(newId);
             ModelState.Clear();
             return View("OrderedProducts", new Order());
         }
@@ -93,62 +129,16 @@ namespace RT.Controllers
         [HttpPost]
         public ActionResult SaveOrder(long Id, FormCollection formcollection, OrderedProductModel[] orderedproducts, string Seats, decimal TotalAmount, int Status = 0)
         {
-
             Order orderToUpdate = null;
-            MembershipUser user = Membership.GetUser(HttpContext.User.Identity.Name);
+            long newId = Save(Id, orderToUpdate, StatusType.New, formcollection, orderedproducts, Seats, TotalAmount, Status);
+            //Todo: Need to pass userid here
             if (Id == 0)
             {
-                orderToUpdate = new Order() { CreatedBy = (Guid)user.ProviderUserKey,CreatedDate= DateTime.Now};
+                PushToClient(newId);
             }
-            else
-            {
-                orderToUpdate = db.Orders.Where(i => i.Id == Id).Single();
-            }
-
-
-            if (TryUpdateModel(orderToUpdate, "", new string[] { "Status","Seats","TotalAmount" }
-               ))
-            {
-                    if (orderedproducts != null)
-                    {
-                        UpdateOrderedProducts(orderedproducts, orderToUpdate);
-                    }
-                    orderToUpdate.TotalAmount = TotalAmount;
-                    orderToUpdate.Seats = Seats;
-                    orderToUpdate.SetStatusType(StatusType.New);
-                    if (Id == 0)
-                    {
-
-                        db.Entry(orderToUpdate).State = EntityState.Added;
-                    }
-                    else
-                    {
-                        db.Entry(orderToUpdate).State = EntityState.Modified;
-                    }
-                    
-                    db.SaveChanges();
-
-                    //Todo: Need to pass userid here
-                    if (Id == 0)
-                    {
-                        long newId = db.Entry(orderToUpdate).Entity.Id;
-
-
-                        NotificationEngine notificationengine = new NotificationEngine();
-                        //notificationengine.PushFromServer(string.Format("{{'Key':'order','Value':'{0}'}}", newId.ToString()));
-                        KeyValuePair<string, string> dictOrder = new KeyValuePair<string, string>("order", newId.ToString());
-                        notificationengine.PushFromServer(dictOrder);
-
-                        ArrayList SeatArray = orderToUpdate.SeatArray(SeatType.Locked);
-                        string jsonSeats = JsonConvert.SerializeObject(SeatArray);
-                        KeyValuePair<string, string> dictSeats = new KeyValuePair<string, string>("seats", jsonSeats);
-                        notificationengine.PushFromServer(dictSeats);
-                    }
-            }
-
             ModelState.Clear();
             return View("OrderedProducts", new Order());
-            //return View("Details", db.Orders.Where(x => x.Id == Id).Single());
+            
         }
 
 
