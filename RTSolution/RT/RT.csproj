@@ -357,7 +357,7 @@
     <Content Include="Views\Product\ListsByGroup.cshtml" />
     <Content Include="Views\Order\Index.cshtml" />
     <Content Include="Views\Shared\_OrderLayout.cshtml" />
-    <Content Include="Views\Order\Details.cshtml" />
+    <Content Include="Views\Shared\OrderedProduct.cshtml" />
     <Content Include="Views\Account\ChangePassword.cshtml" />
     <Content Include="Views\Account\ChangePasswordSuccess.cshtml" />
     <Content Include="Views\Account\LogOn.cshtml" />
@@ -372,6 +372,8 @@
     <Content Include="Views\Shared\_LogOnPartial.cshtml">
       <SubType>Code</SubType>
     </Content>
+    <Content Include="Views\Order\OrderedProducts.cshtml" />
+    <Content Include="Views\Bill\OrderedProducts.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

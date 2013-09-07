@@ -15,5 +15,6 @@ namespace RT
         public string ParcelPrice { get; set; }
         public string Name { get; set; }
         public int Type { get; set; }
+
     }
 }

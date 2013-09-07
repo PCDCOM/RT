@@ -47,6 +47,7 @@
                                                         <tr>
                                                             <td style="white-space:nowrap; min-height:25px;position:relative"  class="csInvoiceReorder">
                                                                 <div id="orderedNumbers" style="overflow:hidden;width:510px;"></div>
+                                                                <div id="billedNumbers" style="overflow:hidden;width:510px;"></div>
                                                             </td>
                                                         </tr>
                                                         <tr>
@@ -95,73 +96,7 @@
                                             </tr>
                                             <tr>
                                                 <td colspan="2">
-
-                                                    @using (Html.BeginForm("Save", "Bill", FormMethod.Post))
-                                                    {
-                                                        <div id="divBillDetails">
-                                                            <table class="invoice-form-table">
-                                                                <tbody>
-                                                                    <tr>
-                                                                        <td>
-                                                                            <div style="min-height: 275px; position: inherit;">
-
-                                                                                <table id="dataTable">
-                                                                                    <tbody id="tBodyOrders">
-
-                                                                                        <tr>
-                                                                                            <th>
-                                                                                                <input type="checkbox" name="allbox" class="csChkAll" style="margin: 0 0 0 4px" checked="checked">
-                                                                                                S.No
-                </th>
-                                                                                            <th>Name</th>
-                                                                                            <th>Unit</th>
-                                                                                            <th>Qty</th>
-                                                                                            <th>Total</th>
-                                                                                            <th>
-                                                                                                <img class="button-icon" src="./images/button-remove.png" onclick="removeAll();">
-                                                                                            </th>
-                                                                                        </tr>
-
-                                                                                    </tbody>
-                                                                                </table>
-                                                                            </div>
-
-                                                                        </td>
-                                                                    </tr>
-                                                                    
-                                                                    <tr>
-                                                                        <td>
-                                                                            <div id="invoice-payment-form">
-                                                                                <table id="invoice-payment-table">
-                                                                                    <tbody>
-                                                                                        <tr>
-                                                                                            <td></td>
-                                                                                            <td></td>
-                                                                                            <td></td>
-                                                                                            <td>Total:
-                                                                                                @{
-                                                        //Need to change total as read only
-                                                                                                    }
-                                    <input type="text" value="" name="TotalAmount" id="TotalAmount">
-                                    <input type="text" value="" name="Seats" id="Seats" class="text-box single-line">
-                                    
-                                                                                            </td>
-                                                                                        </tr>
-                                                                                        <tr>
-
-                                                                                    </tbody>
-                                                                                </table>
-                                                                            </div>
-                                                                        </td>
-                                                                    </tr>
-                                                                </tbody>
-                                                            </table>
-                                                        </div>
-                                                        <input type="submit" value="Order" id="saveOrder" class="button">
-                                                        <input type="submit" value="Bill" id="saveBill" class="button">
-                                                          
-                                                    }
-
+                                                    @Html.Action("OrderedProducts", new RT.Models.Order());
                                                 </td>
                                             </tr>
                                         </tbody>

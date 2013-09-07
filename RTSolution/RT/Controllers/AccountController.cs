@@ -43,6 +43,9 @@ namespace Restaurant.Controllers
                         if(roles.Contains("Waiter") || roles.Contains("Parcel")){
                             return this.RedirectToAction("Index","Order");
                         }
+                        else if (roles.Contains("Manager")) {
+                            return this.RedirectToAction("Index", "Bill");
+                        }
                         else
                             return this.Redirect(FormsAuthentication.DefaultUrl);
                     }

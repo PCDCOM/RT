@@ -940,58 +940,7 @@ function searchByInvoiceIDEnterKey(e)
 }
 
 
-function enterPlaceBill(e)
-{
-	
-	var characterCode;
-	//characterCode = ('charCode' in e) ? e.charCode : e.keyCode;
-	
-	var evt=(e)?e:(window.event)?window.event:null;
-	if(evt){ 
-		var key=(evt.charCode)?evt.charCode: ((evt.keyCode)?evt.keyCode:((evt.which)?evt.which:0));
-	}
 
-	
-	/* if(e && e.which){ // NN4 specific code
-	e = e;
-	characterCode = e.which;
-	}
-	else {
-	e = e;
-	characterCode = e.keyCode; // IE specific code
-	} */
-	if (key == 13) {
-		//alert("aaaaaa13");
-		 var printcurrentinvoiceNo;
-		   printcurrentinvoiceNo=invoice_bill_no;
-		//finalplaceBill();
-		//placeBillData(printcurrentinvoiceNo);
-		   invoice_bill_no=printcurrentinvoiceNo;
-		   setBalance();
-		 // alert("aaaaaaaaaaaa"+invoice_bill_no);
-		  var paidamount=$("#payingamount").val();
-		//  alert("paidamount::"+paidamount);
-		  if(paidamount==''){
-			 // alert("paid not provided then it is considered same amount provided");
-			  paidamount=$("#totalamt").val();
-			  $("#payingamount").val(paidamount);
-		  }
-		  if(invoice_bill_no==paidamount){
-			 // alert("Two time scanned the bill");
-			  $("#payingamount").val('');
-			  return ;
-		  }
-		  //alert(paidamount);
-		//placeBill();
-		   placeBillEntered();
-		return true;
-	}// Enter key is 13
-	else {
-		return false;
-	}
-
-
-}
 
 var cashierbillprint=false;
 function placeBillEntered() {

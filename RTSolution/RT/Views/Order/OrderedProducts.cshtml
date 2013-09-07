@@ -1,0 +1,85 @@
+﻿@model RT.Models.Order
+@{
+    Layout = null;
+}
+@using (Html.BeginForm("SaveBill", "Order", FormMethod.Post))
+{
+    <div id="divOrderDetails">
+        <input type="hidden" id="from" value="Order" />
+        <table class="invoice-form-table">
+            <tbody>
+                <tr>
+                    <td>
+                        <div style="min-height: 275px; position: inherit;">
+
+                            <table id="dataTable">
+                                <tbody id="tBodyOrders">
+
+                                    <tr>
+                                        <th>
+                                            <input type="checkbox" name="allbox" class="csChkAll" style="margin: 0 0 0 4px" checked="checked">
+                                            S.No
+                                        </th>
+                                        <th>Name</th>
+                                        <th>Unit</th>
+                                        <th>Qty</th>
+                                        <th>Total</th>
+                                        <th>
+                                            <img class="button-icon" src="./images/button-remove.png" onclick="removeAll();">
+                                        </th>
+                                    </tr>
+
+                                    @if (Model.OrderedProducts.Count > 0)
+                                    {
+                                        int? inx = 0;
+                                        foreach (var item in Model.OrderedProducts)
+                                        {
+                                            //Todo: if it is a parcel row then change this TR class to parcellrow else nonparcelrow
+                                            inx++;
+                                            ViewData["count"] = inx;
+                                        @Html.Partial("OrderedProduct", item);
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <div id="invoice-payment-form">
+                            <table class="invoice-payment-table" id="invoice-payment-table">
+                                <tbody>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td>Total:
+                                    
+                                    @if (Model != null)
+                                    {
+                                        //Tod: Need to change total and seats as read only
+                                        @Html.TextBoxFor(mode => Model.TotalAmount, new { @readonly = "true" });
+                                        <br />
+                                        @Html.HiddenFor(model => Model.Id);
+                                        @Html.TextBoxFor(model => Model.Seats, new { @readonly = "true" });
+
+                                    }
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+
+        <input type="button" value="Order" id="saveOrder" class="button">
+        <input type="button" value="Bill" id="saveBill1" class="button">
+    </div>
+}

@@ -18,7 +18,8 @@ namespace RT.Server
             get
             {
                 MembershipUser user = Membership.GetUser(HttpContext.Current.User.Identity.Name);
-                return user.UserName;
+                //return user.UserName;
+                return "";
             }
         }
     }    

@@ -57,28 +57,37 @@ namespace RT.Controllers
 
         }
         [HttpPost]
-        public ActionResult SaveBill(long Id, OrderedProductModel[] orderedproducts)
+        public ActionResult SaveBill(long Id, OrderedProductModel[] orderedproducts,decimal TotalAmount)
         {
-            //return SaveOrder(Id, formcollection, orderedproducts, Seats, TotalAmount, 1);
-            Order orderToUpdate = null;
             MembershipUser user = Membership.GetUser(HttpContext.User.Identity.Name);
-            orderToUpdate = db.Orders.Where(i => i.Id == Id).Single();
-            if (TryUpdateModel(orderToUpdate, "", new string[] { "Status" }
+
+            Order orderToUpdate = null;
+            if (Id == 0)
+                orderToUpdate = new Order() { CreatedBy = (Guid)user.ProviderUserKey, CreatedDate = DateTime.Now };
+            else
+                orderToUpdate = db.Orders.Where(i => i.Id == Id).Single();
+            
+
+            
+            
+            if (TryUpdateModel(orderToUpdate, "", new string[] { "Status", "TotalAmount" }
                )) {
                    if (orderedproducts != null)
                    {
                        UpdateOrderedProducts(orderedproducts, orderToUpdate);
+                       
                    }
+                   orderToUpdate.TotalAmount = TotalAmount;
                    orderToUpdate.SetStatusType(StatusType.Bill);
             }
             db.Entry(orderToUpdate).State = EntityState.Modified;
             db.SaveChanges();
             long newId = db.Entry(orderToUpdate).Entity.Id;
             NotificationEngine notificationengine = new NotificationEngine();
-            //notificationengine.PushFromServer(string.Format("{{'Key':'order','Value':'{0}'}}", newId.ToString()));
             KeyValuePair<string, string> dictOrder = new KeyValuePair<string, string>("order", newId.ToString());
             notificationengine.PushFromServer(dictOrder);
-            return View("Details", new Order());
+            ModelState.Clear();
+            return View("OrderedProducts", new Order());
         }
 
         [HttpPost]
@@ -136,38 +145,32 @@ namespace RT.Controllers
                         notificationengine.PushFromServer(dictSeats);
                     }
             }
-            //PopulateOrderedProduct(orderToUpdate);
 
-            return View("Details", new Order());
+            ModelState.Clear();
+            return View("OrderedProducts", new Order());
             //return View("Details", db.Orders.Where(x => x.Id == Id).Single());
         }
 
 
 
+        //[HttpGet]
+        //public ActionResult Details(int id)
+        //{
+        //    Order order = db.Orders.Where(x => x.Id == id).Single();
+        //    return View("OrderedProducts",order);
+        //}
+
         [HttpGet]
-        public ActionResult Details(int id)
+        public ActionResult OrderedProducts(int id)
         {
-            Order order = db.Orders.Where(x => x.Id == id).Single();
-            return View(order);
+            Order order = null;
+            if(id == 0)
+                order = new Order();
+            else
+                order = db.Orders.Where(x => x.Id == id).Single();
+            ModelState.Clear();
+            return View("OrderedProducts", order);
         }
-
-        private void PopulateOrderedProduct(Order order)
-        {
-            var viewModel = new List<OrderedProductModel>();
-            foreach (var invoiceProduct in order.OrderedProducts)
-            {
-                viewModel.Add(new OrderedProductModel
-                {
-                    ProductId = invoiceProduct.ProductId,
-                    Name = invoiceProduct.Product.Name,
-                    Quantity = 78
-                });
-                ViewBag.Products = viewModel;
-            }
-
-
-        }
-
 
 
     }
