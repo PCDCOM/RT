@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
@@ -11,7 +13,7 @@ using RT.Models;
 
 namespace RT.Controllers
 {
-    public class BillController : Controller
+    public class BillController : AsyncController
     {
         private RestaurantEntities db = new RestaurantEntities();
         //
@@ -66,11 +68,67 @@ namespace RT.Controllers
             };
             orderToUpdate.Bills.Add(bill);
         }
+
+
+
+
+
+        //[HttpPost]
+        //public async Task<ActionResult> Pay(long Id, OrderedProductModel[] orderedproducts, decimal TotalAmount, decimal PaidAmount, 
+        //    decimal BalanceAmount, CancellationToken cancelToken = default(CancellationToken))
+        //{
+        //    Order orderToUpdate = null;
+
+
+
+        //    MembershipUser user = Membership.GetUser(HttpContext.User.Identity.Name);
+        //    orderToUpdate = db.Orders.Where(i => i.Id == Id).Single();
+        //    if (TryUpdateModel(orderToUpdate, "", new string[] { "Status", "TotalAmount" }
+        //       ))
+        //    {
+        //        if (orderedproducts != null)
+        //        {
+        //            UpdateOrderedProducts(orderedproducts, orderToUpdate);
+        //        }
+        //        UpdateBillForOrder(orderedproducts, TotalAmount, PaidAmount, BalanceAmount, orderToUpdate);
+        //        orderToUpdate.TotalAmount = TotalAmount;
+        //        orderToUpdate.SetStatusType(StatusType.Paid);
+        //    }
+        //    db.Entry(orderToUpdate).State = EntityState.Modified;
+        //    db.SaveChanges();
+
+        //    long newId = db.Entry(orderToUpdate).Entity.Id;
+
+        //    //PrintingSystem.ReceiptPrint tkt = new PrintingSystem.ReceiptPrint() { amount = 300, destination = "sample destination", drawnBy = "someone", source = "billing", ticketDate = DateTime.Now, TicketNo = 12345 };
+        //    //var printTask = tkt.printAsync();
+
+
+        //    NotificationEngine notificationengine = new NotificationEngine();
+        //    KeyValuePair<string, string> dictOrder = new KeyValuePair<string, string>("order", newId.ToString());
+        //    notificationengine.PushFromServer(dictOrder);
+
+
+        //    ArrayList SeatArray = orderToUpdate.SeatArray(SeatType.Vacant);
+        //    string jsonSeats = JsonConvert.SerializeObject(SeatArray);
+        //    KeyValuePair<string, string> dictSeats = new KeyValuePair<string, string>("seats", jsonSeats);
+        //    notificationengine.PushFromServer(dictSeats);
+
+        //    await Task.WhenAll(printTask);
+
+        //    ModelState.Clear();
+        //    return View("OrderedProducts",new Order());
+        //}
+
+
+
+
         [HttpPost]
-        public ActionResult Pay(long Id, OrderedProductModel[] orderedproducts, decimal TotalAmount, decimal PaidAmount, decimal BalanceAmount)
+        public ActionResult Pay(long Id, OrderedProductModel[] orderedproducts, decimal TotalAmount, decimal PaidAmount,
+            decimal BalanceAmount, CancellationToken cancelToken = default(CancellationToken))
         {
-            
             Order orderToUpdate = null;
+
+
 
             MembershipUser user = Membership.GetUser(HttpContext.User.Identity.Name);
             orderToUpdate = db.Orders.Where(i => i.Id == Id).Single();
@@ -87,7 +145,14 @@ namespace RT.Controllers
             }
             db.Entry(orderToUpdate).State = EntityState.Modified;
             db.SaveChanges();
+
             long newId = db.Entry(orderToUpdate).Entity.Id;
+
+            PrintingSystem.ReceiptPrint tkt = new PrintingSystem.ReceiptPrint() { amount = 300, destination = "sample destination", drawnBy = "someone", source = "billing", ticketDate = DateTime.Now, TicketNo = 12345 };
+
+            Task.Run(() => tkt.print());
+
+
             NotificationEngine notificationengine = new NotificationEngine();
             KeyValuePair<string, string> dictOrder = new KeyValuePair<string, string>("order", newId.ToString());
             notificationengine.PushFromServer(dictOrder);
@@ -98,8 +163,10 @@ namespace RT.Controllers
             KeyValuePair<string, string> dictSeats = new KeyValuePair<string, string>("seats", jsonSeats);
             notificationengine.PushFromServer(dictSeats);
 
+            
+
             ModelState.Clear();
-            return View("OrderedProducts",new Order());
+            return View("OrderedProducts", new Order());
         }
         [HttpGet]
         public ActionResult OrderedProducts(int id)

@@ -27,13 +27,17 @@ namespace RT.Server.Response
             //IEnumerable<RT.Order> newOrders = db.Orders.Where(i => i.GetStatusType() == StatusType.New);
             IEnumerable<Order> newOrders = db.Orders.Where(i => (i.Status == (byte)StatusType.New || i.Status == (byte)StatusType.Bill));
 
+
             //Todo: need to optimise this code and do it in lamda expression
             foreach (Order item in newOrders)
             {
                 //Todo: Need to add total in DB and retrieve here
+                string createdDate = "";
+                if(item.CreatedDate != null)
+                    createdDate = item.CreatedDate.Value.ToString("HH : mm tt");
                 notifyorders.Add(new ReturnObjects.NotifyOrder() { 
-                    OrderId = item.Id, 
-                    CreatedDate = item.CreatedDate.Value.ToString("HH : mm tt"), 
+                    OrderId = item.Id,
+                    CreatedDate = createdDate, 
                     Status = item.GetStatusType(), User = "1",
                     Seats = item.Seats,
                     Total = item.TotalAmount
