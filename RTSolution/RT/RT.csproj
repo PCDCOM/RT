@@ -193,6 +193,9 @@
     <Compile Include="Models\Bill.cs">
       <DependentUpon>Restaurant.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Kitchen.cs">
+      <DependentUpon>Restaurant.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Order.cs">
       <DependentUpon>Restaurant.tt</DependentUpon>
     </Compile>
