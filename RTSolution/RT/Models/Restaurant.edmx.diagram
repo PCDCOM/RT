@@ -4,15 +4,18 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="0bad25d7c9854d5c8cdd5d98e0970ff6" Name="Diagram1">
-        <EntityTypeShape EntityType="RestaurantModel.Bill" Width="1.5" PointX="5.25" PointY="7.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="RestaurantModel.Order" Width="1.5" PointX="3" PointY="7.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="RestaurantModel.OrderedProduct" Width="1.5" PointX="5.25" PointY="2.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="RestaurantModel.Product" Width="1.5" PointX="3" PointY="1.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="RestaurantModel.ProductGroup" Width="1.5" PointX="0.75" PointY="2.25" IsExpanded="true" />
+      <Diagram DiagramId="922da66a6b6b4ea799eebed44ff3289e" Name="Diagram1">
+        <EntityTypeShape EntityType="RestaurantModel.Bill" Width="1.5" PointX="5.25" PointY="9.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="RestaurantModel.Kitchen" Width="1.5" PointX="0.75" PointY="4.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="RestaurantModel.Order" Width="1.5" PointX="3" PointY="9.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="RestaurantModel.OrderedProduct" Width="1.5" PointX="5.25" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="RestaurantModel.Product" Width="1.5" PointX="3" PointY="2.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="RestaurantModel.ProductGroup" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
         <AssociationConnector Association="RestaurantModel.FK_Bill_Order" ManuallyRouted="false" />
+        <AssociationConnector Association="RestaurantModel.FK_Product_Kitchen" ManuallyRouted="false" />
         <AssociationConnector Association="RestaurantModel.FK_OrderedProducts_Order" ManuallyRouted="false" />
         <AssociationConnector Association="RestaurantModel.FK_OrderedProducts_Product" ManuallyRouted="false" />
+        <AssociationConnector Association="RestaurantModel.FK_Product_Product" ManuallyRouted="false" />
         <AssociationConnector Association="RestaurantModel.FK_Product_ProductGroup" ManuallyRouted="false" />
       </Diagram>
     </edmx:Diagrams>

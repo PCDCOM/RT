@@ -1,4 +1,4 @@
-﻿// Default code generation is disabled for model 'C:\PCCOM\Projects\RTApplication\RTSolution\RT\Models\Restaurant.edmx'. 
+﻿// Default code generation is disabled for model 'C:\PCCOM\Projects\RT\RTSolution\RT\Models\Restaurant.edmx'. 
 // To enable default code generation, change the value of the 'Code Generation Strategy' designer
 // property to an alternate value. This property is available in the Properties Window when the model is
 // open in the designer.

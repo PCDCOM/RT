@@ -17,6 +17,7 @@ namespace RT.Models
         public Product()
         {
             this.OrderedProducts = new HashSet<OrderedProduct>();
+            this.Product1 = new HashSet<Product>();
         }
     
         public long Id { get; set; }
@@ -37,8 +38,13 @@ namespace RT.Models
         public System.DateTime ModifiedDate { get; set; }
         public bool IsQuickProduct { get; set; }
         public string Remarks { get; set; }
+        public Nullable<int> KitchenID { get; set; }
+        public Nullable<bool> Status { get; set; }
     
+        public virtual Kitchen Kitchen { get; set; }
         public virtual ICollection<OrderedProduct> OrderedProducts { get; set; }
+        public virtual ICollection<Product> Product1 { get; set; }
+        public virtual Product Product2 { get; set; }
         public virtual ProductGroup ProductGroup { get; set; }
     }
 }
