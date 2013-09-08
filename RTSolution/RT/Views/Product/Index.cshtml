@@ -1,0 +1,87 @@
+﻿@model IEnumerable<RT.Models.Product>
+
+@{
+    ViewBag.Title = "Index";
+
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<div class="CSSTableGenerator">
+<table>
+    <tr>
+        <td>
+            Product Name
+        </td>
+        <td>
+            Product Group
+        </td>
+      <td>
+            Master Product
+        </td>
+      <td>
+            Expiry Date
+        </td>
+      <td>
+            Stock
+        </td>
+      <td>
+            Low Stock
+        </td>
+      <td>
+           Actual Price
+        </td>
+      <td>
+            First Selling Price
+        </td>
+
+
+         <td>Actions</td>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ProductGroup.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Product2.Name)
+        </td> 
+         <td>
+        @if (item.ExpiryDate == null)
+        {
+            @item.ExpiryDate
+        }
+        else
+        {
+            @item.ExpiryDate.Value.ToShortDateString();
+        }
+        </td>
+         <td>
+            @Html.DisplayFor(modelItem => item.Stock)
+        </td>
+         <td>
+            @Html.DisplayFor(modelItem => item.LowStockRange)
+        </td> 
+         <td>
+            @Html.DisplayFor(modelItem => item.ActualPrice)
+        </td> 
+         <td>
+            @Html.DisplayFor(modelItem => item.FirstSellingPrice)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
+            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+        </td>
+    </tr>
+}
+
+</table>
+</div>

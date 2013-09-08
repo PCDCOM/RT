@@ -22,9 +22,10 @@
                 <ul id="menu">
                     @if (Context.User.IsInRole("Admin") || Context.User.IsInRole("Manager"))
                     {
-                    <li>@Html.ActionLink("Product group", "Index", "ProductGroup")</li>
-                    <li>@Html.ActionLink("Product sub group", "Index", "ProductSubGroup")</li>
+                    <li>@Html.ActionLink("Product group", "Index", "ProductGroup")</li>                   
                     <li>@Html.ActionLink("Product", "Index", "Product")</li>
+                    <li>@Html.ActionLink("Order", "Index", "Order")</li>
+                    <li>@Html.ActionLink("Bill", "Index", "Bill")</li>
                     }
                     <li>@Html.ActionLink("Home", "Index", "Home")</li>
                     

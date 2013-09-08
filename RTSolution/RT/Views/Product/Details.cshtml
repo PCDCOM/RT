@@ -1,0 +1,143 @@
+﻿@model RT.Models.Product
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+    <h3>ProductGroup</h3>
+         <div class="CSSEditTableGenerator">
+        <table>
+            <tr>
+                <td>
+                    Product Name
+                </td>
+                <td>
+                    @Html.DisplayFor(model => Model.Name)
+                    
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Product Group
+                </td>
+                <td>
+                 
+                 @Html.DisplayFor(model => Model.ProductGroup.Name)            
+                   
+                </td>
+            </tr>            
+            <tr>
+                <td>
+                    Details
+                </td>
+                <td>
+                    @Html.DisplayFor(model => Model.Details)
+                   
+                </td>
+            </tr>
+              <tr>
+                <td>
+                    Expiry Datemodel
+                </td>
+                <td>
+                      @if (Model.ExpiryDate == null)
+                     {
+                         @Model.ExpiryDate
+                     }
+                     else
+                     {
+                         @Model.ExpiryDate.Value.ToShortDateString();
+                     }
+                   
+                </td>
+            </tr>
+            <tr>
+                <td>
+                   Stock
+                </td>
+                <td>
+                    @Html.DisplayFor(model => Model.Stock)
+                    
+                </td>
+            </tr>
+              <tr>
+                <td>
+                    LowStockRange
+                </td>
+                <td>
+                    @Html.DisplayFor(model => Model.LowStockRange)
+                   
+                </td>
+            </tr>  <tr>
+                <td>
+                ActualPrice
+                </td>
+                <td>
+                    @Html.DisplayFor(model => Model.ActualPrice)
+                   
+                </td>
+            </tr>  <tr>
+                <td>
+                 FirstSellingPrice
+                </td>
+                <td>
+                    @Html.DisplayFor(model => Model.FirstSellingPrice)
+                   
+                </td>
+            </tr>  <tr>
+                <td>
+                   SecondSellingPrice
+                </td>
+                <td>
+                    @Html.DisplayFor(model => Model.SecondSellingPrice)
+                   
+                </td>
+            </tr>  <tr>
+                <td>
+                    ThirdSellingPrice
+                </td>
+                <td>
+                    @Html.DisplayFor(model => Model.ThirdSellingPrice)
+                  
+                </td>
+            </tr>  <tr>
+                <td>
+                FourthSellingPrice
+                </td>
+                <td>
+                    @Html.DisplayFor(model => Model.FourthSellingPrice)
+                   
+                </td>
+            </tr>
+              <tr>
+                <td>
+                   IsQuickProduct
+                </td>
+                <td>
+                    @Html.DisplayFor(model => Model.IsQuickProduct)
+                  
+                </td>
+            </tr>  <tr>
+                <td>
+                  Remarks
+                </td>
+                <td>
+                    @Html.DisplayFor(model => Model.Remarks)
+                   
+                </td>
+            </tr>
+              <tr>
+                <td>
+                    Kitchen 
+                </td>
+                <td>                   
+                     @Html.DisplayFor(model => Model.Kitchen.KitchenName)               
+            </tr>
+        </table>
+             </div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id=Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
