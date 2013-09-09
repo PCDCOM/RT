@@ -79,6 +79,8 @@
           <Property Name="Price" Type="money" />
           <Property Name="Type" Type="int" Nullable="false" />
           <Property Name="CreatedBy" Type="uniqueidentifier" />
+          <Property Name="ProductName" Type="varchar" MaxLength="50" />
+          <Property Name="Amount" Type="decimal" />
         </EntityType>
         <EntityType Name="Product">
           <Key>
@@ -272,6 +274,8 @@
           <Property Name="Price" Type="Decimal" Precision="19" Scale="4" />
           <Property Name="Type" Type="Int32" Nullable="false" />
           <Property Name="CreatedBy" Type="Guid" />
+          <Property Name="ProductName" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="Amount" Type="Decimal" Precision="18" Scale="0" />
           <NavigationProperty Name="Order" Relationship="RestaurantModel.FK_OrderedProducts_Order" FromRole="OrderedProduct" ToRole="Order" />
           <NavigationProperty Name="Product" Relationship="RestaurantModel.FK_OrderedProducts_Product" FromRole="OrderedProduct" ToRole="Product" />
         </EntityType>
@@ -438,6 +442,8 @@
                 <ScalarProperty Name="Price" ColumnName="Price" />
                 <ScalarProperty Name="Type" ColumnName="Type" />
                 <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

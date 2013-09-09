@@ -17,7 +17,7 @@
                                         </td>
                                         <td>
                                             <span style="text-decoration: line-through">
-                                                @Html.DisplayFor(modelItem => Model.Product.Name)
+                                                @Html.DisplayFor(modelItem => Model.ProductName)
                                             </span>
 
                                         </td>
@@ -33,7 +33,7 @@
                                         </td>
                                         <td id='unitTotal'>
                                            
-                                            <span> @(Model.Price * Model.Quantity) </span>
+                                            @Html.DisplayFor(modelItem => Model.Amount)
                                         </td>
                                         <td>
                                             @{

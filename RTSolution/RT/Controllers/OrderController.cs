@@ -42,7 +42,9 @@ namespace RT.Controllers
                         Quantity = newOrderedProduct.Quantity,
                         Type = newOrderedProduct.Type,
                         Price = newOrderedProduct.Price,
-                        CreatedBy = (Guid)user.ProviderUserKey
+                        CreatedBy = (Guid)user.ProviderUserKey,
+                        Amount = newOrderedProduct.Amount,
+                        ProductName = newOrderedProduct.ProductName
                          
                     };
                     orderToUpdate.OrderedProducts.Add(orderedProduct);
@@ -115,12 +117,29 @@ namespace RT.Controllers
                 notificationengine.PushFromServer(dictSeats);
             }
         }
+        private void PrintBill(long Id) {
+            Order order = db.Orders.Find(Id);
+            string createdBy = Membership.GetUser(order.OrderedProducts.First().CreatedBy).UserName;
+            PrintingSystem.ReceiptPrint rcpt = new PrintingSystem.ReceiptPrint();
+
+            rcpt.TotalAmount = order.TotalAmount;
+            rcpt.OrderNo = Id;
+            rcpt.CreatedBy = createdBy;
+            rcpt.CreateDate = order.CreatedDate.Value.ToString("dd-MM-yyyy HH:mm");
+            rcpt.OrderedProducts = order.OrderedProducts;
+
+            System.Threading.Tasks.Task.Run(() => rcpt.print());
+        }
         [HttpPost]
         public ActionResult SaveBill(long Id, FormCollection formcollection, OrderedProductModel[] orderedproducts, string Seats, decimal TotalAmount, int Status = 0)
         {
             Order orderToUpdate = null;
             long newId = Save(Id, orderToUpdate, StatusType.Bill, formcollection, orderedproducts, Seats, TotalAmount, Status);
             //Todo: Need to pass userid here
+
+
+            PrintBill(newId);
+
             PushToClient(newId);
             ModelState.Clear();
             return View("OrderedProducts", new Order());

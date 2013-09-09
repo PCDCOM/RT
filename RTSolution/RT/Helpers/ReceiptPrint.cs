@@ -4,6 +4,7 @@ using System.Linq;
 using System.Drawing.Printing;
 using System.Drawing;
 using System.Threading;
+using RT.Models;
 
 
 
@@ -12,150 +13,117 @@ namespace PrintingSystem
     public class ReceiptPrint
     {
         PrintDocument pdoc = null;
-        int ticketNo;
-        DateTime TicketDate;
-        String Source, Destination, DrawnBy;
-        float Amount;
 
-        public int TicketNo
-        {
-            //set the person name
-            set { this.ticketNo = value; }
-            //get the person name 
-            get { return this.ticketNo; }
-        }
-        public DateTime ticketDate
-        {
-            //set the person name
-            set { this.TicketDate = value; }
-            //get the person name 
-            get { return this.TicketDate; }
-        }
-
-        public String source
-        {
-            //set the person name
-            set { this.Source = value; }
-            //get the person name 
-            get { return this.Source; }
-        }
-        public String destination
-        {
-            //set the person name
-            set { this.Destination = value; }
-            //get the person name 
-            get { return this.Destination; }
-        }
-        public float amount
-        {
-            //set the person name
-            set { this.Amount = value; }
-            //get the person name 
-            get { return this.Amount; }
-        }
-        public String drawnBy
-        {
-            //set the person name
-            set { this.DrawnBy = value; }
-            //get the person name 
-            get { return this.DrawnBy; }
-        }
-
-        public ReceiptPrint()
-        {
-
-        }
-        public ReceiptPrint(int ticketNo, DateTime TicketDate, String Source,
-               String Destination, float Amount, String DrawnBy)
-        {
-            this.ticketNo = ticketNo;
-            this.TicketDate = TicketDate;
-            this.Source = Source;
-            this.Destination = Destination;
-            this.Amount = Amount;
-            this.DrawnBy = DrawnBy;
-        }
+        public Nullable<decimal> TotalAmount { get; set; }
+        public long OrderNo { get; set; }
+        public string CreatedBy { get; set; }
+        public string CreateDate { get; set; }
+        public ICollection<OrderedProduct> OrderedProducts { get; set; }
         public void print()
         {
-
-            //Thread.Sleep(10000);
             pdoc = new PrintDocument();
             PrinterSettings ps = new PrinterSettings();
             Font font = new Font("Courier New", 15);
-
-
             PaperSize psize = new PaperSize("Custom", 100, 200);
-            //ps.DefaultPageSettings.PaperSize = psize;
-
-
             pdoc.DefaultPageSettings.PaperSize = psize;
-            //pdoc.DefaultPageSettings.PaperSize.Height =320;
             pdoc.DefaultPageSettings.PaperSize.Height = 820;
-
             pdoc.DefaultPageSettings.PaperSize.Width = 520;
-
             pdoc.PrintPage += new PrintPageEventHandler(pdoc_PrintPage);
             pdoc.Print();
 
-            
+
 
         }
 
-        //public async Task<string>  printAsync()
-        //{
-        //    await Task.Delay(3000);
-
-        //    pdoc = new PrintDocument();
-        //    PrinterSettings ps = new PrinterSettings();
-        //    Font font = new Font("Courier New", 15);
-
-
-        //    PaperSize psize = new PaperSize("Custom", 100, 200);
-        //    //ps.DefaultPageSettings.PaperSize = psize;
-
-
-        //    pdoc.DefaultPageSettings.PaperSize = psize;
-        //    //pdoc.DefaultPageSettings.PaperSize.Height =320;
-        //    pdoc.DefaultPageSettings.PaperSize.Height = 820;
-
-        //    pdoc.DefaultPageSettings.PaperSize.Width = 520;
-
-        //    pdoc.PrintPage += new PrintPageEventHandler(pdoc_PrintPage);
-        //    pdoc.Print();
-
-        //    return await Task.Run(() =>
-        //    {
-        //        return ("success");
-        //    });
-
-        //}
 
         void pdoc_PrintPage(object sender, PrintPageEventArgs e)
         {
             Graphics graphics = e.Graphics;
-            Font font = new Font("Courier New", 10);
+            Font font = new Font("Georgia", 8);
+            Font fontBold = new Font("Georgia", 8, FontStyle.Bold);
+
+            Pen boldPen = new Pen(Color.Black, 3);
+            Pen lightPen = new Pen(Color.Black, 1);
             float fontHeight = font.GetHeight();
-            int startX = 50;
-            int startY = 55;
-            int Offset = 40;
-            graphics.DrawString("RESTORAN MUTHU", new Font("Courier New", 14),
+            int startX = 3;
+            int startY = 2;
+            int Offset = 5;
+            graphics.DrawString("RESTORAN MUTHU", new Font("Courier New", 14, FontStyle.Bold),
                                 new SolidBrush(Color.Black), startX, startY + Offset);
-            Offset = Offset + 20;
+            Offset = Offset + 30;
             graphics.DrawString("No:118, Jalan Trus, 80000 Johor Bahru.",
-                 new Font("Courier New", 14),
-                                new SolidBrush(Color.Black), startX, startY + Offset);
+                 font, new SolidBrush(Color.Black), startX, startY + Offset);
+
             Offset = Offset + 20;
-            graphics.DrawString("Tel: 07-2214113 8/9/2013 21:49",
-                new Font("Courier New", 14),
+
+            graphics.DrawString(string.Format("Tel: 07-2214113        Bill No : {0}", OrderNo),
+               fontBold,
                     new SolidBrush(Color.Black), startX, startY + Offset);
             Offset = Offset + 20;
-            graphics.DrawString("Bill No : 19 Service: A1",
-                new Font("Courier New", 14),
+            graphics.DrawString(string.Format("{0}    Service: {1}", CreateDate, CreatedBy),
+                font,
                     new SolidBrush(Color.Black), startX, startY + Offset);
 
 
-            //graphics.DrawImage(
-            //    Image.FromFile(@"C:\PCCOM\Projects\RT\RTSolution\RT\test.jpg"),0,0);
+            string[] headerTxts = { "No", "Item", "Qty", "RM", "Amt" };
+            DrawRow(startX, startY = Offset + 20, graphics, lightPen, headerTxts, fontBold);
+
+
+            int Sno = 0;
+            
+            foreach (OrderedProduct item in OrderedProducts)
+            {
+
+                string[] rowTxt = { (++Sno).ToString(), item.ProductName, item.Quantity.ToString(), 
+                                      String.Format("{0:0.00}", item.Price), String.Format("{0:0.00}",item.Amount)};
+                DrawRow(startX, startY = startY + 20, graphics, lightPen, rowTxt, font);
+                
+            }
+
+            //Total
+            RectangleF rf = new RectangleF(startX, startY = startY + 20, 280, 30);
+            graphics.DrawRectangle(lightPen, rf.X, rf.Y, rf.Width, rf.Height);
+            StringFormat stringFormat = new StringFormat();
+            stringFormat.Alignment = StringAlignment.Far;
+            stringFormat.LineAlignment = StringAlignment.Center;
+
+            graphics.DrawString("Total: RM " + String.Format("{0:0.00}",TotalAmount), fontBold, Brushes.Blue, rf, stringFormat);
+
+
         }
+
+        void DrawRow(int startX, int startY, Graphics graphics, Pen lightPen, string[] txts, Font font)
+        {
+            int celltWidth = 0;
+
+            var rectObjects = new[] { 
+                new { rect = new RectangleF (startX , startY , celltWidth = 25, 20), txt = txts[0], alignment = StringAlignment.Far },
+                new { rect = new RectangleF (startX = startX + celltWidth, startY, celltWidth =  110, 20), txt = txts[1] ,alignment = StringAlignment.Near},
+                new { rect = new RectangleF (startX = startX + celltWidth, startY, celltWidth =  25, 20), txt = txts[2] ,alignment = StringAlignment.Far},
+                new { rect = new RectangleF (startX =startX + celltWidth, startY, celltWidth =  60, 20), txt = txts[3],alignment = StringAlignment.Far },
+                new { rect = new RectangleF (startX =startX + celltWidth, startY, celltWidth = 60, 20), txt = txts[4] ,alignment = StringAlignment.Far}
+            };
+
+
+
+            foreach (var r in rectObjects)
+            {
+                DrawColumn(r.rect, graphics, lightPen, r.txt, font, r.alignment);
+            }
+
+
+
+        }
+        void DrawColumn(RectangleF cell, Graphics g, Pen lightPen, string text, Font font, StringAlignment alignment)
+        {
+            g.DrawRectangle(lightPen, cell.X, cell.Y, cell.Width, cell.Height);
+            StringFormat stringFormat = new StringFormat();
+            stringFormat.Alignment = alignment;
+            stringFormat.LineAlignment = StringAlignment.Center;
+
+            g.DrawString(text, font, Brushes.Blue, cell, stringFormat);
+        }
+
+
     }
 }

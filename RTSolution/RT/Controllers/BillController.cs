@@ -42,6 +42,8 @@ namespace RT.Controllers
                         Type = newOrderedProduct.Type,
                         Price = newOrderedProduct.Price,
                         CreatedBy = (Guid)user.ProviderUserKey,
+                        Amount = newOrderedProduct.Amount,
+                        ProductName = newOrderedProduct.ProductName
                         
                     };
                     orderToUpdate.OrderedProducts.Add(orderedProduct);
@@ -120,7 +122,19 @@ namespace RT.Controllers
         //}
 
 
+        private void PrintBill(long Id) {
+            Order order = db.Orders.Find(Id);
+            string createdBy = Membership.GetUser(order.OrderedProducts.First().CreatedBy).UserName;
+            PrintingSystem.ReceiptPrint rcpt = new PrintingSystem.ReceiptPrint();
 
+            rcpt.TotalAmount = order.TotalAmount;
+            rcpt.OrderNo = Id;
+            rcpt.CreatedBy = createdBy;
+            rcpt.CreateDate = order.CreatedDate.Value.ToString("dd-MM-yyyy HH:mm");
+            rcpt.OrderedProducts = order.OrderedProducts;
+
+            Task.Run(() => rcpt.print());
+        }
 
         [HttpPost]
         public ActionResult Pay(long Id, OrderedProductModel[] orderedproducts, decimal TotalAmount, decimal PaidAmount,
@@ -148,10 +162,10 @@ namespace RT.Controllers
 
             long newId = db.Entry(orderToUpdate).Entity.Id;
 
-            PrintingSystem.ReceiptPrint tkt = new PrintingSystem.ReceiptPrint() { amount = 300, destination = "sample destination", drawnBy = "someone", source = "billing", ticketDate = DateTime.Now, TicketNo = 12345 };
-
-            Task.Run(() => tkt.print());
-
+            if (orderedproducts != null)
+            {
+                PrintBill(newId);
+            }
 
             NotificationEngine notificationengine = new NotificationEngine();
             KeyValuePair<string, string> dictOrder = new KeyValuePair<string, string>("order", newId.ToString());

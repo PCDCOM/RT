@@ -20,6 +20,8 @@ namespace RT.Models
         public Nullable<decimal> Price { get; set; }
         public int Type { get; set; }
         public Nullable<System.Guid> CreatedBy { get; set; }
+        public string ProductName { get; set; }
+        public Nullable<decimal> Amount { get; set; }
     
         public virtual Order Order { get; set; }
         public virtual Product Product { get; set; }

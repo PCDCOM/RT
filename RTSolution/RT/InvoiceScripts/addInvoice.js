@@ -405,7 +405,7 @@ function placeBillEntered() {
                 + '</td>'
                 + '<td><input  id="nameid'
                 + rowCount
-                + '" type="text" value="'
+                + '" type="text" name="orderedproducts[' + rowCount + '].ProductName" value="'
                 + name
                 + '"/></td>'
 
@@ -429,9 +429,13 @@ function placeBillEntered() {
                 + rowId + '\')">1</a>'
                 + '<input type="hidden" size="3" name="orderedproducts[' + rowCount
                 + '].Quantity" value="1" id="qtyid' + rowCount + '"></td>'
+
                 + '<td id="unitTotal"><span>' + unitprice + '</span>'
-                + '<input type="hidden" size="3" value="' + unitprice + '" id="item_totalprice'
-                + rowCount + '"></td>' + '<td>' + removeButton + '</td>' + '</tr>';
+
+                + '<input type="hidden" size="3" name="orderedproducts[' + rowCount + '].Amount" value="' + unitprice + '" id="Amount' + rowCount + '">'
+                
+                + '</td>'
+                + '<td>' + removeButton + '</td>' + '</tr>';
 
         $('#dataTable tr:last').after(rowHtmlData);
         $('#invoice #TotalAmount').val(newTotal.toFixed(2));
@@ -1068,6 +1072,9 @@ function placeBillEntered() {
             $(rowSelector + " .number_button_qty").html(newQty);
             $(rowSelector + " td:nth-child(5) span").html(
                     newItemTotalPrice.toFixed(2));
+            $(rowSelector + " td:nth-child(5) input").val(
+            newItemTotalPrice.toFixed(2));
+
             $(rowSelector + ' td:nth-child(4) input').val(newQty);
             $(rowSelector + ' td:nth-child(5) input').val(
                     newItemTotalPrice.toFixed(2));
@@ -1176,6 +1183,9 @@ function placeBillEntered() {
             $(rowSelector + " .number_button_unit_price").html(newUnitPrice);
             $(rowSelector + " td:nth-child(5) span").html(
                     newItemTotalPrice.toFixed(2));
+            $(rowSelector + " td:nth-child(5) input").val(
+            newItemTotalPrice.toFixed(2));
+
             $(rowSelector + ' td:nth-child(3) input').val(newUnitPrice);
             $(rowSelector + ' td:nth-child(5) input').val(
                     newItemTotalPrice.toFixed(2));
