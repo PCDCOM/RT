@@ -1,6 +1,5 @@
 ﻿div.seatGroup {
     width: 100%;
-    height: 33px;
 }
 div.seatGroup ul {
     list-style-type: none;
@@ -9,6 +8,7 @@ div.seatGroup ul {
 }
 div.seatGroup li {
     float: left;
+    margin-bottom: 5px;
 }
 div.seatGroup a {
     display: block;
@@ -29,7 +29,7 @@ div.seatGroup a:hover, div.seatGroup a:active {
 
 div.prodGroup {
     width: 100%;
-    height: 33px;   
+    
 }
 div.prodGroup ul {
     list-style-type: none;
@@ -38,10 +38,11 @@ div.prodGroup ul {
 }
 div.prodGroup li {
     float: left;
+    margin-bottom: 5px;
 }
 div.prodGroup a {
     display: block;
-    width: auto;
+    width: 90px;
 }
 div.prodGroup a:link, div.prodGroup a:visited {
     background-color: #FFCC00;
