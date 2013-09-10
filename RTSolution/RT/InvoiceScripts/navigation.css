@@ -1,0 +1,57 @@
+﻿div.seatGroup {
+    width: 100%;
+    height: 33px;
+}
+div.seatGroup ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+div.seatGroup li {
+    float: left;
+}
+div.seatGroup a {
+    display: block;
+    width: 156px;
+}
+div.seatGroup a:link, div.seatGroup a:visited {
+    background-color: #98BF21;
+    color: #FFFFFF;
+    font-weight: bold;
+    padding: 4px;
+    text-align: center;
+    text-decoration: none;
+    text-transform: uppercase;
+}
+div.seatGroup a:hover, div.seatGroup a:active {
+    background-color: #7A991A;
+}
+
+div.prodGroup {
+    width: 100%;
+    height: 33px;   
+}
+div.prodGroup ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+div.prodGroup li {
+    float: left;
+}
+div.prodGroup a {
+    display: block;
+    width: auto;
+}
+div.prodGroup a:link, div.prodGroup a:visited {
+    background-color: #FFCC00;
+    color: black;
+    font-weight: bold;
+    padding: 4px;
+    text-align: center;
+    text-decoration: none;
+    text-transform: uppercase;
+}
+div.prodGroup a:hover, div.prodGroup a:active {
+    background-color: #FF6600;
+}

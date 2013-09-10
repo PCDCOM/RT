@@ -85,9 +85,14 @@ $(function () {
             },
             success: function (result) {
                 $(".csSeatList .seat a").parent().removeClass("selectingSeat");
-                $('#orderedNumbers a').removeClass("selected");
-                $('#billedNumbers a').removeClass("selected");
-                $('#ord' + ordId).addClass('selected');
+                $('#orderedNumbers a').removeClass("btn-info-mini");
+                $('#billedNumbers a').removeClass("btn-info-mini");
+                $('#invoice a').removeClass("btn-info-mini");
+
+                $('#orderedNumbers .ord' + ordId).addClass("btn-info-mini");
+                $('#billedNumbers .ord' + ordId).addClass("btn-info-mini");
+                $('#invoice .ord' + ordId).addClass('btn-info-mini');
+
                 $("#divOrderDetails").html(result);
                 $.setOrderedProductEvents();
             }
@@ -165,6 +170,8 @@ $(function () {
 
 
 $(document).ready(function () {
+
+
     $('#btnLoadOrder').click(function (e) {
         e.preventDefault();
         var ordId = $('#txtOrderId').val()
@@ -174,6 +181,52 @@ $(document).ready(function () {
 
     $.setOrderedProductEvents();
 
+
+    $("#product-adder td div.circle").click(
+        function () {
+            var currentQty = trim($("#quantity").val());
+            var btnQty = $(this).html();
+            if (btnQty == "C") {
+                $("#quantity").val("");
+                return false;
+            }
+
+            if (isNumber(btnQty)) {
+                if (isNumber(currentQty)) {
+                    $("#quantity").val(currentQty + "" + btnQty);
+                } else if (currentQty == null || currentQty == "") {
+                    $("#quantity").val(btnQty);
+                    var productId = $("#current-item-id").val();
+                    var unitPrice = $("#current-item-unitprice").val();
+                    var productName = $("#current-item-name").val();
+                    if ($("#prev-added-item-id").val() == productId) {
+                        // ////alert("ipdateproduct::::");
+                        // need to investigate this method
+                        // updateProduct(productName, parseInt(btnQty) - 1,
+                        // productId);
+                        updateCurrentProduct(productName,
+                                parseInt(btnQty) - 1, productId);
+                    }
+                }
+            }
+            return false;
+        });
+
+    $('#autoProduct').keyup(function (e) {
+        var key = 0;
+        var evt = (e) ? e : (window.event) ? window.event : null;
+        if (evt) {
+           key = (evt.charCode) ? evt.charCode : ((evt.keyCode) ? evt.keyCode : ((evt.which) ? evt.which : 0));
+        }
+        if (key == 13) {
+            var txt = $('#autoProduct').val();
+            var val = $('#ProductDataList').find('option[value="' + txt + '"]');
+            var prm1 = val.attr('prm1');
+            var prm2 = val.attr('id');
+            addRowRecord(prm1, prm2);
+            $('#autoProduct').val("");
+        }
+    });
 
 });
 function setBalanceAmountValue() {
@@ -243,13 +296,8 @@ function enterPlaceBill(e) {
 function placeBillEntered() {
     $('#savePayment').trigger('click');
 }
-    /**
-     * 
-     * @param value (
-     * @param id
-     */
-    function addRowRecord(value, id) {
 
+function addRowRecord(value, id) {
         var rowCount = $('table#dataTable tr').length - 1;
 
         if (rowCount == 0) {
@@ -384,8 +432,7 @@ function placeBillEntered() {
                 + unitprice
                 + ','
                 + parcelPrice
-                + ')" /> &nbsp;'
-                + rowCount
+                + ')" />'
                 + '<input type="hidden" id="type'
                 + rowCount
                 + '" value="'
@@ -403,9 +450,9 @@ function placeBillEntered() {
                 + rowCount
                 + '].ProductId"/>'
                 + '</td>'
-                + '<td><input  id="nameid'
+                + '<td><span>' + name + '</span><input  id="nameid'
                 + rowCount
-                + '" type="text" name="orderedproducts[' + rowCount + '].ProductName" value="'
+                + '" type="hidden" name="orderedproducts[' + rowCount + '].ProductName" value="'
                 + name
                 + '"/></td>'
 
@@ -443,11 +490,6 @@ function placeBillEntered() {
         document.getElementById("parceloptionID").checked = false;
 
     }
-
-
-
-
-
 
 
     // $(document).ready(function(){
@@ -771,104 +813,7 @@ function placeBillEntered() {
      * @param productId
      */
 
-    function addNewDataRowQuantity(name, unitprice, productId, quan, saleorderid,
-            parcel) {
 
-        var rowCount = $('table#dataTable tr').length;
-        var currentTotal = $('#TotalAmount').val();
-        var totalQty = $('#totalqty');
-        var newTotal = parseFloat(unitprice);
-        var isParcel = $.trim(parcel);
-        var rowTotalvalue = parseFloat(unitprice) * quan;
-        var remove_space_productName = name.split(' ').join('');
-        var parcelHidden;
-        // var rowId = 'row-id-' + name + "-" + productId;
-        var rowId = 'row-id-' + remove_space_productName + "-" + productId;
-
-        if (rowCount > 1) {
-            newTotal = newTotal + parseFloat(currentTotal);
-        }
-
-        if (isParcel != '') {
-            isParcel = ' checked="checked"';
-            parcelHidden = '<input type="checkbox" checked="checked" disabled="disabled"/>';
-        } else {
-            isParcel = '';
-            parcelHidden = '<input type="checkbox" disabled="disabled"/>';
-        }
-
-        var removeButton = "<a href='" + "javascript:deleteDataRow(\"" + rowId
-                + "\"," + rowCount + ");" + "' >"
-                + "<img class='button-icon'	src='images/button-remove.png'>"
-                + "</a>";
-
-        var rowHtmlData = '<tr id='
-                + rowId
-                + ' class="old_order plist_'
-                + rowCount
-                + '" data-count="'
-                + rowCount
-                + '">'
-                + '<td>'
-                + parcelHidden
-                + ' <input type="checkbox" class="p_'
-                + rowCount
-                + ' csChkParcel" id="parcelid'
-                + rowCount
-                + '"  name="saleorders['
-                + rowCount
-                + '].parcel"  value="'
-                + parcel
-                + '" style="display: none;" '
-                + isParcel
-                + ' onclick="tickParcel()" /> &nbsp;'
-                + rowCount
-                + '<input type="hidden" id="rowscount" value="'
-                + rowCount
-                + '" name="rowsets"/><input type="hidden" id="productId'
-                + rowCount
-                + '" value="'
-                + productId
-                + '" name="saleorders['
-                + rowCount
-                + '].product.productid"/>'
-                + '</td>'
-                + '<td ><input style="text-decoration:line-through" id="nameid'
-                + rowCount
-                + '" type="text" value="'
-                + name
-                + '" name="saleorders['
-                + rowCount
-                + '].producname" disabled="disabled"/>'
-                + '<input  id="saleorderid'
-                + rowCount
-                + '" type="hidden" value="'
-                + saleorderid
-                + '" name="saleorders['
-                + rowCount
-                + '].saleorderid"/></td>'
-                + '<td> <a class="number_button_unit_price" href="#" onclick="javascript:;">'
-                + unitprice
-                + '</a>'
-                + '<input id="unitid'
-                + rowCount
-                + '" type="hidden" size="5" value="'
-                + unitprice
-                + '" name="saleorders['
-                + rowCount
-                + '].unitprice"></td>'
-                + '<td><a class="number_button_qty" href="#" onclick="javascript:;">'
-                + quan + '</a>' + '<input type="hidden" size="3" name="saleorders['
-                + rowCount + '].quantity" value="' + quan + '" id="qtyid'
-                + rowCount + '"></td>' + '<td id="unitTotal"><span>'
-                + rowTotalvalue.toFixed(2) + '</span>'
-                + '</td>' + '<td>' + removeButton + '</td>' + '</tr>';
-
-        $('#dataTable tr:last').after(rowHtmlData);
-        $('#invoice #TotalAmount').val(newTotal.toFixed(2));
-        $('#invoice #totalqty').val(rowCount);
-
-    }
 
 
 
@@ -937,7 +882,7 @@ function placeBillEntered() {
 
         if ($(rowSelector).html() != null) {
 
-            var rowNumber = $(rowSelector).prevAll("tr").length;
+            var rowNumber = $(rowSelector).prevAll("tr").length - 1;
             if (rowNumber != 0) {
                 var unitPrice = parseFloat($(rowSelector + " #unitid" + rowNumber)
                         .val());
@@ -1146,7 +1091,7 @@ function placeBillEntered() {
         var remove_space_productName = productName.split(' ').join('');
         var rowSelector = "tr#row-id-" + remove_space_productName + "-" + productId;
         if ($(rowSelector).html() != null) {
-            var rowNumber = $(rowSelector).prevAll("tr").length;
+            var rowNumber = $(rowSelector).prevAll("tr").length-1;
             if (rowNumber != 0) {
                 var unitPrice = parseFloat($(rowSelector + " #unitid" + rowNumber)
                         .val());

@@ -3,20 +3,17 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 
-    <script src="~/InvoiceScripts/jquery-1.7.1.min.js"></script>
-    <script type="text/javascript" src="~/InvoiceScripts/jquery-1.7.1.min.js"></script>
-    <script type="text/javascript" src="~/InvoiceScripts/jquery-ui-1.8.17.custom.min.js"></script>
-    <link rel="stylesheet" href="~/InvoiceScripts/style.css" type="text/css" media="all">
-    <link rel="stylesheet" href="~/InvoiceScripts/pos.css" type="text/css">
-    <link type="text/css" href="~/InvoiceScripts/jquery-ui-1.8.17.custom.css" rel="stylesheet">
-    <script src="~/InvoiceScripts/jquery.ui.autocomplete.js"></script>
-    <script src="~/InvoiceScripts/addInvoice.js"></script>
-    <link rel="stylesheet" type="text/css" media="all" href="~/InvoiceScripts/invoice-styles.css">
-    <link rel="stylesheet" type="text/css" href="~/InvoiceScripts/arrange.css">
+    @Styles.Render("~/Content/css")
     <link rel="stylesheet" type="text/css" href="~/InvoiceScripts/buttons.css">
-    <link href="~/InvoiceScripts/global.css" media="screen" rel="stylesheet" type="text/css">
-    <script type="text/javascript" src="~/InvoiceScripts/jquery-barcode.js"></script>
-    <script type="text/javascript" src="~/InvoiceScripts/common.js"></script>
+    <link rel="stylesheet" type="text/css" href="~/InvoiceScripts/navigation.css">
+    <link rel="stylesheet" href="~/InvoiceScripts/pos.css" type="text/css">
+    <link rel="stylesheet" type="text/css" media="all" href="~/InvoiceScripts/invoice-styles.css">
+
+    <link rel="stylesheet" type="text/css" href="~/InvoiceScripts/circle.css">
+
+    <link rel="stylesheet" type="text/css" href="~/InvoiceScripts/arrange.css">
+    
+    
     @Scripts.Render("~/bundles/jquery")
 
     @Scripts.Render("~/bundles/jquerychannel")
@@ -25,48 +22,11 @@
 
     @Scripts.Render("~/bundles/jquerynotification")
 
+    <script src="~/InvoiceScripts/addInvoice.js"></script>
+    <script type="text/javascript" src="~/InvoiceScripts/common.js"></script>
+
     <title>Add New Invoice</title>
     <script type="text/javascript" id="waxCS">var WAX = function () { var _arrInputs; window.addEventListener('waxSetArr', function (evt) { _arrInputs = evt.detail; }); return { getElement: function (i) { return _arrInputs[i]; } } }(); function waxGetElement(i) { return WAX.getElement(i); }</script>
-    <style>
-        * {
-            color: #7F7F7F;
-            font-family: Arial,sans-serif;
-            font-size: 12px;
-            font-weight: normal;
-        }
-
-        #config {
-            overflow: auto;
-            margin-bottom: 10px;
-        }
-
-        .config {
-            float: left;
-            width: 200px;
-            height: 80px;
-            border: 1px solid #000;
-            margin-left: 10px;
-        }
-
-            .config .title {
-                font-weight: bold;
-                text-align: center;
-            }
-
-            .config .barcode2D,
-            #miscCanvas {
-                display: none;
-            }
-
-        #submit {
-            clear: both;
-        }
-
-        #barcodeTarget,
-        #canvasTarget {
-            margin-top: 20px;
-        }
-    </style>
 </head>
 <body onload="seatSettingDetails();">
     <div class="page">
@@ -78,6 +38,7 @@
         <section>
             @RenderBody()
         </section>
+
     </div>
     @RenderSection("scripts", required: false)
 </body>

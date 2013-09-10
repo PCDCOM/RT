@@ -1,34 +1,7 @@
-.but td {
-	background-color: gray;
-	text-align: center;
-	border-style: solid;
-	border-color: silver;
-	width: 80px;
-	height: 40px;
-}
 
-.but a:link {
-	text-decoration: none;
-	color: white;
-}
-
-.but a:visited {
-	text-decoration: none;
-	color: white;
-}
-
-.but a:active {
-	text-decoration: none;
-	color: white;
-}
-
-.but a:hover {
-	text-decoration: none;
-	color: white;
-}
 
 #invoice-wrapper {
-	background-color: #FDEEF4;
+	background-color: #FFFFFF;
 	border-style: solid;
 	border-color: silver;
 	width: 500px;
@@ -38,61 +11,29 @@
 	float: left;
 }
 
-#parcel-invoice-wrapper {
-	background-color: #FDEEF4;
-	border-style: solid;
-	border-color: silver;
-	width: 400px;
-	height: 500px;
-	border-radius: 10px;
-	padding: 5px 3px 0;
-	float: left;
-}
 
 #items-wrapper {
-	background-color: #FDEEF4;
+	background-color: #FFFFFF;
 	border-style: solid;
 	border-color: silver;
-	width: 610px;
+	width: 505px;
 	height: 500px;
 	border-radius: 10px;
 	padding: 10px 10px 0;
 	float: right;
 }
 
-#items-top {
-	width: 550px;
-	height: 250px;
-}
-
-#items-bottom {
-	width: 550px;
-	height: 250px;
-}
-#product-Group{
-	/* height: 280px; */
-    
-}
-
-#dataTable {
-	width: 100%;
-}
-
 #product-adder td,#dataTable td,#users td {
 	vertical-align: middle;
 }
 
-#dataTable td:nth-child(6),#dataTable td:nth-child(1),#dataTable th:nth-child(6)
+#dataTable td:nth-child(6),#dataTable td:nth-child(1),#dataTable th:nth-child(6),#dataTable th:nth-child(1)
 	{
 	text-align: center;
 }
 
 table.invoice-wrapper-table,.invoice-form-table {
 	width: 100%;
-}
-
-table.parcel-invoice-wrapper-table, {
-	width: 300px;
 }
 
 .button-icon {
@@ -113,52 +54,6 @@ table.parcel-invoice-wrapper-table, {
 	vertical-align: middle;
 }
 
-.number_button {
-	background-color: #F1F1F3;
-	background-image: -moz-linear-gradient(#FFFFFF, #ECECEE);
-	border: 1px solid #CCCCCC;
-	border-radius: 12px 12px 12px 12px;
-	color: #333333;
-	font-size: 0.9em;
-	font-weight: normal;
-	margin: 0 0 0 3px;
-	padding: 4px 8px;
-	text-decoration: none;
-	text-shadow: 0 1px 0 white;
-}
-
-.number_button:hover {
-	border: 1px solid #333 !important;
-}
-
-.number_button_unit_price {
-	background-color: #F1F1F3;
-	background-image: -moz-linear-gradient(#FFFFFF, #ECECEE);
-	border: 1px solid #CCCCCC;
-	border-radius: 12px 12px 12px 12px;
-	color: #333333;
-	font-size: 0.9em;
-	font-weight: normal;
-	margin: 0 0 0 3px;
-	padding: 4px 8px;
-	text-decoration: none;
-	text-shadow: 0 1px 0 white;
-}
-
-.number_button_qty {
-	background-color: #F1F1F3;
-	background-image: -moz-linear-gradient(#FFFFFF, #ECECEE);
-	border: 1px solid #CCCCCC;
-	border-radius: 12px 12px 12px 12px;
-	color: #333333;
-	font-size: 0.9em;
-	font-weight: normal;
-	margin: 0 0 0 3px;
-	padding: 4px 8px;
-	text-decoration: none;
-	text-shadow: 0 1px 0 white;
-}
-
 #product-adder {
 	width: 100%;
 	margin: 10px 0;
@@ -166,44 +61,6 @@ table.parcel-invoice-wrapper-table, {
 
 #product-adder td:nth-child(2) {
 	text-align: right;
-}
-
-/** food item styles */
-.item-button {
-	float: left;
-	height: auto;
-	font: 76%/150% "Lucida Grande", Geneva, Verdana, Arial, Helvetica, sans-serif;
-	width: 10em;
-	text-align: center;
-	white-space: nowrap;
-}
-
- /*Button link styles*/
-
-.item-button a:link,.item-button a:visited {
-	color: #eee;
-	background-color: #1e5184;
-	font-size: 1em;
-	font-weight: bolder;
-	text-decoration: none;
-	border-bottom: 0.1em solid #555;
-	border-right: 0.1em solid #555;
-	border-top: 0.1em solid #ccc;
-	border-left: 0.1em solid #ccc;
-	margin: 0.2em;
-	padding: 0.2em;
-	display: block;
-}
-
-.item-button a:hover {
-	background-color: #003366;
-	color: #999;
-	border-top: 0.1em solid #777;
-	border-left: 0.1em solid #777;
-	border-bottom: 0.1em solid #aaa;
-	border-right: 0.1em solid #aaa;
-	padding: 0.2em;
-	margin: 0.2em;
 }
 
 /* table buttons */
@@ -430,7 +287,7 @@ br
 	color: #fff;
 }
 .csProdutGroupBlk{
-	width: 620px;
+	width: 490px;
 	padding: 10px;
 	
 }
@@ -447,4 +304,92 @@ br
 }
 .none {
     display:none;
+}
+input.small[type="text"] {
+    width :50px;
+}
+.btn-mini {
+    margin: 2px;
+}
+
+
+table #dataTable {
+    width: 100%;
+}
+
+
+
+
+
+
+/* primary mini starts*/
+
+.btn-info-mini {
+    color: #ffffff;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+    background-color: #49afcd;
+    *background-color: #2f96b4;
+    background-image: -moz-linear-gradient(top, #5bc0de, #2f96b4);
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#5bc0de), to(#2f96b4));
+    background-image: -webkit-linear-gradient(top, #5bc0de, #2f96b4);
+    background-image: -o-linear-gradient(top, #5bc0de, #2f96b4);
+    background-image: linear-gradient(to bottom, #5bc0de, #2f96b4);
+    background-repeat: repeat-x;
+    border-color: #2f96b4 #2f96b4 #1f6377;
+    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff5bc0de', endColorstr='#ff2f96b4', GradientType=0);
+    filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+    margin: 2px;
+    padding: 0 6px;
+    font-size: 10.5px;
+}
+
+.btn-info-mini:hover,
+.btn-info-mini:focus,
+.btn-info-mini:active,
+.btn-info-mini.active,
+.btn-info-mini.disabled,
+.btn-info-mini[disabled] {
+  color: #ffffff;
+  background-color: #2f96b4;
+  *background-color: #2a85a0;
+}
+
+.btn-info-mini:active,
+.btn-info-mini.active {
+  background-color: #24748c \9;
+}
+/*Primary mini ends*/
+.btn-greend {
+    background-color: #66CDAA;
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#45bf70), to(#66CDAA));
+    background-image: -webkit-linear-gradient(top, #45bf70, #66CDAA);
+    background-image: -o-linear-gradient(top, #45bf70, #66CDAA);
+    background-image: linear-gradient(to bottom, #45bf70, #66CDAA);
+    background-image: -moz-linear-gradient(center top , #45bf70, #66CDAA);
+    background-repeat: repeat-x;
+    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25) rgba(0, 0, 0, 0.5);
+    color: #FFFFFF;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.35);
+
+}
+.btn-greend:hover,
+.btn-greend:focus,
+.btn-greend.disabled,
+.btn-greend[disabled]{
+    background: none repeat scroll 0 0 #029239;
+    color: #FFFFFF;
+}
+.prod {
+}
+.prod.btn0,
+.prod.btn1,
+.prod.btn2,
+.prod.btn3,
+.prod.btn4,
+.prod.btn5 {
+    padding: 3px 5px 3px 5px;
+    width:80px;
+    text-align:center;
+    margin-bottom:5px;
 }

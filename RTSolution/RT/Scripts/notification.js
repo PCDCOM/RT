@@ -49,7 +49,7 @@ $(function () {
                         var btn = $('<a/>',
                             {
                                 html: ord.OrderId,
-                                'class': 'orderButton ord' + ord.OrderId,
+                                'class': 'btn btn-mini orderButton ord' + ord.OrderId,
                                 Id: "ord" + ord.OrderId,
                                 click: function () {
                                     var id = this.id.substr(3, this.id.length);
@@ -69,14 +69,14 @@ $(function () {
             var loadTblBilled = function (ords, obj, status) {
                 $.each(ords, function (index, ord) {
                     if (status == ord.Status) {
-                        var row = $('<tr></tr>', {'class' : 'ord' + ord.OrderId});
+                        var row = $('<tr></tr>', {'class' : 'ordTr' + ord.OrderId});
                         var col1 = $("<td>" + ord.CreatedDate + "</td>");
                         var col2 = $("<td>" + ord.Seats + "</td>");
                         var col3 = $("<td>" + ord.Total + "</td>");
                         var btn = $('<a/>',
                             {
                                 html: ord.OrderId,
-                                'class': 'orderButton ord' + ord.OrderId,
+                                'class': 'btn btn-mini orderButton ord' + ord.OrderId,
                                 Id: "ord" + ord.OrderId,
                                 click: function () {
                                     var id = this.id.substr(3, this.id.length);

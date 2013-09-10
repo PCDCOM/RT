@@ -1,0 +1,28 @@
+#circleButton {
+width: 20px;
+height: 20px;
+position: relative;
+background-image: -moz-radial-gradient(45px 45px 45deg, circle cover, lightblue 0%, grey 100%, blue 5%);
+background-image: -webkit-radial-gradient(45px 45px, circle cover, lightblue, grey);
+background-image: radial-gradient(45px 45px 45deg, circle cover, lightblue 0%, grey 100%, blue 5%);
+border: 1px solid grey;
+-webkit-box-shadow: 0 3px 8px rgba(0, 0, 0, .3);
+box-shadow: 0 3px 8px rgba(0, 0, 0, .3);
+color:white
+}
+
+#circleButton:hover {
+background-image: -moz-radial-gradient(45px 45px 45deg, circle cover, grey 0%, lightblue 100%, blue 95%);
+background-image: -webkit-radial-gradient(45px 45px, circle cover, grey, lightblue);
+background-image: radial-gradient(45px 45px 45deg, circle cover, grey 0%, lightblue 100%, blue 95%);
+color:black
+}
+.circle {
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 7px;
+    text-align:center;
+    vertical-align:baseline
+
+        
+}

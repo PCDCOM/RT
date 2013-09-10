@@ -18,7 +18,6 @@
                                     <tr>
                                         <th>
                                             <input type="checkbox" name="allbox" class="csChkAll" style="margin: 0 0 0 4px" checked="checked">
-                                            S.No
                                         </th>
                                         <th>Name</th>
                                         <th>Unit</th>
@@ -50,31 +49,18 @@
                 <tr>
                     <td>
                         <div id="invoice-payment-form">
-                            <table class="invoice-payment-table" id="invoice-payment-table">
-                                <tbody>
-                                    <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td>
-                                    
-                                    @if (Model != null)
-                                    {
+                            @if (Model != null)
+                            {
                                         
-                                        @Html.HiddenFor(model => Model.Id);
-                                        @Html.TextBoxFor(model => Model.Seats, new { @readonly = "true" });
-                                        <br />
-                                        @Html.TextBoxFor(mode => Model.TotalAmount, new { @readonly = "true" });
-                                        <input type="text"  onclick="setBalanceAmount()" onkeypress="enterPlaceBill(event)" onkeyup="setBalanceAmount()" onkeydown="setBalanceAmountValue()" value="" id="PaidAmount" name="PaidAmount" />
+                                @Html.HiddenFor(model => Model.Id);
+                                @Html.TextBoxFor(model => Model.Seats, new { @readonly = "true" });
+                                <br />
+                                @Html.TextBoxFor(mode => Model.TotalAmount, new { @readonly = "true" });
+                                <input type="text"  onclick="setBalanceAmount()" onkeypress="enterPlaceBill(event)" onkeyup="setBalanceAmount()" onkeydown="setBalanceAmountValue()" value="" id="PaidAmount" name="PaidAmount" />
                                         
-                                        <input type="text" value="" id="BalanceAmount" name="BalanceAmount" readonly="true"/>
+                                <input type="text" value="" id="BalanceAmount" name="BalanceAmount" readonly="true"/>
                                         
-                                    }
-                                        </td>
-                                    </tr>
-
-                                </tbody>
-                            </table>
+                            }
                         </div>
                     </td>
                 </tr>
@@ -83,8 +69,8 @@
 
         @if (Model.Status != (byte)RT.StatusType.Bill)
         {
-            <input type="button" value="Order" id="saveOrder" class="button">
+            <input type="button" value="Order" id="saveOrder" class="btn btn-primary">
         }
-       <input type="button" value="Pay" id="savePayment" class="button">
+       <input type="button" value="Pay" id="savePayment" class="btn btn-success">
     </div>
 }

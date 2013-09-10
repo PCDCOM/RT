@@ -13,7 +13,7 @@ namespace RT.Controllers
 
         public ActionResult ListsByGroup(long id)
         {
-            List<Product> products = db.Products.Where(p => p.Id == id).ToList();
+            List<Product> products = db.Products.Where(p => p.ProductGroupID == id).ToList();
             return View(products);
         }
 
@@ -124,6 +124,10 @@ namespace RT.Controllers
             db.Entry(product).State = EntityState.Modified;
             db.SaveChanges();
             return RedirectToAction("Index");
+        }
+        public ActionResult AutoList() {
+            List<Product> products = db.Products.Where(p => p.Status == true).ToList();
+            return View(products);
         }
     }
 }

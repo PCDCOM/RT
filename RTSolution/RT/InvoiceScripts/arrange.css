@@ -22,23 +22,20 @@
          list-style: none outside none;
          position: absolute;   
      }    
-     .csSeatList li:hover
-     {
-        background-color:yellow;      
-     } 
+
 	.csSeatList .seat{
-	 background:url("../images/available_seat_img.gif") no-repeat scroll 0 0 transparent;
+	 background:url("../images/vacantChair.png") no-repeat scroll 0 0 transparent;
 	 height:33px;
 	 width:33px;
 	 display:block;	 
 	 }
       .csSeatList .selectedSeat
       { 
-		background-image:url("../images/booked_seat_img.gif");      	 
+		background-image:url("../images/lockedChair.png");      	 
       }
 	   .csSeatList .selectingSeat
       { 
-		background-image:url("../images/selected_seat_img.gif");      	 
+		background-image:url("../images/selectedChair.png");      	 
       }
        .csSeatList .payingSeat,
        .csSeatList .payingSeat1,
@@ -76,7 +73,7 @@
        }
        .csSeatList .csShowReorder
       { 
-		background-image:url("../images/active_seat_img.gif");      	 
+		background-image:url("../images/vacantChair.png");      	 
       }
 	  .csSeatList .row-4, .csSeatList .row-3{
 		margin-top:px;
@@ -92,7 +89,7 @@
 	  float:left;
 	  }
 	  .csSeatWrapper{
-	  	background-color:#E0FDF5;
+	  	background-color:#F8F8FF;
 	 	border:1px solid #eee;
 	 	padding:10px;
 	 	margin:0 10px 10px 0;

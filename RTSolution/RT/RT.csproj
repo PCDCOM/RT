@@ -174,6 +174,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\tmpController.cs" />
     <Compile Include="Helpers\ReceiptPrint.cs" />
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="App_Start\AuthConfig.cs" />
@@ -234,6 +235,8 @@
     <Compile Include="ViewModel\OrderProduct.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\TableCSSCode.css" />
+    <Content Include="Content\TableEditCSSCode.css" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
@@ -291,6 +294,7 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="InvoiceScripts\addInvoice.js" />
+    <Content Include="InvoiceScripts\navigation.css" />
     <Content Include="Scripts\jquery.channel.js" />
     <Content Include="Scripts\jquery.channel.min.js" />
     <Content Include="Scripts\notification.js" />
@@ -378,10 +382,19 @@
     </Content>
     <Content Include="Views\Order\OrderedProducts.cshtml" />
     <Content Include="Views\Bill\OrderedProducts.cshtml" />
+    <Content Include="Views\Shared\_tmpLayout.cshtml" />
+    <Content Include="Views\tmp\Index.cshtml" />
+    <Content Include="Views\Product\AutoList.cshtml" />
+    <Content Include="Views\Product\Create.cshtml" />
+    <Content Include="Views\Product\Delete.cshtml" />
+    <Content Include="Views\Product\Details.cshtml" />
+    <Content Include="Views\Product\Edit.cshtml" />
+    <Content Include="Views\Product\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Filters\" />
+    <Folder Include="Views\Kitchen\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

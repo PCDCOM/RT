@@ -18,7 +18,7 @@
                                     <tr>
                                         <th>
                                             <input type="checkbox" name="allbox" class="csChkAll" style="margin: 0 0 0 4px" checked="checked">
-                                            S.No
+                                            
                                         </th>
                                         <th>Name</th>
                                         <th>Unit</th>
@@ -50,14 +50,6 @@
                 <tr>
                     <td>
                         <div id="invoice-payment-form">
-                            <table class="invoice-payment-table" id="invoice-payment-table">
-                                <tbody>
-                                    <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td>Total:
-                                    
                                     @if (Model != null)
                                     {
                                         //Tod: Need to change total and seats as read only
@@ -67,11 +59,6 @@
                                         @Html.TextBoxFor(model => Model.Seats, new { @readonly = "true" });
 
                                     }
-                                        </td>
-                                    </tr>
-
-                                </tbody>
-                            </table>
                         </div>
                     </td>
                 </tr>
@@ -79,7 +66,7 @@
         </table>
 
 
-        <input type="button" value="Order" id="saveOrder" class="button">
-        <input type="button" value="Bill" id="saveBill" class="button">
+        <input type="button" value="Order" id="saveOrder" class="btn btn-primary">
+        <input type="button" value="Bill" id="saveBill" class="btn btn-greend">
     </div>
 }

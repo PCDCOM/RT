@@ -2,155 +2,115 @@
     Layout = "~/Views/Shared/_OrderLayout.cshtml";
 }
 
+<div id="content">
+    <div class="clsContentLeft">
+        <div class="clsContentRight">
+            <div class="clsMain">
 
+                <div class="clsPrimary">
 
-<div id="wrapper">
-    <div class="container">
-        <!-- Begin: Header-->
-        <div id="header" style="bottom: top;">
-            <div class="clsHeadLeft">
-                <div class="clsHeadRight">
-                    <div class="clsTopContent">
-                        <div id="header">
-                        </div>
+                    <div id="invoice-wrapper" style="height: auto;">
+                        <table class="invoice-wrapper-table">
+                            <tbody>
+                                <tr>
+                                    <td align="left">
+                                        
+                                        <input id="product" placeholder="Search products" type="text" class="ui-autocomplete-input" autocomplete="on" role="textbox" list="ProductDataList">
+                                        @Html.Action("AutoList", "Product")  &nbsp;&nbsp; 
+                                        <input type="button" value="Select" id="btnSelectProduct" class="button" size="5">
+                                        <input type="text" size="11" name="barcodereader" placeholder="ScanBarcode" id="prodnameid" class="clsTextBox" onkeypress="searchByEnterKey(event)">
+                                       
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: left; border: 2px solid #D3D3D3">
+                                        <div id="orderedNumbers" style="overflow: hidden; width: 450px;"></div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: left; border: 2px solid #D3D3D3">
+                                        <div id="billedNumbers" style="overflow: hidden; width: 450px;"></div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input type="text"  class="small" id="txtOrderId" name="invoicereorderID" size="5">&nbsp;&nbsp;
+                                        <input type="button" value="Load" id="btnLoadOrder" class="btn btn-info" />&nbsp;&nbsp;
+                                        <input type="checkbox" name="parceloption" class="csChkParceloption" id="parceloptionID" style="margin: 0 0 0 4px">
+                                        &nbsp;Parcel
+                                        <input type="checkbox" name="takeaway" class="csChkTakewayoption" id="takeawayoptionID" style="margin: 0 0 0 4px">
+                                        &nbsp;TakeAway
+                                    </td>
+                                </tr>
+                                <tr align="left">
+                                    <td colspan="2">
+                                        <input type="hidden" id="current-item-id">
+                                        <input type="hidden" id="current-item-name">
+                                        <input type="hidden" id="prev-added-item-id">
+                                        <input type="hidden" id="current-item-unitprice">
+                                        <table id="product-adder" style="margin-top: 0;">
+                                            <tbody>
+                                                <tr>
+                                                    <td nowrap="nowrap">
+                                                        <div id="circleButton" class="circle">0</div>
+                                                        <div id="circleButton" class="circle">1</div>
+                                                        <div id="circleButton" class="circle">2</div>
+                                                        <div id="circleButton" class="circle">3</div>
+                                                        <div id="circleButton" class="circle">4</div>
+                                                        <div id="circleButton" class="circle">5</div>
+                                                        <div id="circleButton" class="circle">6</div>
+                                                        <div id="circleButton" class="circle">7</div>
+                                                        <div id="circleButton" class="circle">8</div>
+                                                        <div id="circleButton" class="circle">9</div>
+                                                        <div id="circleButton" class="circle">C</div>
+                                                    </td>
+                                                    <td nowrap="nowrap">
+                                                        <input id="quantity" name="quantity" size="2">
+                                                        <input type="button" onclick="addProductsWithQuantitySelection();" name="add-product" id="add-product" value="+"></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                        @Html.Action("OrderedProducts", new RT.Models.Order())
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
-                </div>
-            </div>
-            <div id="content">
-                <div class="clsContentLeft">
-                    <div class="clsContentRight">
-                        <div class="clsMain">
-                            <div>&nbsp;</div>
-                            <div class="clsPrimary">
+                    <div style="height: auto;" id="items-wrapper">
+                        <div id="product-Group">
+                            <div style="display: block" id="items-bottom0" class="csProdutGroupBlk">
+                                <div class="wall-of-buttons">
 
-                                <div id="invoice-wrapper" style="height: auto;">
-                                    <table class="invoice-wrapper-table">
-                                        <tbody>
+                                    <table class="table-grid" style="WIDTH: 100%;" id="invoice">
+                                        <thead>
                                             <tr>
-                                                <td align="left">
-                                                    <table>
-                                                        <tbody>
-                                                            <tr>
-                                                                <td style="padding-bottom: 10px;">
-                                                                    <input id="product" placeholder="Search products" type="text" class="ui-autocomplete-input" autocomplete="off" role="textbox" aria-autocomplete="list" aria-haspopup="true">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-								                                    <input type="text" size="11" name="barcodereader" placeholder="ScanBarcode" id="prodnameid" class="clsTextBox" onkeypress="searchByEnterKey(event)">
-                                                                </td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </td>
+
+                                                <th>Time</th>
+                                                <th>Table Details</th>
+                                                <th>Bill Amount</th>
+                                                <!-- <th>ORDER STATUS</th> -->
+                                                <th>Action Item</th>
                                             </tr>
-                                            <tr>
-                                                <td style="text-align: left;">
-                                                    <!--*****recent-bills**********-->
-                                                    <table style="width: 100%;">
-                                                        <tr>
-                                                            <td style="white-space: nowrap; min-height: 25px; position: relative" class="csInvoiceReorder">
-                                                                <div id="orderedNumbers" style="overflow: hidden; width: 510px;"></div>
-                                                                <div id="billedNumbers" style="overflow: hidden; width: 510px;"></div>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <input type="text" id="txtOrderId" name="invoicereorderID" size="5">&nbsp;&nbsp;
-                                                                <input type="button" value="Load" id="btnLoadOrder" class="button" size="5">&nbsp;&nbsp;
-                                                                <input type="checkbox" name="parceloption" class="csChkParceloption" id="parceloptionID" style="margin: 0 0 0 4px">
-                                                                &nbsp;Parcel
-                                                                <input type="checkbox" name="takeaway" class="csChkTakewayoption" id="takeawayoptionID" style="margin: 0 0 0 4px">
-                                                                &nbsp;TakeAway
-                                                            </td>
-                                                        </tr>
-                                                    </table>
-                                                </td>
-                                                <td align="left">&nbsp;</td>
-                                            </tr>
-                                            <tr align="left">
-                                                <td colspan="2">
-                                                    <input type="hidden" id="current-item-id">
-                                                    <input type="hidden" id="current-item-name">
-                                                    <input type="hidden" id="prev-added-item-id">
-                                                    <input type="hidden" id="current-item-unitprice">
-                                                    <table id="product-adder" style="margin-top: 0;">
-                                                        <tbody>
-                                                            <tr>
-                                                                <td nowrap="nowrap">
-                                                                    <a class="number_button" href="http://localhost:8080/addinvoice.htm#">0</a>
-                                                                    <a class="number_button" href="http://localhost:8080/addinvoice.htm#">1</a>
-                                                                    <a class="number_button" href="http://localhost:8080/addinvoice.htm#">2</a>
-                                                                    <a class="number_button" href="http://localhost:8080/addinvoice.htm#">3</a>
-                                                                    <a class="number_button" href="http://localhost:8080/addinvoice.htm#">4</a>
-                                                                    <a class="number_button" href="http://localhost:8080/addinvoice.htm#">5</a>
-                                                                    <a class="number_button" href="http://localhost:8080/addinvoice.htm#">6</a>
-                                                                    <a class="number_button" href="http://localhost:8080/addinvoice.htm#">7</a>
-                                                                    <a class="number_button" href="http://localhost:8080/addinvoice.htm#">8</a>
-                                                                    <a class="number_button" href="http://localhost:8080/addinvoice.htm#">9</a>
-                                                                    <a class="number_button" href="http://localhost:8080/addinvoice.htm#">C</a>
-                                                                </td>
-                                                                <td nowrap="nowrap">
-                                                                    <input id="quantity" name="quantity" size="2">
-                                                                    <input type="button" onclick="addProductsWithQuantitySelection();" name="add-product" id="add-product" value="+"></td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td colspan="2">
-                                                    @Html.Action("OrderedProducts", new RT.Models.Order());
-                                                </td>
-                                            </tr>
+                                        </thead>
+                                        <tbody id="tblBilled">
                                         </tbody>
                                     </table>
                                 </div>
-                                <div style="height: auto;" id="items-wrapper">
-                                    <div id="product-Group">
-                                        <div style="display: block" id="items-bottom0" class="csProdutGroupBlk">
-                                            <div class="wall-of-buttons">
-
-                                                <table class="table-grid" style="WIDTH: 100%;" id="invoice">
-                                                    <thead>
-                                                        <tr>
-                                                            
-                                                            <th>Time</th>
-                                                            <th>Table Details</th>
-                                                            <th>Bill Amount</th>
-                                                            <!-- <th>ORDER STATUS</th> -->
-                                                            <th>Action Item</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody id="tblBilled">
-
-                                                    </tbody>
-                                                </table>
-                                            </div>
 
 
-                                        </div>
-                                    </div>
-
-                                    <div class="clearOne"></div>
-                                </div>
                             </div>
                         </div>
+
+                        <div class="clearOne"></div>
                     </div>
-
-                    <!-- Begin: Footer-->
-                    <div id="footer">
-                        <div class="clsFooterLeft">
-                            <div class="clsFooterRight">
-                                <div class="clsFooterContent">
-                                    <!-- <div align="center">&copy; Copyright © 2012,All Rights Reserved.</div> -->
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- End: Footer-->
-
                 </div>
             </div>
-
-
-
         </div>
+
+
+
     </div>

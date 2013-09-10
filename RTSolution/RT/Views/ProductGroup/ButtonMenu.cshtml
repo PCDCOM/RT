@@ -4,19 +4,27 @@
     Layout = null;
 
 }
+<div class="seatGroup">
+<ul>
+    <li id="SBtn1" onclick="collapseOthers('SBtn1','SBtn',true)"><a href="#">Diamond (A-I)</a></li>
+    <li id="SBtn2" onclick="collapseOthers('SBtn2','SBtn',true)"><a href="#">Gold (J-Q)</a></li>
+    <li id="SBtn3" onclick="collapseOthers('SBtn3','SBtn',true)"><a href="#">Silver (R-Y)</a></li>
 
-    @foreach (var item in Model) {
-        <input type="button" id='PBtn@(item.Id)' value='@item.Name' class="button" onclick="collapseOthers('PBtn@(item.Id)','pBtn')"   />
-    }
-    <input type="button" id="SBtn1" class="button" value="Diamond (A-I)" onclick="collapseOthers('SBtn1','SBtn',true)">
-    <input type="button" id="SBtn2" class="button" value="Gold (J-Q)" onclick="collapseOthers('SBtn2','SBtn',true)">
-    <input type="button" id="SBtn3" class="button" value="Silver (R-Y)" onclick="collapseOthers('SBtn3','SBtn',true)">
+</ul>
+</div>
+<div class="prodGroup">
+    <ul>
+        @foreach (var item in Model) {
+            <li id='PBtn@(item.Id)' onclick="collapseOthers('PBtn@(item.Id)','pBtn')"> <a href='#'>@item.Name</a></li>
+        }
+    </ul>
+</div>
 
      @foreach (var item in Model) {
         <!--  product list for each group -->
         <div class="csProdutGroupBlk none" id='itm-btn-PBtn@(item.Id)'>
             <div class="wall-of-buttons">
-                <ul class="cButton">
+                <ul>
                     @Html.Action("ListsByGroup","Product",new { id = item.Id })
                 </ul>
             </div>
