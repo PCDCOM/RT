@@ -5,7 +5,7 @@
 @using (Html.BeginForm("SaveBill", "Order", FormMethod.Post))
 {
     <div id="divOrderDetails">
-        <input type="hidden" id="from" value="Order" />
+        
         <table class="invoice-form-table">
             <tbody>
                 <tr>
@@ -67,6 +67,8 @@
 
 
         <input type="button" value="Order" id="saveOrder" class="btn btn-primary">
+        @Html.Hidden("saveOrderUrl", Url.Action("SaveOrder"))
         <input type="button" value="Bill" id="saveBill" class="btn btn-greend">
+        @Html.Hidden("saveBillUrl", Url.Action("SaveBill"))
     </div>
 }

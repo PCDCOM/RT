@@ -1,7 +1,7 @@
 ﻿
 $(function () {
     
-    var connection = $.connection('/echo');
+    var connection = $.connection('/Restaurant/echo');
     
     connection.received(function (data) {
         
@@ -91,6 +91,8 @@ $(function () {
                     } else if (obj.length > 0) {
                         //obj.find("option[text='ord" + ord.OrderId + "']").remove();
                         obj.find(".ord" + ord.OrderId).remove();
+                        obj.find(".ordTr" + ord.OrderId).remove();
+                        
 
                     }
                 });

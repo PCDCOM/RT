@@ -11,6 +11,7 @@
 
                     <div id="invoice-wrapper" style="height: auto;">
                         <table class="invoice-wrapper-table">
+                            @Html.Hidden("loadOrder", Url.Action("OrderedProducts"))
                             <tbody>
                                 <tr>
                                     <td align="left">
@@ -23,6 +24,7 @@
                                 </tr>
                                 <tr>
                                     <td style="text-align: left; border: 2px solid #D3D3D3">
+                                        
                                         <div id="orderedNumbers" style="overflow: hidden; width: 450px;"></div>
                                     </td>
                                 </tr>

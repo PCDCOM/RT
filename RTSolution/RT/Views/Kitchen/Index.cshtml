@@ -1,0 +1,38 @@
+﻿@model IEnumerable<RT.Models.Kitchen>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+   <div class="CSSEditTableGenerator">
+<table>
+    <tr>
+        <td>
+            @Html.DisplayNameFor(model => model.KitchenName)
+        </td>
+        <td></td>
+    </tr>
+
+
+@foreach (var item in Model) {
+       
+            <tr>
+                <td>
+                      @Html.DisplayFor(modelItem => item.KitchenName)
+                </td>        
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id=item.KitchenID }) |
+                    @Html.ActionLink("Details", "Details", new { id=item.KitchenID }) |
+                    @Html.ActionLink("Delete", "Delete", new { id=item.KitchenID })
+                </td>
+            </tr>
+}
+           </table>
+    </div>
+
+</table>

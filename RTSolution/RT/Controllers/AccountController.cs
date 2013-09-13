@@ -40,10 +40,11 @@ namespace Restaurant.Controllers
                     else
                     {
                         string[] roles = Roles.GetRolesForUser(model.UserName);
-                        if(roles.Contains("Waiter") || roles.Contains("Parcel")){
+                        if(roles.Contains("Waiter")){
                             return this.RedirectToAction("Index","Order");
                         }
-                        else if (roles.Contains("Manager")) {
+                        else if (roles.Contains("Cashier"))
+                        {
                             return this.RedirectToAction("Index", "Bill");
                         }
                         else

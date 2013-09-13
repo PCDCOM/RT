@@ -1,0 +1,30 @@
+﻿@model RT.Models.Kitchen
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+
+
+    <div class="CSSEditTableGenerator">
+      <table>
+            <tr>
+                <td>
+                      @Html.DisplayNameFor(model => model.KitchenName)
+                    </td>
+                </tr>
+           <tr>
+                <td>
+
+        @Html.DisplayFor(model => model.KitchenName)
+                    </td>
+           </tr>
+    </table>
+    </div>
+
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id=Model.KitchenID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

@@ -56,6 +56,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="NLog">
+      <HintPath>..\packages\NLog.2.0.1.2\lib\net45\NLog.dll</HintPath>
+    </Reference>
     <Reference Include="Owin">
       <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
     </Reference>
@@ -63,6 +66,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Data.Entity" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Management" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
     <Reference Include="System.Web.DynamicData" />
@@ -174,8 +178,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controllers\tmpController.cs" />
+    <Compile Include="Controllers\KitchenController.cs" />
+    <Compile Include="CustomHandleErrorAttribute.cs" />
+    <Compile Include="Encryption.cs" />
+    <Compile Include="FileReadWrite.cs" />
     <Compile Include="Helpers\ReceiptPrint.cs" />
+    <Compile Include="LogActionFilter.cs" />
+    <Compile Include="LogAdapter.cs" />
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="App_Start\AuthConfig.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
@@ -233,8 +242,14 @@
     <Compile Include="Server\Process\ProcessOrder.cs" />
     <Compile Include="Server\Request.cs" />
     <Compile Include="ViewModel\OrderProduct.cs" />
+    <Compile Include="WebPrint.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\arrange.css" />
+    <Content Include="Content\buttons.css" />
+    <Content Include="Content\circle.css" />
+    <Content Include="Content\pos.css" />
+    <Content Include="Content\style.css" />
     <Content Include="Content\TableCSSCode.css" />
     <Content Include="Content\TableEditCSSCode.css" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
@@ -293,8 +308,10 @@
     <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
-    <Content Include="InvoiceScripts\addInvoice.js" />
-    <Content Include="InvoiceScripts\navigation.css" />
+    <Content Include="Scripts\addInvoice.js" />
+    <Content Include="Content\navigation.css" />
+    <Content Include="Scripts\common.js" />
+    <Content Include="Content\orderstyles.css" />
     <Content Include="Scripts\jquery.channel.js" />
     <Content Include="Scripts\jquery.channel.min.js" />
     <Content Include="Scripts\notification.js" />
@@ -315,6 +332,13 @@
       <DependentUpon>Restaurant.edmx</DependentUpon>
       <LastGenOutput>Restaurant.cs</LastGenOutput>
     </Content>
+    <Content Include="NLog.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <None Include="NLog.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Properties\PublishProfiles\RTPublish.pubxml" />
     <None Include="Scripts\jquery-1.7.1.intellisense.js" />
     <Content Include="Scripts\jquery-1.7.1.js" />
     <Content Include="Scripts\jquery-1.7.1.min.js" />
@@ -337,25 +361,13 @@
     </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\_references.js" />
-    <Content Include="Images\accent.png" />
-    <Content Include="Images\bullet.png" />
-    <Content Include="Images\heroAccent.png" />
-    <Content Include="Images\orderedList0.png" />
-    <Content Include="Images\orderedList1.png" />
-    <Content Include="Images\orderedList2.png" />
-    <Content Include="Images\orderedList3.png" />
-    <Content Include="Images\orderedList4.png" />
-    <Content Include="Images\orderedList5.png" />
-    <Content Include="Images\orderedList6.png" />
-    <Content Include="Images\orderedList7.png" />
-    <Content Include="Images\orderedList8.png" />
-    <Content Include="Images\orderedList9.png" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
@@ -382,19 +394,23 @@
     </Content>
     <Content Include="Views\Order\OrderedProducts.cshtml" />
     <Content Include="Views\Bill\OrderedProducts.cshtml" />
-    <Content Include="Views\Shared\_tmpLayout.cshtml" />
-    <Content Include="Views\tmp\Index.cshtml" />
     <Content Include="Views\Product\AutoList.cshtml" />
     <Content Include="Views\Product\Create.cshtml" />
     <Content Include="Views\Product\Delete.cshtml" />
     <Content Include="Views\Product\Details.cshtml" />
     <Content Include="Views\Product\Edit.cshtml" />
     <Content Include="Views\Product\Index.cshtml" />
+    <Content Include="Views\Shared\CustomError.cshtml" />
+    <Content Include="Views\Kitchen\Create.cshtml" />
+    <Content Include="Views\Kitchen\Delete.cshtml" />
+    <Content Include="Views\Kitchen\Details.cshtml" />
+    <Content Include="Views\Kitchen\Edit.cshtml" />
+    <Content Include="Views\Kitchen\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Filters\" />
-    <Folder Include="Views\Kitchen\" />
+    <Folder Include="Images\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -418,9 +434,9 @@
         <WebProjectProperties>
           <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>0</DevelopmentServerPort>
+          <DevelopmentServerPort>1851</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:6317/</IISUrl>
+          <IISUrl>http://localhost:82/Restaurant</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

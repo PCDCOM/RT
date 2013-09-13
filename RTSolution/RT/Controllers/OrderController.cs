@@ -128,7 +128,12 @@ namespace RT.Controllers
             rcpt.CreateDate = order.CreatedDate.Value.ToString("dd-MM-yyyy HH:mm");
             rcpt.OrderedProducts = order.OrderedProducts;
 
-            System.Threading.Tasks.Task.Run(() => rcpt.print());
+            //System.Threading.Tasks.Task.Run(() => rcpt.print());
+            //rcpt.print();
+
+            //WebPrinting wp = new WebPrinting();
+            //wp.PageCreate("EPSON TM-T81 Receipt", "TEST FORM");
+
         }
         [HttpPost]
         public ActionResult SaveBill(long Id, FormCollection formcollection, OrderedProductModel[] orderedproducts, string Seats, decimal TotalAmount, int Status = 0)

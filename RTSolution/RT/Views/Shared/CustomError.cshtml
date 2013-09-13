@@ -1,0 +1,15 @@
+﻿
+@model System.Web.Mvc.HandleErrorInfo
+           
+@{
+    ViewBag.Title = "Error occured";
+}
+
+<h2>Error occured. Please contact support for help</h2>
+<h1> Exception details : @Model.Exception.Message </h1>
+<p>
+    Controller: @Model.ControllerName <br>
+    Action: @Model.ActionName
+    @*Exception: @Model.Exception*@
+</p>
+

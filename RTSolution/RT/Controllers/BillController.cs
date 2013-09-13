@@ -133,7 +133,7 @@ namespace RT.Controllers
             rcpt.CreateDate = order.CreatedDate.Value.ToString("dd-MM-yyyy HH:mm");
             rcpt.OrderedProducts = order.OrderedProducts;
 
-            Task.Run(() => rcpt.print());
+            //Task.Run(() => rcpt.print());
         }
 
         [HttpPost]
@@ -162,10 +162,10 @@ namespace RT.Controllers
 
             long newId = db.Entry(orderToUpdate).Entity.Id;
 
-            if (orderedproducts != null)
-            {
-                PrintBill(newId);
-            }
+            //if (orderedproducts != null)
+            //{
+            //    PrintBill(newId);
+            //}
 
             NotificationEngine notificationengine = new NotificationEngine();
             KeyValuePair<string, string> dictOrder = new KeyValuePair<string, string>("order", newId.ToString());

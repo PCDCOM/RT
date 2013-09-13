@@ -22,18 +22,19 @@
 
                                         </td>
                                         <td>
-                                            <a href="#" class="number_button_unit_price">
+                                            <span style="text-decoration: line-through">
                                                 @Html.DisplayFor(modelItem => Model.Price)
-                                            </a>
+                                            </span>
                                         </td>
                                         <td>
-                                            <a href="#" class="number_button_qty">
+                                            <span style="text-decoration: line-through">
                                                 @Html.DisplayFor(modelItem => Model.Quantity)
-                                            </a>
+                                            </span>
                                         </td>
                                         <td id='unitTotal'>
-                                           
+                                           <span style="text-decoration: line-through">
                                             @Html.DisplayFor(modelItem => Model.Amount)
+                                            </span>
                                         </td>
                                         <td>
                                             @{

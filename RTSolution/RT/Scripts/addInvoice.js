@@ -77,9 +77,9 @@ function seatSettingDetails() {
 
 $(function () {
     $.loadOrder = function (ordId, from) {
-        var from = $("#from").val();
         $.ajax({
-            url: "/" + from +"/OrderedProducts/" + ordId,
+            //"/" + from +"/OrderedProducts/"
+            url: $("#loadOrder").val() +"/" +  ordId,
             error: function (xhr, ajaxOptions, thrownError) {
                 alert(xhr.status);
             },
@@ -107,7 +107,7 @@ $(function () {
             e.preventDefault();
             $.ajax({
                 type: "POST",
-                url: "/Order/SaveOrder",
+                url: $("#saveOrderUrl").val(),
                 data: $('form').serialize(),
                 success: function (result) {
                     $("#divOrderDetails").html(result);
@@ -125,7 +125,7 @@ $(function () {
             e.preventDefault();
             $.ajax({
                 type: "POST",
-                url: "/Order/SaveBill",
+                url: $("#saveBillUrl").val(),
                 data: $('form').serialize(),
                 success: function (result) {
                     $("#divOrderDetails").html(result);
@@ -152,7 +152,7 @@ $(function () {
             
             $.ajax({
                 type: "POST",
-                url: "/Bill/Pay",
+                url: $("#savePayUrl").val(),
                 data: $('form').serialize(),
                 success: function (result) {
                     $("#divOrderDetails").html(result);
@@ -381,9 +381,9 @@ function addRowRecord(value, id) {
         var remove_space_productName = name.split(' ').join('');
         var rowId = 'row-id-' + remove_space_productName + "-" + productId;
 
-        if (rowCount > 1) {
+        //if (rowCount > 1) {
             newTotal = newTotal + parseFloat(currentTotal);
-        }
+        //}
 
         var removeButton = "<a href='" + "javascript:deleteDataRow(\"" + rowId
                 + "\"," + rowCount + ");" + "' >"
@@ -459,7 +459,7 @@ function addRowRecord(value, id) {
                 + '<td> <a class="number_button_unit_price" href="#" onclick="changeUnitPrice(\''
                 + rowId
                 + '\')">'
-                + unitprice
+                + parseFloat(unitprice).toFixed(2)
                 + '</a>'
                 + '<input id="unitid'
                 + rowCount
@@ -477,7 +477,7 @@ function addRowRecord(value, id) {
                 + '<input type="hidden" size="3" name="orderedproducts[' + rowCount
                 + '].Quantity" value="1" id="qtyid' + rowCount + '"></td>'
 
-                + '<td id="unitTotal"><span>' + unitprice + '</span>'
+                + '<td id="unitTotal"><span>' + parseFloat(unitprice).toFixed(2) + '</span>'
 
                 + '<input type="hidden" size="3" name="orderedproducts[' + rowCount + '].Amount" value="' + unitprice + '" id="Amount' + rowCount + '">'
                 
@@ -485,15 +485,31 @@ function addRowRecord(value, id) {
                 + '<td>' + removeButton + '</td>' + '</tr>';
 
         $('#dataTable tr:last').after(rowHtmlData);
-        $('#invoice #TotalAmount').val(newTotal.toFixed(2));
-        $('#invoice #totalqty').val(rowCount);
+        $('#TotalAmount').val(newTotal.toFixed(2));
+        $('#totalqty').val(rowCount);
         document.getElementById("parceloptionID").checked = false;
 
     }
 
 
     // $(document).ready(function(){
+    function updateInvoiceTotal() {
+        var total = 0;
+        var i = 0;
+        $("#dataTable tr").each(function () {
+            $this = $(this);
+            unitTotal = $this.find("td#unitTotal span").html();
 
+            if (isNumber(unitTotal)) {
+                total += parseFloat(unitTotal);
+                i++;
+            }
+        });
+
+        $("#TotalAmount").val(total.toFixed(2));
+        $('#invoice #totalqty').val(i);
+
+    }
 
     function doClear() {
 
@@ -912,23 +928,7 @@ function addRowRecord(value, id) {
         return false;
     }
 
-    function updateInvoiceTotal() {
-        var total = 0;
-        var i = 0;
-        $("#dataTable tr").each(function () {
-            $this = $(this);
-            unitTotal = $this.find("td#unitTotal span").html();
 
-            if (isNumber(unitTotal)) {
-                total += parseFloat(unitTotal);
-                i++;
-            }
-        });
-
-        $("#TotalAmount").val(total.toFixed(2));
-        $('#invoice #totalqty').val(i);
-
-    }
 
     function deleteDataRow(rowId, count) {
         // ////////////////alert(rowId);

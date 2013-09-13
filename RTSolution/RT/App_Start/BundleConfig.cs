@@ -39,7 +39,15 @@ namespace RT
                 "~/Content/TableEditCSSCode.css"
                 
                 ));
+            bundles.Add(new StyleBundle("~/Content/Ordercss").Include(
+                "~/Content/buttons.css",
+                "~/Content/navigation.css",
+                "~/Content/circle.css",
+                "~/Content/arrange.css",
+                "~/Content/pos.css",
+                "~/Content/orderstyles.css"
 
+            ));
             bundles.Add(new StyleBundle("~/Content/themes/base/css").Include(
                         "~/Content/themes/base/jquery.ui.core.css",
                         "~/Content/themes/base/jquery.ui.resizable.css",

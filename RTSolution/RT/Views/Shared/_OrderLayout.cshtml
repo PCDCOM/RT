@@ -4,14 +4,16 @@
     <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 
     @Styles.Render("~/Content/css")
-    <link rel="stylesheet" type="text/css" href="~/InvoiceScripts/buttons.css">
-    <link rel="stylesheet" type="text/css" href="~/InvoiceScripts/navigation.css">
-    <link rel="stylesheet" href="~/InvoiceScripts/pos.css" type="text/css">
-    <link rel="stylesheet" type="text/css" media="all" href="~/InvoiceScripts/invoice-styles.css">
 
-    <link rel="stylesheet" type="text/css" href="~/InvoiceScripts/circle.css">
+    @Styles.Render("~/Content/Ordercss")
 
-    <link rel="stylesheet" type="text/css" href="~/InvoiceScripts/arrange.css">
+    <link rel="stylesheet" type="text/css" href="~/Content/buttons.css">
+    <link rel="stylesheet" type="text/css" href="~/Content/navigation.css">
+    <link rel="stylesheet" type="text/css" href="~/Content/circle.css">
+    <link rel="stylesheet" type="text/css" href="~/Content/arrange.css">
+    <link rel="stylesheet" href="~/Content/pos.css" type="text/css">
+    <link rel="stylesheet" type="text/css" media="all" href="~/Content/orderstyles.css">
+
     
     
     @Scripts.Render("~/bundles/jquery")
@@ -22,8 +24,8 @@
 
     @Scripts.Render("~/bundles/jquerynotification")
 
-    <script src="~/InvoiceScripts/addInvoice.js"></script>
-    <script type="text/javascript" src="~/InvoiceScripts/common.js"></script>
+    <script src="~/Scripts/addInvoice.js"></script>
+    <script type="text/javascript" src="~/Scripts/common.js"></script>
 
     <title>Add New Invoice</title>
     <script type="text/javascript" id="waxCS">var WAX = function () { var _arrInputs; window.addEventListener('waxSetArr', function (evt) { _arrInputs = evt.detail; }); return { getElement: function (i) { return _arrInputs[i]; } } }(); function waxGetElement(i) { return WAX.getElement(i); }</script>

@@ -5,7 +5,7 @@
 @using (Html.BeginForm("SaveBill", "Order", FormMethod.Post))
 {
     <div id="divOrderDetails">
-        <input type="hidden" id="from" value="Bill" />
+        
         <table class="invoice-form-table">
             <tbody>
                 <tr>
@@ -53,12 +53,12 @@
                             {
                                         
                                 @Html.HiddenFor(model => Model.Id);
-                                @Html.TextBoxFor(model => Model.Seats, new { @readonly = "true" });
+                                @Html.TextBoxFor(model => Model.Seats, new { @readonly = "true",@placeholder="Seats" });
                                 <br />
-                                @Html.TextBoxFor(mode => Model.TotalAmount, new { @readonly = "true" });
-                                <input type="text"  onclick="setBalanceAmount()" onkeypress="enterPlaceBill(event)" onkeyup="setBalanceAmount()" onkeydown="setBalanceAmountValue()" value="" id="PaidAmount" name="PaidAmount" />
+                                @Html.TextBoxFor(mode => Model.TotalAmount, new { @readonly = "true",@placeholder="Total" });
+                                <input type="text" placeholder="PAY AMOUNT" onclick="setBalanceAmount()" onkeypress="enterPlaceBill(event)" onkeyup="setBalanceAmount()" onkeydown="setBalanceAmountValue()" value="" id="PaidAmount" name="PaidAmount" />
                                         
-                                <input type="text" value="" id="BalanceAmount" name="BalanceAmount" readonly="true"/>
+                                <input type="text" value="" placeholder="BALANCE" id="BalanceAmount" name="BalanceAmount" readonly="true"/>
                                         
                             }
                         </div>
@@ -69,8 +69,11 @@
 
         @if (Model.Status != (byte)RT.StatusType.Bill)
         {
+            
             <input type="button" value="Order" id="saveOrder" class="btn btn-primary">
+           
         }
+        @Html.Hidden("savePayUrl", Url.Action("Pay"))
        <input type="button" value="Pay" id="savePayment" class="btn btn-success">
     </div>
 }

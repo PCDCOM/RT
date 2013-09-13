@@ -1,0 +1,39 @@
+﻿@model RT.Models.Kitchen
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<h2>Create</h2>
+
+@using (Html.BeginForm()) {
+    @Html.ValidationSummary(true)
+
+
+    <div class="CSSEditTableGenerator">
+          <table>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.KitchenName)
+                </td>
+             </tr>
+             <tr>
+                <td>
+            @Html.EditorFor(model => model.KitchenName)
+            @Html.ValidationMessageFor(model => model.KitchenName)
+              </td>
+            </tr>
+            </table>
+
+        <p>
+            <input type="submit" value="Create" />
+        </p>
+     </div>
+}
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
