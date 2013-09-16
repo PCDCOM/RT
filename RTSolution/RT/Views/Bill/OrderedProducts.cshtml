@@ -69,7 +69,7 @@
 
         @if (Model.Status != (byte)RT.StatusType.Bill)
         {
-            
+            @Html.Hidden("saveOrderUrl", Url.Action("SaveOrder"))
             <input type="button" value="Order" id="saveOrder" class="btn btn-primary">
            
         }

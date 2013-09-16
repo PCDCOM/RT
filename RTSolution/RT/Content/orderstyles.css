@@ -1,27 +1,6 @@
 
 
-#invoice-wrapper {
-	background-color: #FFFFFF;
-	border-style: solid;
-	border-color: silver;
-	width: 500px;
-	height: 500px;
-	border-radius: 10px;
-	padding: 5px 3px 0;
-	float: left;
-}
 
-
-#items-wrapper {
-	background-color: #FFFFFF;
-	border-style: solid;
-	border-color: silver;
-	width: 505px;
-	height: 500px;
-	border-radius: 10px;
-	padding: 10px 10px 0;
-	float: right;
-}
 
 #product-adder td,#dataTable td,#users td {
 	vertical-align: middle;
@@ -245,7 +224,9 @@ br
 {
   clear: left;
 }
-        ..wall-of-buttons li a {
+
+
+        .wall-of-buttons li a {
          color: #333;
          display: block;
          height: 16px;
@@ -287,16 +268,34 @@ br
 	color: #fff;
 }
 .csProdutGroupBlk{
-	width: 490px;
-	padding: 10px;
+	width: 480px;
+	
 	
 }
-.cButton{
-	
+.cButton1{
+    float:left;
+    width:110px;
+    padding:0 10px 0 0;
+    font:normal 11px trebuchet ms;
+    margin:0;
+    word-wrap:break-word;
 }
-.cButton li{
-	white-space; nowrap;
+.cButton1 li {
+    border-radius: 5px 5px 5px 5px;
+    box-shadow: 2px 2px 2px #B295A2;
+    color: #FFFFFF;
+    cursor: pointer;
+    font-weight: bold;
+    list-style: none outside none;
+    margin: 7px 0;
+    padding: 5px;
+    text-align: center;
+    text-shadow: 3px 2px 3px #222222;
+    text-transform: uppercase;
+    transition: all 1s ease 0s;
+   
 }
+
 
 #right
 {
@@ -392,4 +391,5 @@ table #dataTable {
     width:80px;
     text-align:center;
     margin-bottom:5px;
+    display:block;
 }

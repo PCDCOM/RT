@@ -23,7 +23,7 @@ namespace RT.Models
         public string Name { get; set; }
         public string Details { get; set; }
         public bool Status { get; set; }
-        public string CreatedBy { get; set; }
+        public Nullable<System.Guid> CreatedBy { get; set; }
         public System.DateTime CreatedDate { get; set; }
         public System.DateTime ModifiedDate { get; set; }
     

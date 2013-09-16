@@ -5,11 +5,18 @@
 @using (Html.BeginForm("SaveBill", "Order", FormMethod.Post))
 {
     <div id="divOrderDetails">
-        
-        <table class="invoice-form-table">
-            <tbody>
-                <tr>
-                    <td>
+        <div id="invoice-payment-form">
+            @if (Model != null)
+            {
+                //Tod: Need to change total and seats as read only
+
+                @Html.TextBoxFor(model => Model.Seats, new { @readonly = "true" });
+                @Html.TextBoxFor(mode => Model.TotalAmount, new { @readonly = "true" });
+                @Html.HiddenFor(model => Model.Id);
+            }
+
+        </div> 
+
                         <div style="min-height: 275px; position: inherit;">
 
                             <table id="dataTable">
@@ -44,31 +51,12 @@
                             </table>
                         </div>
 
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>
-                        <div id="invoice-payment-form">
-                                    @if (Model != null)
-                                    {
-                                        //Tod: Need to change total and seats as read only
-                                        @Html.TextBoxFor(mode => Model.TotalAmount, new { @readonly = "true" });
-                                        <br />
-                                        @Html.HiddenFor(model => Model.Id);
-                                        @Html.TextBoxFor(model => Model.Seats, new { @readonly = "true" });
-
-                                    }
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
 
 
         <input type="button" value="Order" id="saveOrder" class="btn btn-primary">
         @Html.Hidden("saveOrderUrl", Url.Action("SaveOrder"))
         <input type="button" value="Bill" id="saveBill" class="btn btn-greend">
         @Html.Hidden("saveBillUrl", Url.Action("SaveBill"))
+        
     </div>
 }

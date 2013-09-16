@@ -646,7 +646,8 @@ fDisplay+="<tr>";
 			tableName: 'E',
 			column: 'left',
 			groupId : 'holder1'
-		});		
+		 });
+
 	};
 	
 	function seatArrangmentSetB(){

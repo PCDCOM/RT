@@ -9,6 +9,7 @@ using RT.Models;
 
 namespace RT.Controllers
 {
+    [Authorize(Roles="Admin,Cashier")]
     public class KitchenController : Controller
     {
         private RestaurantEntities db = new RestaurantEntities();

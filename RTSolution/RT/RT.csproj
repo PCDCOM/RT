@@ -178,6 +178,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AuthorizeAjaxAttribute.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\KitchenController.cs" />
     <Compile Include="CustomHandleErrorAttribute.cs" />
     <Compile Include="Encryption.cs" />
@@ -193,7 +195,6 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\BillController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
-    <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Controllers\ProductGroupController.cs" />
@@ -205,6 +206,9 @@
       <DependentUpon>Restaurant.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Kitchen.cs">
+      <DependentUpon>Restaurant.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Log.cs">
       <DependentUpon>Restaurant.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Order.cs">
@@ -234,6 +238,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Restaurant.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Models\Validation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Server\Process\ProcessObject.cs" />
     <Compile Include="Server\Process\ProcessInit.cs" />
@@ -248,6 +253,8 @@
     <Content Include="Content\arrange.css" />
     <Content Include="Content\buttons.css" />
     <Content Include="Content\circle.css" />
+    <Content Include="Content\themes\base\images\ajax-loader.gif" />
+    <Content Include="Content\themes\base\jquery.loader.css" />
     <Content Include="Content\pos.css" />
     <Content Include="Content\style.css" />
     <Content Include="Content\TableCSSCode.css" />
@@ -280,6 +287,7 @@
     <Content Include="Content\themes\base\jquery.ui.slider.css" />
     <Content Include="Content\themes\base\jquery.ui.tabs.css" />
     <Content Include="Content\themes\base\jquery.ui.theme.css" />
+    <Content Include="Content\themes\base\minified\images\ajax-loader.gif" />
     <Content Include="Content\themes\base\minified\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\themes\base\minified\images\ui-bg_flat_75_ffffff_40x100.png" />
     <Content Include="Content\themes\base\minified\images\ui-bg_glass_55_fbf9ee_1x400.png" />
@@ -294,6 +302,7 @@
     <Content Include="Content\themes\base\minified\images\ui-icons_888888_256x240.png" />
     <Content Include="Content\themes\base\minified\images\ui-icons_cd0a0a_256x240.png" />
     <Content Include="Content\themes\base\minified\jquery-ui.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.loader.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.accordion.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.autocomplete.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.button.min.css" />
@@ -314,7 +323,12 @@
     <Content Include="Content\orderstyles.css" />
     <Content Include="Scripts\jquery.channel.js" />
     <Content Include="Scripts\jquery.channel.min.js" />
+    <Content Include="Scripts\jquery.loader.js" />
+    <Content Include="Scripts\jquery.loader.min.js" />
     <Content Include="Scripts\notification.js" />
+    <Content Include="NLog.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <EntityDeploy Include="Models\Restaurant.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>Restaurant.Designer.cs</LastGenOutput>
@@ -331,9 +345,6 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>Restaurant.edmx</DependentUpon>
       <LastGenOutput>Restaurant.cs</LastGenOutput>
-    </Content>
-    <Content Include="NLog.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>
@@ -382,8 +393,6 @@
     <Content Include="Views\Account\ChangePasswordSuccess.cshtml" />
     <Content Include="Views\Account\LogOn.cshtml" />
     <Content Include="Views\Account\Register.cshtml" />
-    <Content Include="Views\Home\About.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\ProductGroup\Create.cshtml" />
     <Content Include="Views\ProductGroup\Delete.cshtml" />
     <Content Include="Views\ProductGroup\Details.cshtml" />
@@ -406,6 +415,8 @@
     <Content Include="Views\Kitchen\Details.cshtml" />
     <Content Include="Views\Kitchen\Edit.cshtml" />
     <Content Include="Views\Kitchen\Index.cshtml" />
+    <Content Include="Views\Home\About.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

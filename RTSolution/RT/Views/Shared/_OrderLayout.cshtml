@@ -7,17 +7,25 @@
 
     @Styles.Render("~/Content/Ordercss")
 
-    <link rel="stylesheet" type="text/css" href="~/Content/buttons.css">
-    <link rel="stylesheet" type="text/css" href="~/Content/navigation.css">
-    <link rel="stylesheet" type="text/css" href="~/Content/circle.css">
-    <link rel="stylesheet" type="text/css" href="~/Content/arrange.css">
-    <link rel="stylesheet" href="~/Content/pos.css" type="text/css">
-    <link rel="stylesheet" type="text/css" media="all" href="~/Content/orderstyles.css">
+    @Styles.Render("~/Content/themes/base/loadcss")
 
+    
+  
+        
     
     
     @Scripts.Render("~/bundles/jquery")
-
+    
+    @Scripts.Render("~/bundles/jqueryloader")
+    <script type="text/javascript">
+        $().ready(function () {
+            
+            $.loader({
+                className: "blue-with-image-2",
+                content: ''
+            });
+        });
+    </script>
     @Scripts.Render("~/bundles/jquerychannel")
 
     @Scripts.Render("~/bundles/jquerysignalr")
@@ -27,11 +35,30 @@
     <script src="~/Scripts/addInvoice.js"></script>
     <script type="text/javascript" src="~/Scripts/common.js"></script>
 
-    <title>Add New Invoice</title>
+    <title>Restoran Muthu</title>
     <script type="text/javascript" id="waxCS">var WAX = function () { var _arrInputs; window.addEventListener('waxSetArr', function (evt) { _arrInputs = evt.detail; }); return { getElement: function (i) { return _arrInputs[i]; } } }(); function waxGetElement(i) { return WAX.getElement(i); }</script>
+
+
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script type="text/javascript">
+        if (navigator.userAgent.match(/iPhone/i) || navigator.userAgent.match(/iPad/i)) {
+            var viewportmeta = document.querySelector('meta[name="viewport"]');
+            if (viewportmeta) {
+                viewportmeta.content = 'width=device-width, minimum-scale=1.0, maximum-scale=1.0, initial-scale=1.0';
+                document.body.addEventListener('gesturestart', function () {
+                    viewportmeta.content = 'width=device-width, minimum-scale=0.25, maximum-scale=1.6';
+                }, false);
+            }
+        }
+
+
+
+    </script>
+
 </head>
 <body onload="seatSettingDetails();">
-    <div class="page">
+    
         <header>
             <div id="logindisplay">
                 @Html.Partial("_LogOnPartial")
@@ -41,7 +68,7 @@
             @RenderBody()
         </section>
 
-    </div>
+    
     @RenderSection("scripts", required: false)
 </body>
 </html>

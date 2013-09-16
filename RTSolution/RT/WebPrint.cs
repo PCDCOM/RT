@@ -77,7 +77,7 @@ namespace RT
                 // print the page
                 doc.Print();
                 // adds status to querystring
-                qs = "Results.aspx?" + qs.Substring(1, qs.Length - 1) + "&Status=Success";
+                
             }
             catch (Exception ex)
             {

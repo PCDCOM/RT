@@ -27,7 +27,17 @@
                  @Html.DisplayFor(model => Model.ProductGroup.Name)            
                    
                 </td>
-            </tr>            
+            </tr>       
+           <tr>
+                <td>
+                    Master Product
+                </td>
+                <td>
+                 
+                 @Html.DisplayFor(model => Model.Product2.Name )        
+                   
+                </td>
+            </tr>                    
             <tr>
                 <td>
                     Details
@@ -39,7 +49,7 @@
             </tr>
               <tr>
                 <td>
-                    Expiry Datemodel
+                    Expiry Date
                 </td>
                 <td>
                       @if (Model.ExpiryDate == null)

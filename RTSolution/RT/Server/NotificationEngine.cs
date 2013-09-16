@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 
 namespace RT
 {
-
+    
     public class NotificationEngine : PersistentConnection
     {
         private Server.ProcessObject GetResponseObject(KeyValuePair<string, string> dictData)
@@ -23,6 +23,7 @@ namespace RT
         {
             KeyValuePair<string, string> dictData = JsonConvert.DeserializeObject<KeyValuePair<string, string>>(data);
             Server.ProcessObject response = GetResponseObject(dictData);
+            
             return Connection.Broadcast(response.Message);
         }
         public void PushFromServer(KeyValuePair<string, string> dictData)

@@ -25,7 +25,7 @@ namespace RT.Server.Response
             ArrayList seatsArray = new ArrayList();
             //Todo: need to solve the unrecognised StatusType issue
             //IEnumerable<RT.Order> newOrders = db.Orders.Where(i => i.GetStatusType() == StatusType.New);
-            IEnumerable<Order> newOrders = db.Orders.Where(i => (i.Status == (byte)StatusType.New || i.Status == (byte)StatusType.Bill));
+            IEnumerable<Order> newOrders = db.Orders.Where(i => (i.Status == (byte)StatusType.New) || (i.Status == (byte)StatusType.Bill));
 
 
             //Todo: need to optimise this code and do it in lamda expression

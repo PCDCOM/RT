@@ -12,7 +12,7 @@ div.seatGroup li {
 }
 div.seatGroup a {
     display: block;
-    width: 156px;
+    width: 145px;
 }
 div.seatGroup a:link, div.seatGroup a:visited {
     background-color: #98BF21;
@@ -23,9 +23,14 @@ div.seatGroup a:link, div.seatGroup a:visited {
     text-decoration: none;
     text-transform: uppercase;
 }
-div.seatGroup a:hover, div.seatGroup a:active {
+div.seatGroup a:hover, div.seatGroup a:active a.active{
     background-color: #7A991A;
 }
+
+div.seatGroup a.active{
+    background-color: #7A991A;
+}
+
 
 div.prodGroup {
     width: 100%;
@@ -42,7 +47,7 @@ div.prodGroup li {
 }
 div.prodGroup a {
     display: block;
-    width: 90px;
+    width: 107px;
 }
 div.prodGroup a:link, div.prodGroup a:visited {
     background-color: #FFCC00;
@@ -53,6 +58,10 @@ div.prodGroup a:link, div.prodGroup a:visited {
     text-decoration: none;
     text-transform: uppercase;
 }
-div.prodGroup a:hover, div.prodGroup a:active {
+div.prodGroup a:hover, div.prodGroup a:active a.active{
+    background-color: #FF6600;
+}
+
+div.prodGroup a.active{
     background-color: #FF6600;
 }

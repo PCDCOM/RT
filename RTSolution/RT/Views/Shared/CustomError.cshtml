@@ -8,8 +8,9 @@
 <h2>Error occured. Please contact support for help</h2>
 <h1> Exception details : @Model.Exception.Message </h1>
 <p>
-    Controller: @Model.ControllerName <br>
-    Action: @Model.ActionName
-    @*Exception: @Model.Exception*@
+    Controller: @Model.ControllerName <br/>
+    Action: @Model.ActionName<br>
+    @*<strong>Exception:</strong> @Model.Exception<br>*@
+    <strong>Inner Exception</strong> : @Model.Exception.InnerException
 </p>
 

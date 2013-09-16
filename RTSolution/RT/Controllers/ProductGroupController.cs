@@ -5,8 +5,10 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using RT.Models;
+using System.Web.Security;
 namespace RT.Controllers
 {
+
     public class ProductGroupController : Controller
     {
         //
@@ -17,7 +19,7 @@ namespace RT.Controllers
 
         //
         // GET: /ProductGroup/
-
+        [Authorize(Roles = "Admin,Cashier")]
         [OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")]
         public ViewResult Index()
         {
@@ -28,7 +30,7 @@ namespace RT.Controllers
 
         //
         // GET: /ProductGroup/Details/5
-
+        [Authorize(Roles = "Admin,Cashier")]
         [OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")]
         public ViewResult Details(int id)
         {
@@ -38,7 +40,7 @@ namespace RT.Controllers
 
         //
         // GET: /ProductGroup/Create
-
+        [Authorize(Roles = "Admin,Cashier")]
         public ActionResult Create()
         {
             return View();
@@ -46,15 +48,16 @@ namespace RT.Controllers
 
         //
         // POST: /ProductGroup/Create
-
+        [Authorize(Roles = "Admin,Cashier")]
         [HttpPost]
         public ActionResult Create(ProductGroup productgroup)
         {
+            MembershipUser user = Membership.GetUser(HttpContext.User.Identity.Name);
             if (ModelState.IsValid)
             {
                 productgroup.CreatedDate = DateTime.Now;
                 productgroup.ModifiedDate = DateTime.Now;
-                productgroup.CreatedBy = HttpContext.User.Identity.Name;
+                productgroup.CreatedBy = (Guid)user.ProviderUserKey;
                 productgroup.Status = true;
                 db.ProductGroups.Add(productgroup);
                 db.SaveChanges();
@@ -67,7 +70,7 @@ namespace RT.Controllers
 
         //
         // GET: /ProductGroup/Edit/5
-
+        [Authorize(Roles = "Admin,Cashier")]
         public ActionResult Edit(int id)
         {
             ProductGroup productgroup = db.ProductGroups.Single(p => p.Id == id);
@@ -78,6 +81,7 @@ namespace RT.Controllers
         // POST: /ProductGroup/Edit/5
 
         [HttpPost]
+        [Authorize(Roles = "Admin,Cashier")]
         public ActionResult Edit(ProductGroup productgroup)
         {
             if (ModelState.IsValid)
@@ -94,7 +98,7 @@ namespace RT.Controllers
 
         //
         // GET: /ProductGroup/Delete/5
-
+        [Authorize(Roles = "Admin,Cashier")]
         public ActionResult Delete(int id)
         {
             ProductGroup productgroup = db.ProductGroups.Single(p => p.Id == id);
@@ -105,6 +109,7 @@ namespace RT.Controllers
         // POST: /ProductGroup/Delete/5
 
         [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = "Admin,Cashier")]
         public ActionResult DeleteConfirmed(int id)
         {
             ProductGroup productgroup = db.ProductGroups.Single(p => p.Id == id);
@@ -117,6 +122,7 @@ namespace RT.Controllers
         }
 
         [ChildActionOnly]
+        [Authorize]
         public ActionResult ButtonMenu()
         {
             List<ProductGroup> productGroups = db.ProductGroups.Where(p => p.Status == true).ToList();

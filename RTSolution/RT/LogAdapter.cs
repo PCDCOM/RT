@@ -17,6 +17,7 @@ namespace RT
 
         public static void Error(string Message, string ControllerName, string ActionName)
         {
+
             LogManager.GetCurrentClassLogger().Error("Err:" + Message + " ," + "Controller: " + ControllerName + ", " + "Action: " + ActionName);
 
         }

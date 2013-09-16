@@ -5,9 +5,22 @@
 }
 
 <h2>Edit</h2>
-
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
 <script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
 <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery-1.7.1.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery-ui-1.8.20.min.js")" type="text/javascript"></script>
+
+
+<script type="text/javascript"> 
+    
+    $(document).ready(function () {
+      
+        $("#ExpiryDate").datepicker({ dateFormat: 'dd/mm/yy' });
+        
+    });
+
+</script>
 
 @using (Html.BeginForm()) {
     @Html.ValidationSummary(true)
@@ -37,10 +50,19 @@
                 <td>
                  
                     @Html.DropDownList("ProductGroupID", (SelectList)ViewBag.ProductGroup ,"Select ProductGroup") 
-                    @Html.ValidationMessageFor(model => model.ProductGroup.Name)       
+                    @Html.ValidationMessageFor(model => model.ProductGroup.Id)       
                 </td>
             </tr>            
-
+           <tr>
+                <td>
+                   Master Product Name
+                </td>
+                <td>                    
+                    @Html.DropDownList("MasterProductID", (SelectList)ViewBag.MasterProduct ,"Select Master Product")
+                     @Html.ValidationMessageFor(model => model.MasterProductID)            
+                               
+                </td>
+            </tr>      
             <tr>
                 <td>
                     @Html.LabelFor(model => model.Details)
@@ -55,11 +77,24 @@
                     @Html.LabelFor(model => model.ExpiryDate)
                 </td>
                 <td>
-                    @Html.EditorFor(model => model.ExpiryDate)
+@*                    @if(Model.ExpiryDate.Value.ToString() == ""  || Model.ExpiryDate.Value == null)
+                    {
+                    @Html.TextBoxFor(model => model.ExpiryDate,"",false)
                     @Html.ValidationMessageFor(model => model.ExpiryDate)
+                    }
+                    else
+                    {
+                    @Html.TextBoxFor(model => model.ExpiryDate,"dd/mm/yy",false)
+                    @Html.ValidationMessageFor(model => model.ExpiryDate)                        
+                    }
+*@
+                @*   @Html.TextBoxFor(model => model.ExpiryDate,"{0:dd/MM/yyyy}",false)*@
+                     @Html.TextBoxFor(model => model.ExpiryDate,"{0:dd/MM/yyyy}",false)
+                   @* @Html.ValidationMessageFor(model => model.ExpiryDate)             *@       
+
                 </td>
             </tr>
-            <tr>
+            <tr>    
                 <td>
                     @Html.LabelFor(model => model.Stock)
                 </td>

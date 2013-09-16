@@ -5,6 +5,7 @@ using System.Drawing.Printing;
 using System.Drawing;
 using System.Threading;
 using RT.Models;
+using System.Configuration;
 
 
 
@@ -21,6 +22,7 @@ namespace PrintingSystem
         public ICollection<OrderedProduct> OrderedProducts { get; set; }
         public void print()
         {
+            string printerName = ConfigurationManager.AppSettings["PrinterName"].ToString();
             pdoc = new PrintDocument();
             PrinterSettings ps = new PrinterSettings();
             Font font = new Font("Courier New", 15);
@@ -28,6 +30,8 @@ namespace PrintingSystem
             pdoc.DefaultPageSettings.PaperSize = psize;
             pdoc.DefaultPageSettings.PaperSize.Height = 820;
             pdoc.DefaultPageSettings.PaperSize.Width = 520;
+
+            pdoc.PrinterSettings.PrinterName = printerName;
             pdoc.PrintPage += new PrintPageEventHandler(pdoc_PrintPage);
             pdoc.Print();
 
@@ -65,7 +69,7 @@ namespace PrintingSystem
                     new SolidBrush(Color.Black), startX, startY + Offset);
 
 
-            string[] headerTxts = { "No", "Item", "Qty", "RM", "Amt" };
+            string[] headerTxts = { "No", "Item", "Qty", "UPrice", "Amt" };
             DrawRow(startX, startY = Offset + 20, graphics, lightPen, headerTxts, fontBold);
 
 
@@ -89,7 +93,10 @@ namespace PrintingSystem
 
             graphics.DrawString("Total: RM " + String.Format("{0:0.00}",TotalAmount), fontBold, Brushes.Blue, rf, stringFormat);
 
-
+            
+                graphics.DrawString("*" + OrderNo.ToString() + "*",
+               new Font("IDAutomationHC39M",8),
+                    new SolidBrush(Color.Black), 120, startY + Offset);
         }
 
         void DrawRow(int startX, int startY, Graphics graphics, Pen lightPen, string[] txts, Font font)
@@ -98,8 +105,8 @@ namespace PrintingSystem
 
             var rectObjects = new[] { 
                 new { rect = new RectangleF (startX , startY , celltWidth = 25, 20), txt = txts[0], alignment = StringAlignment.Far },
-                new { rect = new RectangleF (startX = startX + celltWidth, startY, celltWidth =  110, 20), txt = txts[1] ,alignment = StringAlignment.Near},
-                new { rect = new RectangleF (startX = startX + celltWidth, startY, celltWidth =  25, 20), txt = txts[2] ,alignment = StringAlignment.Far},
+                new { rect = new RectangleF (startX = startX + celltWidth, startY, celltWidth =  105, 20), txt = txts[1] ,alignment = StringAlignment.Near},
+                new { rect = new RectangleF (startX = startX + celltWidth, startY, celltWidth =  30, 20), txt = txts[2] ,alignment = StringAlignment.Far},
                 new { rect = new RectangleF (startX =startX + celltWidth, startY, celltWidth =  60, 20), txt = txts[3],alignment = StringAlignment.Far },
                 new { rect = new RectangleF (startX =startX + celltWidth, startY, celltWidth = 60, 20), txt = txts[4] ,alignment = StringAlignment.Far}
             };

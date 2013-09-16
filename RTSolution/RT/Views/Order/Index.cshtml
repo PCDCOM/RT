@@ -2,174 +2,97 @@
     Layout = "~/Views/Shared/_OrderLayout.cshtml";
 }
 
-            <div id="content">
-                <div class="clsContentLeft">
-                    <div class="clsContentRight">
-                        
-                            <div class="clsPrimary">
-                                <div id="invoice-wrapper" style="height: auto;">
-                                    <table class="invoice-wrapper-table">
-                                        <tbody>
-                                            <tr>
-                                                <td align="left">
-                                                    <input id="autoProduct" placeholder="Search products" type="text" class="ui-autocomplete-input" autocomplete="on" role="textbox" list="ProductDataList">
-                                                    @Html.Action("AutoList", "Product")  &nbsp;&nbsp; 
+<div id="iwrap">
+    <div id="icontent">
+
+        <div id="imain" style="height: auto;">
+            <table class="invoice-wrapper-table">
+                <tbody>
+                    <tr>
+                        <td align="left">
+                            <input id="autoProduct" placeholder="Search products" type="text" class="ui-autocomplete-input" autocomplete="on" role="textbox" list="ProductDataList">
+                            @Html.Action("AutoList", "Product")  &nbsp;&nbsp; 
                                                     
                                                     
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td style="text-align: left; border: 2px solid #D3D3D3">
-                                                    @Html.Hidden("loadOrder", Url.Action("OrderedProducts"))
-                                                    <div id="orderedNumbers" style="overflow: hidden; width: 450px;"></div>
-                                                </td>
-                                                
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <input type="text" class="small" id="txtOrderId" name="invoicereorderID" size="2" />&nbsp;&nbsp;
-                                                    <input type="button" value="Load" id="btnLoadOrder" class="btn btn-info" />&nbsp;&nbsp;
-                                                    <input type="checkbox" name="parceloption" class="csChkParceloption" id="parceloptionID" style="margin: 0 0 0 4px">
-                                                    &nbsp;Parcel
-                                                    <input type="checkbox" name="takeaway" class="csChkTakewayoption" id="takeawayoptionID" style="margin: 0 0 0 4px">
-                                                    &nbsp;TakeAway
-                                                </td>
-                                            </tr>
-                                            <tr align="left">
-                                                <td colspan="2">
-                                                    <input type="hidden" id="current-item-id">
-                                                    <input type="hidden" id="current-item-name">
-                                                    <input type="hidden" id="prev-added-item-id">
-                                                    <input type="hidden" id="current-item-unitprice">
-                                                    <table id="product-adder" style="margin-top: 0;">
-                                                        <tbody>
-                                                            <tr>
-                                                                <td nowrap="nowrap">
-                                                                    <div id="circleButton" class="circle">0</div>
-                                                                    <div id="circleButton" class="circle">1</div>
-                                                                    <div id="circleButton" class="circle">2</div>
-                                                                    <div id="circleButton" class="circle">3</div>
-                                                                    <div id="circleButton" class="circle">4</div>
-                                                                    <div id="circleButton" class="circle">5</div>
-                                                                    <div id="circleButton" class="circle">6</div>
-                                                                    <div id="circleButton" class="circle">7</div>
-                                                                    <div id="circleButton" class="circle">8</div>
-                                                                    <div id="circleButton" class="circle">9</div>
-                                                                    <div id="circleButton" class="circle">C</div>
-                                                                </td>
-                                                                <td nowrap="nowrap">
-                                                                    <input id="quantity" name="quantity" size="2">
-                                                                    <input type="button" onclick="addProductsWithQuantitySelection();" name="add-product" id="add-product" value="+"></td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td colspan="2">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: left; border-top: 2px solid #D3D3D3;border-bottom: 2px solid #D3D3D3">
+                            @Html.Hidden("loadOrder", Url.Action("OrderedProducts"))
+                            <div id="orderedNumbers" style="overflow: hidden; width: 450px;"></div>
+                        </td>
 
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="text" class="small" id="txtOrderId" name="invoicereorderID" size="2" />&nbsp;&nbsp;
+                                            <input type="button" value="Load" id="btnLoadOrder" class="btn btn-info" />&nbsp;&nbsp;
+                                            <input type="checkbox" name="parceloption" class="csChkParceloption" id="parceloptionID" style="margin: 0 0 0 4px">
+                            &nbsp;Parcel
 
-                                                    @Html.Action("OrderedProducts", new RT.Models.Order())
-
-
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <div id="items-wrapper" style="height: auto;">
-                                    <div id="product-Group">
-                                        <!--  **************************************** PRODUCT and GROUP DETAIL ********************************************** -->
-
-
-                                        <script type="text/javascript">
-                                        </script>
-                                        <table border="0">
-                                            <tbody>
-                                                <tr>
-                                                    <td>
-                                                        <div style="width: 500px">
-
-                                                            @Html.Action("ButtonMenu", "ProductGroup")
-                                                        </div>
-                                                    </td>
-
-                                                </tr>
-                                            </tbody>
-                                        </table>
-
-
-                                    </div>
-
-
-
-                                    <!--  barcode setup required -->
-                                    <div id="externalbox" style="width: 5cm; display: none;">
-                                        <div id="inputdata"></div>
-                                    </div>
-                                    <div id="generator">
-                                        <input type="hidden" id="barcodeValue"><br>
-                                        <div id="config">
-                                            <div>
-                                                <input type="hidden" name="btype" id="code128" value="code128"><br>
-                                            </div>
-                                            <div class="config" hidden="">
-                                                <div class="title">Misc</div>
-                                                Background :
-                                                        <input type="hidden" id="bgColor" value="#FFFFFF" size="7"><br>
-                                                "1" Bars :
-                                                        <input type="text" id="color" value="#000000" size="7"><br>
-                                                <div class="barcode1D">
-                                                    bar width:
-                                                            <input type="text" id="barWidth" value="1" size="3"><br>
-                                                    bar height:
-                                                            <input type="text" id="barHeight" value="20" size="3"><br>
-                                                </div>
-                                                <div class="barcode2D">
-                                                    Module Size:
-                                                            <input type="text" id="moduleSize" value="5" size="3"><br>
-                                                    Quiet Zone Modules:
-                                                            <input type="text" id="quietZoneSize" value="1" size="3"><br>
-                                                    Form:
-                                                            <input type="checkbox" name="rectangular" id="rectangular"><label for="rectangular">Rectangular</label><br>
-                                                </div>
-                                                <div id="miscCanvas">
-                                                    x :
-                                                            <input type="text" id="posX" value="10" size="3"><br>
-                                                    y :
-                                                            <input type="text" id="posY" value="20" size="3"><br>
-                                                </div>
-                                            </div>
-
-                                            <div class="config" hidden="">
-                                                <div class="title">Format</div>
-                                                <input type="radio" id="css" name="renderer" value="css" checked="checked"><label for="css">CSS</label><br>
-                                                <input type="radio" id="bmp" name="renderer" value="bmp"><label for="bmp">BMP (not usable in IE)</label><br>
-                                                <input type="radio" id="svg" name="renderer" value="svg"><label for="svg">SVG
-					(not usable in IE)</label><br>
-                                                <input type="radio" id="canvas" name="renderer" value="canvas"><label for="canvas">Canvas
-					(not usable in IE)</label><br>
-                                            </div>
-                                        </div>
-
-
-                                    </div>
-
-                                    <div id="barcodeTarget" class="barcodeTarget" hidden="" style="display: block;"></div>
-                                    <canvas id="canvasTarget" width="150" height="150" hidden="" style="display: none;"></canvas>
-
-
-
-
-                                </div>
-
-                                <div class="clearOne"></div>
-                            </div>
+                        </td>
+                    </tr>
+                    <tr align="left">
+                        <td colspan="2">
+                            <input type="hidden" id="current-item-id">
+                            <input type="hidden" id="current-item-name">
+                            <input type="hidden" id="prev-added-item-id">
+                            <input type="hidden" id="current-item-unitprice">
+                            <table id="product-adder" style="margin-top: 0;">
+                                <tbody>
+                                    <tr>
+                                        <td nowrap="nowrap">
+                                            <div id="circleButton" class="circle">0</div>
+                                            <div id="circleButton" class="circle">1</div>
+                                            <div id="circleButton" class="circle">2</div>
+                                            <div id="circleButton" class="circle">3</div>
+                                            <div id="circleButton" class="circle">4</div>
+                                            <div id="circleButton" class="circle">5</div>
+                                            <div id="circleButton" class="circle">6</div>
+                                            <div id="circleButton" class="circle">7</div>
+                                            <div id="circleButton" class="circle">8</div>
+                                            <div id="circleButton" class="circle">9</div>
+                                            <div id="circleButton" class="circle">C</div>
+                                        </td>
+                                        <td nowrap="nowrap">
+                                            <input id="quantity" name="quantity" size="2">
+                                            <input type="button" onclick="addProductsWithQuantitySelection();" name="add-product" id="add-product" value="+"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
                         
-                    </div>
-                </div>
+                        <td>
+
+                            @Html.Action("OrderedProducts", new RT.Models.Order())
 
 
-            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div id="iside">
+            
+
+                            
+
+                                @Html.Action("ButtonMenu", "ProductGroup")
+                            
+
+
+
+           
+
+
+
+
+        </div>
+
+    </div>
+
+</div>
 
 

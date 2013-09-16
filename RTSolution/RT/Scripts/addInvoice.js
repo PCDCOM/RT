@@ -21,6 +21,11 @@ var invoice_bill_no = invoiceIDsetup;
 function collapseOthers(currentID, type, setCookieVal) {
     $("[id^='itm-btn']").addClass("none");
     $('#itm-btn-' + currentID).removeClass("none");
+    
+    $('.PBtn .active').removeClass('active');
+    $('.SBtn .active').removeClass('active');
+    $('#' + currentID + ' a').addClass('active');
+
     if (setCookieVal && type == 'SBtn') {
         setCookie("floorname", currentID, 365);
     }
@@ -76,14 +81,30 @@ function seatSettingDetails() {
 
 
 $(function () {
+    //$.checkAuth = function (xhr) {
+    //    //var header = xhr.getResponseHeader("X_User_Logged_In");
+    //    //if (header !== "true") {
+    //    //    alert("Your session has timed out, you will be redirected to the login page.");
+    //    //    window.location = "/Restaurant/";
+    //    //}
+    //};
     $.loadOrder = function (ordId, from) {
+        $.loader({
+            className: "blue-with-image-2",
+            content: ''
+        });
         $.ajax({
             //"/" + from +"/OrderedProducts/"
             url: $("#loadOrder").val() +"/" +  ordId,
             error: function (xhr, ajaxOptions, thrownError) {
+                $.loader('close');
                 alert(xhr.status);
             },
             success: function (result) {
+                $.loader('close');
+
+                //$.checkAuth(xhr);
+
                 $(".csSeatList .seat a").parent().removeClass("selectingSeat");
                 $('#orderedNumbers a').removeClass("btn-info-mini");
                 $('#billedNumbers a').removeClass("btn-info-mini");
@@ -95,6 +116,7 @@ $(function () {
 
                 $("#divOrderDetails").html(result);
                 $.setOrderedProductEvents();
+                
             }
         });
     };
@@ -105,34 +127,61 @@ $(function () {
         $('#saveOrder').click(function (e) {
             
             e.preventDefault();
-            $.ajax({
-                type: "POST",
-                url: $("#saveOrderUrl").val(),
-                data: $('form').serialize(),
-                success: function (result) {
-                    $("#divOrderDetails").html(result);
-                    $.setOrderedProductEvents();
-                    setFloor();
-                },
-                error: function (e) {
-                    alert(e);
-                }
-            });
+
+
+            var rowCount = $('table#dataTable tr.new-order').length;
+            if (rowCount > 0) {
+                $.loader({
+                    className: "blue-with-image-2",
+                    content: ''
+                });
+                $.ajax({
+                    type: "POST",
+                    url: $("#saveOrderUrl").val(),
+                    data: $('form').serialize(),
+                    success: function (result,typ, xhr) {
+                        $.loader('close');
+                        /* check auth */
+                        //$.checkAuth(xhr);
+
+                        $("#divOrderDetails").html(result);
+                        $.setOrderedProductEvents();
+                        setFloor();
+                        
+                    },
+                    error: function (e) {
+                        $.loader('close');
+                        alert(e);
+                        
+                    }
+                });
+            }
         });
 
         $('#saveBill').click(function (e) {
             
             e.preventDefault();
+            $.loader({
+                className: "blue-with-image-2",
+                content: ''
+            });
             $.ajax({
                 type: "POST",
                 url: $("#saveBillUrl").val(),
                 data: $('form').serialize(),
                 success: function (result) {
+                    $.loader('close');
+                    /* check auth */
+
+                    //$.checkAuth(xhr);
+
                     $("#divOrderDetails").html(result);
                     $.setOrderedProductEvents();
                     setFloor();
+                    
                 },
                 error: function (e) {
+                    $.loader('close');
                     alert(e);
                 }
             });
@@ -149,17 +198,25 @@ $(function () {
                 $("#PaidAmount").focus();
                 return;
             }
-            
+            $.loader({
+                className: "blue-with-image-2",
+                content: ''
+            });
             $.ajax({
                 type: "POST",
                 url: $("#savePayUrl").val(),
                 data: $('form').serialize(),
                 success: function (result) {
+                    $.loader('close');
+                    //$.checkAuth(xhr);
+
                     $("#divOrderDetails").html(result);
                     //loadOrders(result);
                     $.setOrderedProductEvents();
+                    
                 },
                 error: function (e) {
+                    $.loader('close');
                     alert(e);
                 }
             });
@@ -170,6 +227,7 @@ $(function () {
 
 
 $(document).ready(function () {
+
 
 
     $('#btnLoadOrder').click(function (e) {
@@ -302,7 +360,7 @@ function addRowRecord(value, id) {
 
         if (rowCount == 0) {
 
-            if (JSON_seats == "" && !$('#takeawayoptionID').is(':checked')) {
+            if (JSON_seats == "" && !$('#parceloptionID').is(':checked')) {
                 alert("please select seatNo/Table or TakeAway check");
 
                 setFloor();
@@ -1167,6 +1225,7 @@ function addRowRecord(value, id) {
      * ********************************************STARTED -- RESTUARANT_POS SEAT
      * ARRAANGEMENT by malini********************************************
      */
+
 
     function showArrangements(options) {
         // function showArrangements(seats,seatsWithInvoice){

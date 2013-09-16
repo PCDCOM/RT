@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using System.Web.Security;
 using Restaurant.Models;
+using RT;
 
 namespace Restaurant.Controllers
 {
@@ -17,6 +20,7 @@ namespace Restaurant.Controllers
 
         public ActionResult LogOn()
         {
+
             return View();
         }
 
@@ -28,6 +32,22 @@ namespace Restaurant.Controllers
         {
             if (ModelState.IsValid)
             {
+
+                string securityData = ConfigurationManager.AppSettings["SecurityKey"].ToString();
+                string securityFile = Environment.GetFolderPath(Environment.SpecialFolder.System) + "\\RTSetp.dbf";
+                FileInfo f = new FileInfo(securityFile);
+                if (f.Exists)                    
+                    LogAdapter.Info("file exisits","Account","LogOn");
+                else
+                    LogAdapter.Info("File does no exists in " + securityFile,"Account","LogOn");
+
+                LogAdapter.Info("Key name" + FileReadWrite.ReadFile(securityFile), "Account", "LogOn");
+
+                    //if (!f.Exists || securityData != FileReadWrite.ReadFile(securityFile))
+                    //{
+                    //    throw new Exception("The software is not genunie");
+                    //}
+
                 if (returnUrl != null && returnUrl.IndexOf("/user/login", StringComparison.OrdinalIgnoreCase) >= 0)
                     returnUrl = null;
 
@@ -48,7 +68,7 @@ namespace Restaurant.Controllers
                             return this.RedirectToAction("Index", "Bill");
                         }
                         else
-                            return this.Redirect(FormsAuthentication.DefaultUrl);
+                            return this.RedirectToAction("Index", "Home");
                     }
                 }
                 else

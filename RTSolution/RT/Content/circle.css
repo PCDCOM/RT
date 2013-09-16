@@ -20,7 +20,7 @@ color:black
 .circle {
     border-radius: 50%;
     display: inline-block;
-    margin-right: 7px;
+    margin-right: 5px;
     text-align:center;
     vertical-align:baseline
 

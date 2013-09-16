@@ -1,21 +1,26 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 using Newtonsoft.Json;
+
 using RT.Models;
 
 namespace RT.Controllers
 {
+    
+    [Authorize]  
     public class OrderController : Controller
     {
         private RestaurantEntities db = new RestaurantEntities();
 
-
+        
         public ActionResult Index(long id = 0)
         {
             //Order order = new Order();
@@ -58,7 +63,7 @@ namespace RT.Controllers
 
 
         }
-        private long Save(long Id, Order orderToUpdate, StatusType statustype, FormCollection formcollection, OrderedProductModel[] orderedproducts, string Seats, decimal TotalAmount, int Status = 0)
+        private long Save(long Id, ref Order orderToUpdate, StatusType statustype, FormCollection formcollection, OrderedProductModel[] orderedproducts, string Seats, decimal TotalAmount, int Status = 0)
         {
             long newId = 0;
             MembershipUser user = Membership.GetUser(HttpContext.User.Identity.Name);
@@ -100,7 +105,7 @@ namespace RT.Controllers
 
             return newId;
         }
-        private void PushToClient(long Id)
+        private void PushToClient(long Id,SeatType seattype )
         {
             if (Id != 0)
             {
@@ -111,13 +116,14 @@ namespace RT.Controllers
                 KeyValuePair<string, string> dictOrder = new KeyValuePair<string, string>("order", Id.ToString());
                 notificationengine.PushFromServer(dictOrder);
 
-                ArrayList SeatArray = orderToUpdate.SeatArray(SeatType.Locked);
+                ArrayList SeatArray = orderToUpdate.SeatArray(seattype);
                 string jsonSeats = JsonConvert.SerializeObject(SeatArray);
                 KeyValuePair<string, string> dictSeats = new KeyValuePair<string, string>("seats", jsonSeats);
                 notificationengine.PushFromServer(dictSeats);
             }
         }
         private void PrintBill(long Id) {
+
             Order order = db.Orders.Find(Id);
             string createdBy = Membership.GetUser(order.OrderedProducts.First().CreatedBy).UserName;
             PrintingSystem.ReceiptPrint rcpt = new PrintingSystem.ReceiptPrint();
@@ -128,37 +134,40 @@ namespace RT.Controllers
             rcpt.CreateDate = order.CreatedDate.Value.ToString("dd-MM-yyyy HH:mm");
             rcpt.OrderedProducts = order.OrderedProducts;
 
-            //System.Threading.Tasks.Task.Run(() => rcpt.print());
-            //rcpt.print();
+            System.Threading.Tasks.Task.Run(() => rcpt.print());
+            
 
-            //WebPrinting wp = new WebPrinting();
-            //wp.PageCreate("EPSON TM-T81 Receipt", "TEST FORM");
+
 
         }
         [HttpPost]
         public ActionResult SaveBill(long Id, FormCollection formcollection, OrderedProductModel[] orderedproducts, string Seats, decimal TotalAmount, int Status = 0)
         {
+
             Order orderToUpdate = null;
-            long newId = Save(Id, orderToUpdate, StatusType.Bill, formcollection, orderedproducts, Seats, TotalAmount, Status);
+            long newId = Save(Id, ref orderToUpdate, StatusType.Bill, formcollection, orderedproducts, Seats, TotalAmount, Status);
             //Todo: Need to pass userid here
 
 
             PrintBill(newId);
 
-            PushToClient(newId);
+            PushToClient(newId, SeatType.Vacant);
             ModelState.Clear();
             return View("OrderedProducts", new Order());
         }
 
         [HttpPost]
+        [AjaxAuthorizationFilter]
         public ActionResult SaveOrder(long Id, FormCollection formcollection, OrderedProductModel[] orderedproducts, string Seats, decimal TotalAmount, int Status = 0)
         {
+    
+
             Order orderToUpdate = null;
-            long newId = Save(Id, orderToUpdate, StatusType.New, formcollection, orderedproducts, Seats, TotalAmount, Status);
+            long newId = Save(Id, ref orderToUpdate, StatusType.New, formcollection, orderedproducts, Seats, TotalAmount, Status);
             //Todo: Need to pass userid here
             if (Id == 0)
             {
-                PushToClient(newId);
+                PushToClient(newId, SeatType.Locked);
             }
             ModelState.Clear();
             return View("OrderedProducts", new Order());
@@ -166,13 +175,6 @@ namespace RT.Controllers
         }
 
 
-
-        //[HttpGet]
-        //public ActionResult Details(int id)
-        //{
-        //    Order order = db.Orders.Where(x => x.Id == id).Single();
-        //    return View("OrderedProducts",order);
-        //}
 
         [HttpGet]
         public ActionResult OrderedProducts(int id)

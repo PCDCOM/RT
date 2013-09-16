@@ -5,23 +5,37 @@
 }
 
 @{
-    int inx = 1;
+    int inxcolor = 1;
+    int inxUl = 0;
   }
 @foreach (var item in Model.Where(i => i.MasterProductID == null))
 {
-    <li class="prod btn0" onclick="addRowRecord('@item.Name,@item.ActualPrice,@item.SecondSellingPrice' ,@item.Id) ;return false;">
-        @item.Name
-    </li>
+
     
     
     foreach (var inneritem in Model.Where(j => j.MasterProductID == item.Id))
     {
-        //TODO: Need to parse as two decimal place strings
-        int val = inx % 5;
-        <li class='prod btn@(val)' onclick="addRowRecord('@inneritem.Name,@inneritem.ActualPrice,@inneritem.SecondSellingPrice' ,@inneritem.Id) ;return false;">
-            @inneritem.Name
-        </li>
+        int val = inxcolor % 5;
+       
+        if (inxUl % 12 == 0)
+        { 
+            @:<ul class="cButton1">
+        }
+        if(inxUl == 0){    
+            @:<li class="prod btn0" onclick="addRowRecord('@item.Name,@item.ActualPrice,@item.FirstSellingPrice' ,@item.Id) ;return false;">
+                @item.Name
+            @:</li>
+                inxUl++;
+        }
+            <li class='prod btn@(val)' onclick="addRowRecord('@inneritem.Name,@inneritem.ActualPrice,@inneritem.FirstSellingPrice' ,@inneritem.Id) ;return false;">
+                @inneritem.Name
+            </li>
         
+        if (inxUl % 12 == 11)
+        { 
+            @:</ul>
+        }
+        inxUl++;
     }
-    inx++;
+    inxcolor++;
 }

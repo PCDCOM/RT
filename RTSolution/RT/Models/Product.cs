@@ -33,7 +33,7 @@ namespace RT.Models
         public Nullable<decimal> SecondSellingPrice { get; set; }
         public Nullable<decimal> ThirdSellingPrice { get; set; }
         public Nullable<decimal> FourthSellingPrice { get; set; }
-        public string CreatedBy { get; set; }
+        public Nullable<System.Guid> CreatedBy { get; set; }
         public System.DateTime CreatedDate { get; set; }
         public System.DateTime ModifiedDate { get; set; }
         public bool IsQuickProduct { get; set; }

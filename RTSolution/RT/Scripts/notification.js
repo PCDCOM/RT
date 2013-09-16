@@ -8,9 +8,12 @@ $(function () {
         var objData = jQuery.parseJSON(data);
         jQuery.channel('publish', objData.Key, objData.Value);
     });
-
+    connection.error(function (data) {
+        alert('unable to connect the server pleaes try again');
+        $.loader('close');
+    });
     connection.start().done(function (param) {
-       
+        
         $.notify().onload();
         connection.send("{'Key':'init','Value':''}");
     });
@@ -111,13 +114,15 @@ $(function () {
 
                 $.each(sts, function (index, item) {
                     var seatNode = $(".csSeatList .seat a[title=" + item.Name + "]").parent().removeClass("selectingSeat").removeClass("selectedSeat");
-                    if (item.Status == 1 || item.Status == 2) {
+                    seatNode.unbind('click.loadorderevent');
+                    if (item.Status == 2) {
                         seatNode.addClass("selectedSeat")
+                        seatNode.bind('click.loadorderevent',function (e) {
+                            $.loadOrder(ordId);
+                        });
                     }
                     var ordId = item.OrderId;
-                    seatNode.click(function (e) {
-                        $.loadOrder(ordId);
-                    });
+
                 });
             };
             var initLoadOrderButtons = function (pargs) {
@@ -153,6 +158,7 @@ $(function () {
                 $(".csSeatList .seat a").parent().removeClass("selectingSeat").removeClass("selectedSeat");
                 loadSeats(args);
                 
+                $.loader('close');
             };
 
             var afterSaveLoadOrderButtons = function (pargs) {
