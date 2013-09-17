@@ -152,8 +152,10 @@ namespace RT.Controllers
 
 
             UpdateBillForOrder(orderedproducts, TotalAmount, PaidAmount, BalanceAmount, orderToUpdate);
-
-                PushToClient(newId);
+            if (orderedproducts != null) {
+                PrintBill(newId);
+            }
+            PushToClient(newId);
 
 
             
@@ -187,10 +189,10 @@ namespace RT.Controllers
                 KeyValuePair<string, string> dictOrder = new KeyValuePair<string, string>("order", Id.ToString());
                 notificationengine.PushFromServer(dictOrder);
 
-                ArrayList SeatArray = orderToUpdate.SeatArray(SeatType.Locked);
-                string jsonSeats = JsonConvert.SerializeObject(SeatArray);
-                KeyValuePair<string, string> dictSeats = new KeyValuePair<string, string>("seats", jsonSeats);
-                notificationengine.PushFromServer(dictSeats);
+                //ArrayList SeatArray = orderToUpdate.SeatArray(SeatType.Vacant);
+                //string jsonSeats = JsonConvert.SerializeObject(SeatArray);
+                //KeyValuePair<string, string> dictSeats = new KeyValuePair<string, string>("seats", jsonSeats);
+                //notificationengine.PushFromServer(dictSeats);
             }
         }
         [HttpGet]

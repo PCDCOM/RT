@@ -44,7 +44,12 @@ namespace RT.Server.Response
                 });
                 //seats.Add(item.SeatJson(SeatStatus.Locked));
                 //Todo: need to optimise this code
-                ArrayList seatGroup = item.SeatArray(SeatType.Locked);
+                ArrayList seatGroup;
+                if(item.Status == (byte)StatusType.New)
+                    seatGroup = item.SeatArray(SeatType.Locked);
+                else
+                    seatGroup = item.SeatArray(SeatType.Vacant);
+
                 foreach (object itembyord in seatGroup)
 	            {
                     seatsArray.Add(itembyord);

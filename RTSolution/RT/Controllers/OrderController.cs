@@ -124,21 +124,21 @@ namespace RT.Controllers
         }
         private void PrintBill(long Id) {
 
-            Order order = db.Orders.Find(Id);
-            string createdBy = Membership.GetUser(order.OrderedProducts.First().CreatedBy).UserName;
-            PrintingSystem.ReceiptPrint rcpt = new PrintingSystem.ReceiptPrint();
+                Order order = db.Orders.Find(Id);
+                string createdBy = Membership.GetUser(order.OrderedProducts.First().CreatedBy).UserName;
+                PrintingSystem.ReceiptPrint rcpt = new PrintingSystem.ReceiptPrint();
 
-            rcpt.TotalAmount = order.TotalAmount;
-            rcpt.OrderNo = Id;
-            rcpt.CreatedBy = createdBy;
-            rcpt.CreateDate = order.CreatedDate.Value.ToString("dd-MM-yyyy HH:mm");
-            rcpt.OrderedProducts = order.OrderedProducts;
+                rcpt.TotalAmount = order.TotalAmount;
+                rcpt.OrderNo = Id;
+                rcpt.CreatedBy = createdBy;
+                rcpt.CreateDate = order.CreatedDate.Value.ToString("dd-MM-yyyy HH:mm");
+                rcpt.OrderedProducts = order.OrderedProducts;
 
-            System.Threading.Tasks.Task.Run(() => rcpt.print());
+                
+                LogAdapter.Info("Before Prinint", "Order", "Bill");
+                System.Threading.Tasks.Task.Run(() => rcpt.print());
+                LogAdapter.Info("After Prinint", "Order", "Bill");
             
-
-
-
         }
         [HttpPost]
         public ActionResult SaveBill(long Id, FormCollection formcollection, OrderedProductModel[] orderedproducts, string Seats, decimal TotalAmount, int Status = 0)
