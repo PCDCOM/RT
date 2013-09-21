@@ -1,0 +1,29 @@
+﻿@model RT.CurrencyDenomination
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<fieldset>
+    <legend>CurrencyDenomination</legend>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => Model.Denomination)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => Model.Denomination)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model =>Model.Value)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => Model.Value)
+    </div>
+</fieldset>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id=Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

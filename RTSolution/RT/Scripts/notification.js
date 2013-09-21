@@ -113,15 +113,36 @@ $(function () {
                     sts = data;
 
                 $.each(sts, function (index, item) {
-                    var seatNode = $(".csSeatList .seat a[title=" + item.Name + "]").parent().removeClass("selectingSeat").removeClass("selectedSeat");
-                    seatNode.unbind('click.loadorderevent');
-                    if (item.Status == 2) {
-                        seatNode.addClass("selectedSeat")
-                        seatNode.bind('click.loadorderevent',function (e) {
+
+                    //If the order is paid - check the order number and do vacant - else directly do vacant
+                    //check for vacant
+                    var ordId = item.OrderId;
+                    var seatNode = $(".csSeatList .seat a[title=" + item.Name + "]").parent();
+                    var seatOrderId = 0;
+                    //check if the seat is already locked
+                    if (seatNode.hasClass("selectedSeat"))
+                        seatOrderId = seatNode.attr('orderid');
+
+                    if (item.Status == 0) {
+                        seatNode.removeClass("selectingSeat");
+                        if (seatOrderId == item.OrderId) {
+                            seatNode.removeClass("selectedSeat");
+                            seatNode.removeAttr("orderid");
+                            seatNode.unbind('click.loadorderevent');
+                        }
+                        
+                    } else if (item.Status == 2) {
+
+                        seatNode.removeClass("selectingSeat").removeClass("selectedSeat");
+                        seatNode.removeAttr("orderid");
+                        seatNode.unbind('click.loadorderevent');
+
+                        seatNode.addClass("selectedSeat");
+                        seatNode.bind('click.loadorderevent', function (e) {
                             $.loadOrder(ordId);
                         });
+                        seatNode.attr("orderid", item.OrderId);
                     }
-                    var ordId = item.OrderId;
 
                 });
             };

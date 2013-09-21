@@ -205,10 +205,10 @@
     <Compile Include="Models\Bill.cs">
       <DependentUpon>Restaurant.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Kitchen.cs">
+    <Compile Include="Models\CurrencyDenomination.cs">
       <DependentUpon>Restaurant.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Log.cs">
+    <Compile Include="Models\Kitchen.cs">
       <DependentUpon>Restaurant.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Order.cs">
@@ -246,7 +246,6 @@
     <Compile Include="Server\Process\ProcessSeats.cs" />
     <Compile Include="Server\Process\ProcessOrder.cs" />
     <Compile Include="Server\Request.cs" />
-    <Compile Include="ViewModel\OrderProduct.cs" />
     <Compile Include="WebPrint.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -321,6 +320,7 @@
     <Content Include="Content\navigation.css" />
     <Content Include="Scripts\common.js" />
     <Content Include="Content\orderstyles.css" />
+    <Content Include="Scripts\denomination.js" />
     <Content Include="Scripts\jquery.channel.js" />
     <Content Include="Scripts\jquery.channel.min.js" />
     <Content Include="Scripts\jquery.loader.js" />
@@ -417,6 +417,12 @@
     <Content Include="Views\Kitchen\Index.cshtml" />
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\CurrencyDenominator\Create.cshtml" />
+    <Content Include="Views\CurrencyDenominator\Delete.cshtml" />
+    <Content Include="Views\CurrencyDenominator\DenominationCalculation.cshtml" />
+    <Content Include="Views\CurrencyDenominator\Details.cshtml" />
+    <Content Include="Views\CurrencyDenominator\Edit.cshtml" />
+    <Content Include="Views\CurrencyDenominator\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

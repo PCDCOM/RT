@@ -18,6 +18,35 @@ var currentInvoiceNo;
 var nextInvoiceNo;
 var invoice_bill_no = invoiceIDsetup;
 
+function disableOrder(val) {
+    $("#saveOrder").unbind('click.saveOrderClick');
+    if (val) {
+        $("#saveOrder").removeClass("btn-primary").addClass("btn-disabled");
+        
+    } else {
+        $("#saveOrder").removeClass("btn-disabled").addClass("btn-primary");
+        $("#saveOrder").bind('click.saveOrderClick', $.saveOrderClick);
+    }
+}
+function disableBill(val) {
+    $('#saveBill').unbind('click.saveBillClick');
+    if (val) {
+        $("#saveBill").removeClass("btn-greend").addClass("btn-disabled");
+    } else {
+        $("#saveBill").removeClass("btn-disabled").addClass("btn-greend");
+        $('#saveBill').bind('click.saveBillClick', $.saveBillClick);
+    }
+}
+function disablePayment(val) {
+    $('#savePayment').unbind('click.savePaymentClick');
+    if (val) {
+        $("#savePayment").removeClass("btn-success").addClass("btn-disabled");
+        
+    } else {
+        $("#savePayment").removeClass("btn-disabled").addClass("btn-success");
+        $('#savePayment').bind('click.savePaymentClick', $.savePaymentClick);
+    }
+}
 function collapseOthers(currentID, type, setCookieVal) {
     $("[id^='itm-btn']").addClass("none");
     $('#itm-btn-' + currentID).removeClass("none");
@@ -81,13 +110,13 @@ function seatSettingDetails() {
 
 
 $(function () {
-    //$.checkAuth = function (xhr) {
-    //    //var header = xhr.getResponseHeader("X_User_Logged_In");
-    //    //if (header !== "true") {
-    //    //    alert("Your session has timed out, you will be redirected to the login page.");
-    //    //    window.location = "/Restaurant/";
-    //    //}
-    //};
+    $.checkAuth = function (xhr) {
+        var header = xhr.getResponseHeader("X_User_Logged_In");
+        if (header !== "true") {
+            alert("Your session has timed out, you will be redirected to the login page.");
+            window.location = "/Restaurant/";
+        }
+    };
     $.loadOrder = function (ordId, from) {
         $.loader({
             className: "blue-with-image-2",
@@ -98,12 +127,15 @@ $(function () {
             url: $("#loadOrder").val() +"/" +  ordId,
             error: function (xhr, ajaxOptions, thrownError) {
                 $.loader('close');
-                alert(xhr.status);
+                var msg = "Unable to process";
+                msg = (xhr) ? ((xhr.status) ? xhr.status + " : " : msg) + ((xhr.responseText) ? xhr.responseText : msg) : msg;
+                alert(msg);
+                
             },
-            success: function (result) {
+            success: function (result,typ,xhr) {
                 $.loader('close');
-
-                //$.checkAuth(xhr);
+                if(xhr != undefined)
+                    $.checkAuth(xhr);
 
                 $(".csSeatList .seat a").parent().removeClass("selectingSeat");
                 $('#orderedNumbers a').removeClass("btn-info-mini");
@@ -115,113 +147,136 @@ $(function () {
                 $('#invoice .ord' + ordId).addClass('btn-info-mini');
 
                 $("#divOrderDetails").html(result);
-                $.setOrderedProductEvents();
+                //$.setOrderedProductEvents();
+                disablePayment(false);
+                disableOrder(true);
+                disableBill(false);
                 
+
             }
         });
     };
 
-
-    $.setOrderedProductEvents = function () {
+    $.saveOrderClick =function (e) {
         
-        $('#saveOrder').click(function (e) {
-            
-            e.preventDefault();
+        e.preventDefault();
+        
+        if ($("#divOrderDetails #Seats").val() == "" && !($('.csChkAll').attr('checked'))) {
+            alert("Please select seat for some dining products");
+            setFloor();
+            return true;
+        }
+
+        $.loader({
+            className: "blue-with-image-2",
+            content: ''
+        });
 
 
-            var rowCount = $('table#dataTable tr.new-order').length;
-            if (rowCount > 0) {
-                $.loader({
-                    className: "blue-with-image-2",
-                    content: ''
-                });
-                $.ajax({
-                    type: "POST",
-                    url: $("#saveOrderUrl").val(),
-                    data: $('form').serialize(),
-                    success: function (result,typ, xhr) {
-                        $.loader('close');
-                        /* check auth */
-                        //$.checkAuth(xhr);
+        $.ajax({
+            type: "POST",
+            url: $("#saveOrderUrl").val(),
+            data: $('form').serialize(),
+            success: function (result, typ, xhr) {
+                if(xhr != undefined)
+                    $.checkAuth(xhr);
+                $.loader('close');
+                $("#divOrderDetails").html(result);
+                setFloor();
+                removeAll();
+            },
+            error: function (e) {
+                $.loader('close');
+                alert(e);
 
-                        $("#divOrderDetails").html(result);
-                        $.setOrderedProductEvents();
-                        setFloor();
-                        
-                    },
-                    error: function (e) {
-                        $.loader('close');
-                        alert(e);
-                        
-                    }
-                });
             }
         });
 
-        $('#saveBill').click(function (e) {
+    };
+
+    $.saveBillClick = function (e) {
             
-            e.preventDefault();
-            $.loader({
-                className: "blue-with-image-2",
-                content: ''
-            });
-            $.ajax({
-                type: "POST",
-                url: $("#saveBillUrl").val(),
-                data: $('form').serialize(),
-                success: function (result) {
-                    $.loader('close');
-                    /* check auth */
+        e.preventDefault();
+        if ($("#divOrderDetails #Seats").val() == "" && !($('.csChkAll').attr('checked'))) {
+            alert("Please select seat for some dining products");
+            setFloor();
+            return true;
+        }
 
-                    //$.checkAuth(xhr);
-
-                    $("#divOrderDetails").html(result);
-                    $.setOrderedProductEvents();
-                    setFloor();
-                    
-                },
-                error: function (e) {
-                    $.loader('close');
-                    alert(e);
-                }
-            });
+        $.loader({
+            className: "blue-with-image-2",
+            content: ''
         });
-        $('#savePayment').click(function (e) {
-            e.preventDefault();
-            var paidAmt=0, totAmount = 0;
-            if ($.isNumeric($("#PaidAmount").val()))
-                paidAmt = parseFloat( $("#PaidAmount").val());
-            if ($.isNumeric($("#TotalAmount").val()))
-                totAmount = parseFloat($("#TotalAmount").val());
-            if (paidAmt < totAmount) {
-                alert("Please enter paid amount greater than or equal to total amount");
-                $("#PaidAmount").focus();
-                return;
+        $.ajax({
+            type: "POST",
+            url: $("#saveBillUrl").val(),
+            data: $('form').serialize(),
+            success: function (result, typ, xhr) {
+                if(xhr != undefined)
+                    $.checkAuth(xhr);
+                $.loader('close');
+                $("#divOrderDetails").html(result);
+                setFloor();
+                removeAll();
+            },
+            error: function (e) {
+                $.loader('close');
+                alert(e);
             }
-            $.loader({
-                className: "blue-with-image-2",
-                content: ''
-            });
-            $.ajax({
-                type: "POST",
-                url: $("#savePayUrl").val(),
-                data: $('form').serialize(),
-                success: function (result) {
-                    $.loader('close');
-                    //$.checkAuth(xhr);
+        });
+            
+    };
+    $.savePaymentClick = function (e) {
+        
+        e.preventDefault();
+        if ($("#divOrderDetails #Seats").val() == "" && !($('.csChkAll').attr('checked'))) {
+            alert("Please select seat for some dining products");
+            setFloor();
+            return true;
+        }
 
-                    $("#divOrderDetails").html(result);
-                    //loadOrders(result);
-                    $.setOrderedProductEvents();
-                    
-                },
-                error: function (e) {
-                    $.loader('close');
-                    alert(e);
-                }
-            });
+        var paidAmt=0, totAmount = 0;
+        if ($.isNumeric($("#PaidAmount").val()))
+            paidAmt = parseFloat( $("#PaidAmount").val());
+        if ($.isNumeric($("#TotalAmount").val()))
+            totAmount = parseFloat($("#TotalAmount").val());
+        if (paidAmt < totAmount) {
+            alert("Please enter paid amount greater than or equal to total amount");
+            $("#PaidAmount").focus();
+            return;
+        }
+        $.loader({
+            className: "blue-with-image-2",
+            content: ''
+        });
+        $.ajax({
+            
+            type: "POST",
+            url: $("#savePayUrl").val(),
+            data: $('form').serialize(),
+            success: function (result, typ, xhr) {
+                if(xhr != undefined)
+                    $.checkAuth(xhr);
+                $.loader('close');
+
+
+                $("#divOrderDetails").html(result);
+                //loadOrders(result);
+                //$.setOrderedProductEvents();
+                removeAll();
+            },
+            error: function (e) {
+                $.loader('close');
+                alert(e);
+            }
         });
     };
+
+    //$.setOrderedProductEvents = function () {
+    //    $('#saveOrder').bind('click.saveOrderClick', $.saveOrderClick);
+    //    $('#saveBill'), bind('click.saveBillClick', $.saveBillClick);
+    //    $('#savePayment').bind('click.savePaymentClick', $.savePaymentClick);
+    //};
 });
 
 
@@ -237,7 +292,7 @@ $(document).ready(function () {
             $.loadOrder(ordId,"Order");
     });
 
-    $.setOrderedProductEvents();
+    //$.setOrderedProductEvents();
 
 
     $("#product-adder td div.circle").click(
@@ -373,11 +428,22 @@ function addRowRecord(value, id) {
         var productName = trim(data[0]);
         var unitPrice = trim(data[1]);
         var parcelPrice = trim(data[2]);
+        var prodtype = 0;
         if (parcelPrice == 'null') {
             parcelPrice = trim(data[1]);
         }
         var productId = trim(id + "");
+
+
+        //check it the product type is parcel
+        if ($('.csChkAll').attr('checked') || $('#parceloptionID').attr('checked')) {
+            prodtype = 1;
+        }
+
+
         if ($('.csChkAll').attr('checked')) {
+            
+
             $('.csChkParcel').each(function (index, e) {
                 $(this).attr('checked', 'checked');
             });
@@ -386,18 +452,18 @@ function addRowRecord(value, id) {
             } else {
                 unitPrice = parcelPrice;
             }
-        }
+        } 
         // set the values of product...
         $("#current-item-id").val(productId);
         $("#current-item-unitprice").val(unitPrice);
         $("#current-item-parcelprice").val(parcelPrice);
         $("#current-item-name").val(productName);
+        $("#current-item-type").val(prodtype)
         $("#quantity").val("");
+        var isprodExists = productExists(productName, productId,prodtype);
+        if (!isprodExists) {
 
-        if ((!productExists(productName, productId))
-                && (productExists(productName, productId) != null)) {
-
-            if (!updateProduct(productName, 1, productId)) {
+            if (!updateProduct(productName, 1, productId,prodtype)) {
 
                 addNewDataRow(productName, unitPrice, parcelPrice, productId);
                 if ($('.csChkAll').attr('checked')) {
@@ -409,12 +475,9 @@ function addRowRecord(value, id) {
 
                 $("#prev-added-item-id").val(productId);
             }
-            // $(".invoice-wrapper-table #product-adder tr
-            // td:nth-child(1)").html(document.getElementById("seatno").value);
-        } else if ((productExists(productName, productId))
-                && (!$('.csChkAll').is(':disabled'))) {
+        } else if (!$('.csChkAll').is(':disabled')) {
         
-            repeatedProductUpdate(productName, productId, unitPrice, parcelPrice);
+            repeatedProductUpdate(productName, productId, unitPrice, parcelPrice,prodtype);
             if ($('.csChkAll').attr('checked')) {
                 $('.csChkParcel').each(function (index, e) {
                     $(this).attr('checked', 'checked');
@@ -428,27 +491,19 @@ function addRowRecord(value, id) {
         updateInvoiceTotal();
     }
 
-    function addNewDataRow(name, unitprice, parcelPrice, productId) {
+    function addNewDataRow(name, unitprice, parcelPrice, productId, prodtype) {
         // //////alert("name::::::"+name);
 
-        var rowCount = $('table#dataTable tr.new-order').length;
-    
+        var newItemCount = $('table#dataTable tr.new-order').length;
+        var rowCount = $('table#dataTable tr').length;
+
         var currentTotal = $('#TotalAmount').val();
         var totalQty = $('#totalqty');
         var newTotal = parseFloat(unitprice);
         var remove_space_productName = name.split(' ').join('');
-        var rowId = 'row-id-' + remove_space_productName + "-" + productId;
-
-        //if (rowCount > 1) {
-            newTotal = newTotal + parseFloat(currentTotal);
-        //}
-
-        var removeButton = "<a href='" + "javascript:deleteDataRow(\"" + rowId
-                + "\"," + rowCount + ");" + "' >"
-                + "<img class='button-icon'	src='images/button-remove.png'>"
-                + "</a>";
-        var parcel = parcelPrice;
         var parceloption, parcelClsName, parcelValue;
+
+
 
         if (document.getElementById("parceloptionID").checked == true) {
             // alert("parceloptionID True");
@@ -463,54 +518,47 @@ function addRowRecord(value, id) {
             parceloption = '0';
         }
 
+        //var rowId = 'row' + rowCount;
+        var rowId = 'row-id-' + remove_space_productName + "-" + productId + "-" + parcelValue;
+        //if (rowCount > 1) {
+            newTotal = newTotal + parseFloat(currentTotal);
+        //}
+
+        var removeButton = "<a href='" + "javascript:deleteDataRow(\"" + rowId
+                + "\"," + rowCount + ");" + "' >"
+                + "<img class='button-icon'	src='images/delete.png'>"
+                + "</a>";
+        
+
+
         var rowHtmlData = '<tr id='
                 + rowId
-                + ''
                 + parcelClsName
-                + ' data-count="'
-                + rowCount
-                + '">'
+                + '>'
                 + '<td><input type="checkbox"'
                 + parceloption
                 + ' class="p_'
                 + rowCount
                 + ' csChkParcel" id="parcelid'
                 + rowCount
-                + '" name="orderedproducts['
-                + rowCount
-                + '].ParcelPrice" data-unitprice="'
-                + unitprice
-                + '"  value='
-                + parcelPrice
-                + ' onclick="changeParcelPrice(\''
-                + rowId
-                + '\','
-                + rowCount
-                + ','
-                + unitprice
-                + ','
-                + parcelPrice
-                + ')" />'
-                + '<input type="hidden" id="type'
-                + rowCount
-                + '" value="'
-                + parcelValue
-                + '" name="orderedproducts['
-                + rowCount
-                + '].Type"/>'
+                + '" name="parcelchk" value="'+ parcelPrice + '"'
+                    + ' onclick="changeParcelPrice(\'' + rowId + '\',' + rowCount + ',' + unitprice + ',' + parcelPrice + ')" />'
+
+                + '<input type="hidden" id="type' + rowCount + '" value="' + parcelValue + '" name="newItems[' + newItemCount + '].Type"/>'
+                + '<input type="hidden" id="status' + rowCount + '" value="' + 1 + '" name="newItems[' + newItemCount + '].Status"/>'
                 + '<input type="hidden" id="rowscount" value="'
                 + rowCount
                 + '" name="rowsets"/><input type="hidden" id="productId'
                 + rowCount
                 + '" value="'
                 + productId
-                + '" name="orderedproducts['
-                + rowCount
+                + '" name="newItems['
+                + newItemCount
                 + '].ProductId"/>'
                 + '</td>'
                 + '<td><span>' + name + '</span><input  id="nameid'
                 + rowCount
-                + '" type="hidden" name="orderedproducts[' + rowCount + '].ProductName" value="'
+                + '" type="hidden" name="newItems[' + newItemCount + '].ProductName" value="'
                 + name
                 + '"/></td>'
 
@@ -525,28 +573,36 @@ function addRowRecord(value, id) {
                 + unitprice
                 + '" data-unitprice="'
                 + unitprice
-                + '" name="orderedproducts['
-                + rowCount
+                + '" name="newItems['
+                + newItemCount
                 + '].Price">'
                 + '</td>'
 
                 + '<td><a class="number_button_qty" href="#" onclick="updateQuantity(\''
                 + rowId + '\')">1</a>'
-                + '<input type="hidden" size="3" name="orderedproducts[' + rowCount
+                + '<input type="hidden" size="3" name="newItems[' + newItemCount
                 + '].Quantity" value="1" id="qtyid' + rowCount + '"></td>'
 
                 + '<td id="unitTotal"><span>' + parseFloat(unitprice).toFixed(2) + '</span>'
 
-                + '<input type="hidden" size="3" name="orderedproducts[' + rowCount + '].Amount" value="' + unitprice + '" id="Amount' + rowCount + '">'
+                + '<input type="hidden" size="3" name="newItems[' + newItemCount + '].Amount" value="' + unitprice + '" id="Amount' + rowCount + '">'
                 
                 + '</td>'
                 + '<td>' + removeButton + '</td>' + '</tr>';
 
         $('#dataTable tr:last').after(rowHtmlData);
-        $('#TotalAmount').val(newTotal.toFixed(2));
-        $('#totalqty').val(rowCount);
-        document.getElementById("parceloptionID").checked = false;
+        
+        disableOrder(false);
+        disableBill(false);
+        updateInvoiceTotal();
+        //document.getElementById("parceloptionID").checked = false;
 
+        var noOfParcelCheked = $('.csChkParcel:checked').length;
+        var totNoOfParcelBox = $('.csChkParcel').length;
+        if (noOfParcelCheked == totNoOfParcelBox)
+            $('.csChkAll').attr('checked', 'checked');
+        else
+            $('.csChkAll').removeAttr('checked');
     }
 
 
@@ -554,7 +610,9 @@ function addRowRecord(value, id) {
     function updateInvoiceTotal() {
         var total = 0;
         var i = 0;
-        $("#dataTable tr").each(function () {
+        //$("#dataTable tr:eq[class='deleted-order']").each(function () {
+        //$("#dataTable tr[class*='deleted-order']")
+        $("#dataTable tr:not([class*='deleted-order'])").each(function () {
             $this = $(this);
             unitTotal = $this.find("td#unitTotal span").html();
 
@@ -585,147 +643,16 @@ function addRowRecord(value, id) {
 
     }
 
-    $(function () {
-        // a workaround for a flaw in the demo system
-        // (http://dev.jqueryui.com/ticket/4375), ignore!
-        $("#dialog:ui-dialog").dialog("destroy");
-
-        var name = $("#name"), email = $("#email"), company = $("#company"), mobile = $("#mobile"), address = $("#address"), allFields = $(
-                []).add(name), tips = $(".validateTips");
-
-        var topay = $("#topay"), amounttendered = $("#amounttendered"), cash = $("#cash"), credit = $("#credit"), onaccount = $("#onaccount"), layby = $("#layby"), allFields = $(
-                []).add(topay), tips = $(".validateTips");
-
-        function updateTips(t) {
-            tips.text(t).addClass("ui-state-highlight");
-            setTimeout(function () {
-                tips.removeClass("ui-state-highlight", 1500);
-            }, 500);
-        }
-
-        function checkLength(o, n, min, max) {
-            if (o.val().length > max || o.val().length < min) {
-                o.addClass("ui-state-error");
-                updateTips("Length of " + n + " must be between " + min + " and "
-                        + max + ".");
-                return false;
-            } else {
-                return true;
-            }
-        }
-
-        function checkRegexp(o, regexp, n) {
-            if (!(regexp.test(o.val()))) {
-                o.addClass("ui-state-error");
-                updateTips(n);
-                return false;
-            } else {
-                return true;
-            }
-        }
-
-        function transfer() {
-            document.write(name);
-            location.href = "addinvoice.htm?name=" + name.val() + "&mailid="
-                    + email;
-        }
-        $("#dialog-form")
-                .dialog(
-                        {
-                            autoOpen: false,
-                            height: 250,
-                            width: 350,
-                            modal: true,
-                            buttons: {
-                                "Create Customer": function () {
-                                    var bValid = true;
-                                    allFields.removeClass("ui-state-error");
-
-                                    bValid = bValid
-                                            && checkLength(name, "username", 3, 16);
-                                    bValid = bValid
-                                            && checkLength(email, "email", 6, 80);
-                                    bValid = bValid
-                                            && checkLength(company, "company", 6,
-                                                    80);
-
-                                    bValid = bValid
-                                            && checkLength(mobile, "mobile", 6, 80);
-
-                                    bValid = bValid
-                                            && checkRegexp(name,
-                                                    /^[a-z]([0-9a-z_])+$/i,
-                                                    "Username may consist of a-z, 0-9, underscores, begin with a letter.");
-                                    // From jquery.validate.js (by joern),
-                                    // contributed by Scott Gonzalez:
-                                    // http://projects.scottsplayground.com/email_address_validation/
-                                    bValid = bValid
-                                            && checkRegexp(
-                                                    email,
-                                                    /^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?$/i,
-                                                    "eg. ui@jquery.com");
-
-                                    bValid = bValid
-                                            && checkRegexp(company,
-                                                    /^[a-z]([0-9a-z_])+$/i,
-                                                    "Companyname may consist of a-z, 0-9, underscores, begin with a letter.");
-
-                                    bValid = bValid
-                                            && checkRegexp(mobile, /^([0-9])+$/i,
-                                                    "Username may consist of a-z, 0-9, underscores, begin with a letter.");
-
-                                    if (bValid) {
-
-                                        $('#NewCustomer').val(name.val());
-                                        $('#Email').val(email.val());
-                                        $('#Company').val(company.val());
-                                        $('#Mobile').val(mobile.val());
-
-                                        $(this).dialog("close");
-                                    }
-
-                                },
-                                Cancel: function () {
-                                    $(this).dialog("close");
-                                }
-                            },
-                            close: function () {
-                                allFields.val("").removeClass("ui-state-error");
-                            }
-                        });
-
-        $("#create-user").button().click(function () {
-            $("#dialog-form").dialog("open");
-            return false;
-        });
-
-
-
-        $("#payment").button().click(function () {
-            var topay = document.getElementById("TotalAmount").value;
-            var newpaidamount = parseFloat($('#paidamount').val());
-            $("#topay").val(topay);
-            if (!isNaN(newpaidamount) ? newpaidamount : 0) {
-                // $("#amounttendered").val(newpaidamount);
-                $("#calc_result").val(newpaidamount);
-            } else {
-                // $("#amounttendered").val(0.00);
-                $("#calc_result").val(0.00);
-            }
-            $("#paymenttype").dialog("open");
-            return false;
-        });
-
-    });
+ 
 
 
 
 
 
-    function repeatedProductUpdate(productName, productId, unitPrice, parcelPrice) {
+    function repeatedProductUpdate(productName, productId, unitPrice, parcelPrice,prodtype) {
 
         var remove_space_productName = productName.split(' ').join('');
-        var rowSelector = "tr#row-id-" + remove_space_productName + "-" + productId;
+        var rowSelector = "tr#row-id-" + remove_space_productName + "-" + productId + "-" + prodtype;
         var newRow = rowSelector + '.nonParcelRow';
         var parcelRow = rowSelector + '.parcelRow';
         if ($(newRow).length == 0 && $(parcelRow).length != 1) {
@@ -936,12 +863,17 @@ function addRowRecord(value, id) {
                 updateInvoiceTotal();
             }
         }
-
+        var noOfParcelCheked = $('.csChkParcel:checked').length;
+        var totNoOfParcelBox = $('.csChkParcel').length;
+        if (noOfParcelCheked == totNoOfParcelBox)
+            $('.csChkAll').attr('checked', 'checked');
+        else
+            $('.csChkAll').removeAttr('checked');
     }
 
-    function productExists(productName, productId) {
+    function productExists(productName, productId, prodtype) {
         var remove_space_productName = productName.split(' ').join('');
-        var rowSelector = "tr#row-id-" + remove_space_productName + "-" + productId;
+        var rowSelector = "tr#row-id-" + remove_space_productName + "-" + productId + "-" + prodtype;
         if ($(rowSelector).html() != null || $(rowSelector).hasClass('old_order')) {
             return true;
         }
@@ -951,8 +883,8 @@ function addRowRecord(value, id) {
 
 
 
-    function updateProduct(productName, qty, productId) {
-        var rowSelector = "tr#row-id-" + productName + "-" + productId;
+    function updateProduct(productName, qty, productId,prodtype) {
+        var rowSelector = "tr#row-id-" + productName + "-" + productId + "-" + prodtype;
 
         if ($(rowSelector).html() != null) {
 
@@ -987,20 +919,53 @@ function addRowRecord(value, id) {
     }
 
 
-
+    function promtReason(rowId, count) {
+        var $row = $('#' + rowId);
+        var $reason = $row.find("#Reason");
+        var $prdDisplayName = $row.find("span:eq(1)");
+        var $prdName = $row.find("#ProductName");
+        var reason = window.prompt("Reason:", $reason.val());
+        $reason.val(reason);
+        $prdDisplayName.html($prdName.val() + "~ " + reason);
+        
+    }
     function deleteDataRow(rowId, count) {
         // ////////////////alert(rowId);
-        var $row = $('#dataTable #' + rowId);
+        
+        disableOrder(false);
+        disableBill(false);
+        var $row = $('#' + rowId);
         var nextRow = $row.next('tr').find('td:nth-child(1)').text();
+        var isNew = $row.hasClass("new-order");
         if ($row) {
-            $('.plist_' + count).remove();
+            if (isNew) {
+                $('.plist_' + count).remove();
+            } else {
+                var isDeleted = $row.hasClass("deleted-order");
+                if (!isDeleted) {
+                    promtReason(rowId, count);
+                    $row.find("#imgIcon").removeClass("none");
+                    $row.addClass("deleted-order")
+                    $row.find("span").addClass("deleted");
+                    $row.find("#Status").val(0);
+                    
+                } else {
+                    $row.find("#imgIcon").addClass("none");
+                    $row.removeClass("deleted-order");
+                    $row.find("span").removeClass("deleted");
+                    var $modifyPrdName = $row.find("span:eq(1)");
+                    var $actPrdName = $row.find("#ProductName");
+                    $modifyPrdName.html($actPrdName.val());
+                    $row.find("#Reason").val('');
+                    $row.find("#Status").val(1);
+                }
+            }
+
         }
         if ($('#dataTable tr').length == 1) {
             $('#prev-added-item-id').val($("#current-item-id").val());
         }
-        if (nextRow) {
-            reorderInvoiceContent(nextRow - 1);
-        }
+        updateInvoiceTotal();
     }
 
     function clearCurrentProduct() {
@@ -1012,15 +977,31 @@ function addRowRecord(value, id) {
     }
 
 
-
+    function productRemoveAll() {
+        removeAll();
+        $(".csSeatList .seat a").parent().removeClass("selectingSeat");
+    }
     function removeAll() {
         $("#dataTable tr").each(function (i, el) {
             if (i > 0) {
                 $(el).remove();
             }
         });
-        $("#TotalAmount").val(0.0);
-        $("#Seats").val("");
+
+        $("#product-adder #quantity").val("");
+        $("#divOrderDetails #Id").val("0");
+        $("#divOrderDetails #Seats").val("");
+        $("#divOrderDetails #TotalAmount").val("");
+
+        $('#orderedNumbers a').removeClass("btn-info-mini");
+        $('#billedNumbers a').removeClass("btn-info-mini");
+        $('#invoice a').removeClass("btn-info-mini");
+
+        $('.csChkAll').removeAttr('checked');
+        $('#txtOrderId').val('');
+        $('#parceloptionID').removeAttr('checked');
+        disableOrder(true);
+        disableBill(true);
     }
 
     function isNumber(n) {
@@ -1115,19 +1096,18 @@ function addRowRecord(value, id) {
         var currentQty = parseInt(trim($("#quantity").val()));
         if (isNumber(currentQty)) {
             var productId = trim($("#current-item-id").val());
-            // var productName = $("#product-adder tr:nth-child(1)
-            // td:nth-child(1)").html();
             var productName = $("#current-item-name").val();
+            var prodtype= $("#current-item-type").val();
             if ($("#prev-added-item-id").val() == productId) {
                 var remove_space_productName = productName.split(' ').join('');
-                var rowId = "row-id-" + remove_space_productName + "-" + productId;
+                var rowId = "row-id-" + remove_space_productName + "-" + productId + "-" + prodtype;
                 changeQuantity(rowId, currentQty);
                 // need to investigate the belwo method purpose
                 // clearCurrentProduct();
-            } else if (!productExists(productName, productId)) {
+            } else if (!productExists(productName, productId, prodtype)) {
                 var unitPrice = $("#current-item-unitprice").val();
                 if (productId != "" && productId != null) {
-                    addNewDataRow(productName, unitPrice, productId);
+                    addNewDataRow(productName, unitPrice, productId, prodtype);
                     updateProduct(productName, currentQty - 1, productId);
                 }
             } else if (!updateProduct(productName, currentQty, productId)) {

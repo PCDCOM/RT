@@ -1,8 +1,10 @@
 ﻿@model RT.Models.Order
 @{
     Layout = null;
+    string TotalAmount = Model.TotalAmount.HasValue ? Model.TotalAmount.Value.ToString("#,##0.00#") : "";
+    bool anyDinining = Model.OrderedProducts.Where(i => i.Status == 1).Any(i => i.Type == 0);
 }
-@using (Html.BeginForm("SaveBill", "Order", FormMethod.Post))
+@using (Html.BeginForm("Pay", "Bill", FormMethod.Post))
 {
     <div id="divOrderDetails">
         
@@ -17,14 +19,19 @@
 
                                     <tr>
                                         <th>
-                                            <input type="checkbox" name="allbox" class="csChkAll" style="margin: 0 0 0 4px" checked="checked">
+                                            @if(anyDinining){
+                                                @:<input type="checkbox" name="allbox" class="csChkAll" style="margin: 0 0 0 4px" onclick="checkAll();">
+                                            }
+                                            else{
+                                                @:<input type="checkbox" name="allbox" class="csChkAll" style="margin: 0 0 0 4px" onclick="checkAll(); checked='checked'">
+                                            }
                                         </th>
                                         <th>Name</th>
                                         <th>Unit</th>
                                         <th>Qty</th>
                                         <th>Total</th>
                                         <th>
-                                            <img class="button-icon" src="./images/button-remove.png" onclick="removeAll();">
+                                            <img class="button-icon" src="./images/delete.png" onclick="productRemoveAll();">
                                         </th>
                                     </tr>
 
@@ -53,9 +60,9 @@
                             {
                                         
                                 @Html.HiddenFor(model => Model.Id);
-                                @Html.TextBoxFor(model => Model.Seats, new { @readonly = "true",@placeholder="Seats" });
+                                @Html.TextBoxFor(model => Model.Seats, new { @readonly = "true", @placeholder = "Seats" });
                                 <br />
-                                @Html.TextBoxFor(mode => Model.TotalAmount, new { @readonly = "true",@placeholder="Total" });
+                                @Html.TextBoxFor(mode => TotalAmount, new { @readonly = "true", @placeholder = "Total" });
                                 <input type="text" placeholder="PAY AMOUNT" onclick="setBalanceAmount()" onkeypress="enterPlaceBill(event)" onkeyup="setBalanceAmount()" onkeydown="setBalanceAmountValue()" value="" id="PaidAmount" name="PaidAmount" />
                                         
                                 <input type="text" value="" placeholder="BALANCE" id="BalanceAmount" name="BalanceAmount" readonly="true"/>
@@ -67,13 +74,12 @@
             </tbody>
         </table>
 
-        @if (Model.Status != (byte)RT.StatusType.Bill)
-        {
+
             @Html.Hidden("saveOrderUrl", Url.Action("SaveOrder"))
-            <input type="button" value="Order" id="saveOrder" class="btn btn-primary">
+            <input type="button" value="Order" id="saveOrder" class="btn btn-disabled">
            
-        }
+        
         @Html.Hidden("savePayUrl", Url.Action("Pay"))
-       <input type="button" value="Pay" id="savePayment" class="btn btn-success">
+       <input type="button" value="Pay" id="savePayment" class="btn btn-disabled">
     </div>
 }

@@ -8,7 +8,7 @@ using RT.Models;
 using System.Web.Security;
 namespace RT.Controllers
 {
-
+    [AjaxAuthorizationFilter]
     public class ProductGroupController : Controller
     {
         //

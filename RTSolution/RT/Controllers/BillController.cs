@@ -16,6 +16,7 @@ using RT.Models;
 namespace RT.Controllers
 {
     [Authorize(Roles = "Admin,Cashier")]
+    [AjaxAuthorizationFilter]
     public class BillController : AsyncController
     {
         private RestaurantEntities db = new RestaurantEntities();
@@ -26,11 +27,11 @@ namespace RT.Controllers
         {
             return View();
         }
-        private void UpdateOrderedProducts(OrderedProductModel[] newOrderedProducts, Order orderToUpdate)
+        private void UpdateOrderedProducts(OrderedProduct[] newItems, Order orderToUpdate)
         {
 
             MembershipUser user = Membership.GetUser(HttpContext.User.Identity.Name);
-            foreach (OrderedProductModel newOrderedProduct in newOrderedProducts)
+            foreach (OrderedProduct newOrderedProduct in newItems)
             {
                 OrderedProduct matchedOrder = orderToUpdate.OrderedProducts.SingleOrDefault(i => i.ProductId == newOrderedProduct.ProductId && i.Type == newOrderedProduct.Type);
                 if (matchedOrder == null)
@@ -46,8 +47,8 @@ namespace RT.Controllers
                         Price = newOrderedProduct.Price,
                         CreatedBy = (Guid)user.ProviderUserKey,
                         Amount = newOrderedProduct.Amount,
-                        ProductName = newOrderedProduct.ProductName
-                        
+                        ProductName = newOrderedProduct.ProductName,
+                        Status = newOrderedProduct.Status
                     };
                     orderToUpdate.OrderedProducts.Add(orderedProduct);
                 }
@@ -60,8 +61,10 @@ namespace RT.Controllers
 
 
         }
-        private void UpdateBillForOrder(OrderedProductModel[] orderedproducts,decimal TotalAmount, decimal PaidAmount, decimal BalanceAmount,Order orderToUpdate)
+        private void UpdateBillForOrder(OrderedProduct[] orderedproducts,decimal TotalAmount, decimal PaidAmount, decimal BalanceAmount,ref Order orderToUpdate)
         {
+
+
             MembershipUser user = Membership.GetUser(HttpContext.User.Identity.Name);
             Bill bill = new Bill() { 
                 TotalAmount = TotalAmount ,
@@ -74,7 +77,20 @@ namespace RT.Controllers
             orderToUpdate.Bills.Add(bill);
         }
 
+        private void UpdateDeletedItem(OrderedProduct[] oldItems, Order orderToUpdate)
+        {
+            foreach (OrderedProduct oldItem in oldItems)
+            {
+                OrderedProduct matchedOrder = orderToUpdate.OrderedProducts.Where(i => i.Id == oldItem.Id).Single();
+                if (matchedOrder != null && matchedOrder.Status != oldItem.Status)
+                {
+                    matchedOrder.Status = oldItem.Status;
+                    matchedOrder.Reason = oldItem.Reason;
+                }
 
+            }
+
+        }
         private void PrintBill(long Id) {
             Order order = db.Orders.Find(Id);
             string createdBy = Membership.GetUser(order.OrderedProducts.First().CreatedBy).UserName;
@@ -84,32 +100,34 @@ namespace RT.Controllers
             rcpt.OrderNo = Id;
             rcpt.CreatedBy = createdBy;
             rcpt.CreateDate = order.CreatedDate.Value.ToString("dd-MM-yyyy HH:mm");
-            rcpt.OrderedProducts = order.OrderedProducts;
+            if (rcpt.OrderedProducts != null && rcpt.OrderedProducts.Count > 0)
+            {
+                LogAdapter.Info("Before Prinint", "BillController", "Pay");
+                rcpt.OrderedProducts = order.OrderedProducts.Where(i => i.Status == 1).ToList();
+                LogAdapter.Info("After Prinint", "BillController", "Pay");
+            }
 
             Task.Run(() => rcpt.print());
         }
 
-        private long Save(long Id, ref Order orderToUpdate,StatusType statustype, OrderedProductModel[] orderedproducts, string Seats, decimal TotalAmount, int Status = 0)
+        private long Save(long Id, ref Order orderToUpdate, StatusType statustype, OrderedProduct[] newItems, string Seats, decimal TotalAmount,OrderedProduct[] oldItems, int Status = 0)
         {
             long newId = 0;
             
-            MembershipUser user = Membership.GetUser(HttpContext.User.Identity.Name);
-            if (Id == 0)
-            {
-                orderToUpdate = new Order() { CreatedBy = (Guid)user.ProviderUserKey, CreatedDate = DateTime.Now };
-            }
-            else
-            {
-                orderToUpdate = db.Orders.Where(i => i.Id == Id).Single();
-            }
+            
+
 
 
             if (TryUpdateModel(orderToUpdate, "", new string[] { "Status", "Seats", "TotalAmount" }
                ))
             {
-                if (orderedproducts != null)
+                if (oldItems != null)
                 {
-                    UpdateOrderedProducts(orderedproducts, orderToUpdate);
+                    UpdateDeletedItem(oldItems, orderToUpdate);
+                }
+                if (newItems != null)
+                {
+                    UpdateOrderedProducts(newItems, orderToUpdate);
                 }
                 orderToUpdate.TotalAmount = TotalAmount;
                 orderToUpdate.Seats = Seats;
@@ -133,8 +151,8 @@ namespace RT.Controllers
             return newId;
         }
         [HttpPost]
-        public ActionResult Pay(long Id, OrderedProductModel[] orderedproducts, decimal TotalAmount, decimal PaidAmount,
-            decimal BalanceAmount, string Seats, int Status = 0)
+        public ActionResult Pay(long Id, OrderedProduct[] newItems, decimal TotalAmount, decimal PaidAmount,
+            decimal BalanceAmount, string Seats,OrderedProduct[] oldItems, int Status = 0)
         {
 
             string securityData = ConfigurationManager.AppSettings["SecurityKey"].ToString();
@@ -148,11 +166,22 @@ namespace RT.Controllers
             //}
             
             Order orderToUpdate = null;
-            long newId = Save(Id,ref orderToUpdate, StatusType.Paid, orderedproducts, Seats, TotalAmount, Status);
+            if (Id == 0)
+            {
+                MembershipUser user = Membership.GetUser(HttpContext.User.Identity.Name);
+                orderToUpdate = new Order() { CreatedBy = (Guid)user.ProviderUserKey, CreatedDate = DateTime.Now };
+            }
+            else
+            {
+                orderToUpdate = db.Orders.Where(i => i.Id == Id).Single();
+            }
+
+            UpdateBillForOrder(newItems, TotalAmount, PaidAmount, BalanceAmount, ref orderToUpdate);
+            long newId = Save(Id,ref orderToUpdate, StatusType.Paid, newItems, Seats, TotalAmount,oldItems, Status);
 
 
-            UpdateBillForOrder(orderedproducts, TotalAmount, PaidAmount, BalanceAmount, orderToUpdate);
-            if (orderedproducts != null) {
+            
+            if (newItems != null) {
                 PrintBill(newId);
             }
             PushToClient(newId);
@@ -164,11 +193,20 @@ namespace RT.Controllers
             return View("OrderedProducts", new Order());
         }
         [HttpPost]
-        public ActionResult SaveOrder(long Id, FormCollection formcollection, OrderedProductModel[] orderedproducts, string Seats, decimal TotalAmount, int Status = 0)
+        public ActionResult SaveOrder(long Id, FormCollection formcollection, OrderedProduct[] newItems, string Seats, decimal TotalAmount, OrderedProduct[] oldItems, int Status = 0)
         {
-
+            
             Order orderToUpdate = null;
-            long newId = Save(Id,ref orderToUpdate, StatusType.New, orderedproducts, Seats, TotalAmount, Status);
+            if (Id == 0)
+            {
+                MembershipUser user = Membership.GetUser(HttpContext.User.Identity.Name);
+                orderToUpdate = new Order() { CreatedBy = (Guid)user.ProviderUserKey, CreatedDate = DateTime.Now };
+            }
+            else
+            {
+                orderToUpdate = db.Orders.Where(i => i.Id == Id).Single();
+            }
+            long newId = Save(Id, ref orderToUpdate, StatusType.New, newItems, Seats, TotalAmount, oldItems, Status);
             //Todo: Need to pass userid here
             if (Id == 0)
             {
@@ -189,10 +227,10 @@ namespace RT.Controllers
                 KeyValuePair<string, string> dictOrder = new KeyValuePair<string, string>("order", Id.ToString());
                 notificationengine.PushFromServer(dictOrder);
 
-                //ArrayList SeatArray = orderToUpdate.SeatArray(SeatType.Vacant);
-                //string jsonSeats = JsonConvert.SerializeObject(SeatArray);
-                //KeyValuePair<string, string> dictSeats = new KeyValuePair<string, string>("seats", jsonSeats);
-                //notificationengine.PushFromServer(dictSeats);
+                ArrayList SeatArray = orderToUpdate.SeatArray(SeatType.Vacant);
+                string jsonSeats = JsonConvert.SerializeObject(SeatArray);
+                KeyValuePair<string, string> dictSeats = new KeyValuePair<string, string>("seats", jsonSeats);
+                notificationengine.PushFromServer(dictSeats);
             }
         }
         [HttpGet]
@@ -202,7 +240,14 @@ namespace RT.Controllers
             if (id == 0)
                 order = new Order();
             else
-                order = db.Orders.Where(x => x.Id == id).Single();
+            {
+                order = db.Orders.Where(x => x.Id == id && (x.Status == (byte)StatusType.New || x.Status == (byte)StatusType.Bill)).SingleOrDefault<Order>();
+                if (order == null)
+                {
+                    order = new Order();
+                    throw new Exception("Could not load order");
+                }
+            }
             ModelState.Clear();
             return View("OrderedProducts", order);
         }

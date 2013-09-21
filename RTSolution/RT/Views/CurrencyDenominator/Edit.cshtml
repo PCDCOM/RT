@@ -1,0 +1,41 @@
+﻿@model RT.CurrencyDenomination
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Edit</h2>
+
+@using (Html.BeginForm()) {
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>CurrencyDenomination</legend>
+
+        @Html.HiddenFor(model => Model.Id)
+
+        <div class="editor-label">
+            @Html.LabelFor(model => Model.Denomination)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => Model.Denomination)
+            @Html.ValidationMessageFor(model => Model.Denomination)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model =>  Model.Value)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => Model.Value)
+            @Html.ValidationMessageFor(Model =>Model.Value)
+        </div>
+
+        <p>
+            <input type="submit" value="Save" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>

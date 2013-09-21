@@ -24,6 +24,7 @@ namespace RT.ReturnObjects
         public long UserId { get; set; }
         public SeatType Status { get; set; }
         public long OrderId { get; set; }
+        public StatusType OrderStatus  { get; set; }
     }
 }
 
@@ -54,7 +55,8 @@ namespace RT
                     UserId = 0,
                     Status = seatstatus,
                     Name = st,
-                    OrderId = order.Id
+                    OrderId = order.Id,
+                    OrderStatus = order.GetStatusType()
                 }).ToList();
 
             }

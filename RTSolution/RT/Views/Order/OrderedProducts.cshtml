@@ -1,6 +1,9 @@
 ﻿@model RT.Models.Order
 @{
     Layout = null;
+    
+    string TotalAmount = Model.TotalAmount.HasValue ? Model.TotalAmount.Value.ToString("#,##0.00#") : "";
+    bool anyDinining = Model.OrderedProducts.Where(i=>i.Status==1).Any(i => i.Type == 0);
 }
 @using (Html.BeginForm("SaveBill", "Order", FormMethod.Post))
 {
@@ -11,7 +14,7 @@
                 //Tod: Need to change total and seats as read only
 
                 @Html.TextBoxFor(model => Model.Seats, new { @readonly = "true" });
-                @Html.TextBoxFor(mode => Model.TotalAmount, new { @readonly = "true" });
+                @Html.TextBoxFor(mode =>TotalAmount, new { @readonly = "true" });
                 @Html.HiddenFor(model => Model.Id);
             }
 
@@ -24,15 +27,19 @@
 
                                     <tr>
                                         <th>
-                                            <input type="checkbox" name="allbox" class="csChkAll" style="margin: 0 0 0 4px" checked="checked">
-                                            
+                                            @if(anyDinining){
+                                                @:<input type="checkbox" name="allbox" class="csChkAll" style="margin: 0 0 0 4px" onclick="checkAll();">
+                                            }
+                                            else{
+                                                @:<input type="checkbox" name="allbox" class="csChkAll" style="margin: 0 0 0 4px" onclick="checkAll();" checked = "checked">
+                                            }
                                         </th>
                                         <th>Name</th>
                                         <th>Unit</th>
                                         <th>Qty</th>
                                         <th>Total</th>
                                         <th>
-                                            <img class="button-icon" src="./images/button-remove.png" onclick="removeAll();">
+                                            <img class="button-icon" src="./images/delete.png" onclick="productRemoveAll();">
                                         </th>
                                     </tr>
 
@@ -41,10 +48,11 @@
                                         int? inx = 0;
                                         foreach (var item in Model.OrderedProducts)
                                         {
-                                            //Todo: if it is a parcel row then change this TR class to parcellrow else nonparcelrow
                                             inx++;
+                                            //Todo: if it is a parcel row then change this TR class to parcellrow else nonparcelrow
                                             ViewData["count"] = inx;
-                                        @Html.Partial("OrderedProduct", item);
+                                            @Html.Partial("OrderedProduct", item);
+                                            
                                         }
                                     }
                                 </tbody>
@@ -53,9 +61,9 @@
 
 
 
-        <input type="button" value="Order" id="saveOrder" class="btn btn-primary">
+        <input type="button" value="Order" id="saveOrder" class="btn btn-disabled">
         @Html.Hidden("saveOrderUrl", Url.Action("SaveOrder"))
-        <input type="button" value="Bill" id="saveBill" class="btn btn-greend">
+        <input type="button" value="Bill" id="saveBill" class="btn btn-disabled">
         @Html.Hidden("saveBillUrl", Url.Action("SaveBill"))
         
     </div>

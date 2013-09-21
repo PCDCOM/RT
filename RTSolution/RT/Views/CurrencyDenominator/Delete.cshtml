@@ -1,0 +1,32 @@
+﻿@model RT.CurrencyDenomination
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<fieldset>
+    <legend>CurrencyDenomination</legend>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => Model.Denomination)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => Model.Denomination)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => Model.Value)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => Model.Value)
+    </div>
+</fieldset>
+@using (Html.BeginForm()) {
+    <p>
+        <input type="submit" value="Delete" /> |
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+}

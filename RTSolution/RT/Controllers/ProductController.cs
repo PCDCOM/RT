@@ -8,7 +8,7 @@ using System.Web.Security;
 using RT.Models;
 namespace RT.Controllers
 {
-
+    [AjaxAuthorizationFilter]
     public class ProductController : Controller
     {
         private RestaurantEntities db = new RestaurantEntities();

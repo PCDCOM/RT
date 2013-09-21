@@ -309,17 +309,29 @@ input.small[type="text"] {
 }
 .btn-mini {
     margin: 2px;
+    font-weight:bold;
 }
 
 
 table #dataTable {
     width: 100%;
 }
+table #dataTable tr.disabled {
+    background-color:#dddddd;
+    color:white;
+    cursor:not-allowed; 
+}
+
+table #dataTable tr span.deleted {
+    color:red;
+    text-decoration: line-through;
+}
 
 
-
-
-
+.btn.btn-disabled {
+    color:lightgray  ;
+    cursor: not-allowed;
+}
 
 /* primary mini starts*/
 

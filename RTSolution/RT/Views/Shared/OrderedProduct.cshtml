@@ -1,49 +1,67 @@
 ﻿@model RT.Models.OrderedProduct
 @{
-    int? inx = ViewData.Eval("count") as int?;
+    int? inx = (ViewData.Eval("count") as int?) - 1;
     Layout = null;
+
+    string deletedRowClass = (Model.Status == 0) ? "deleted-order" : "";
+    string deletedSpanClass = (Model.Status == 0) ? "deleted" : "";
+    string infoClass = (Model.Status == 0) ? "" : "none";
+    string ProductDisplayName = (Model.Status == 0) ? Model.ProductName + " ~" + Model.Reason : Model.ProductName  ;
+    string trimedProdName = System.Text.RegularExpressions.Regex.Replace(Model.ProductName, @"\s+", ""); 
 }
 
 
-                                    <tr class="old-order nonParcelRow plist_@inx">
-                                        <td>
-                                            @if(Model.Type == 1){
-                                                <input disabled="disabled" type="checkbox" checked="checked" class="p_1 csChkParcel" id="parcelid"@inx />
-                                            }
-                                            else{
-                                                <input disabled="disabled" type="checkbox" class="p_1 csChkParcel" id="parcelid"@inx /> 
-                                            }
-                                        
-                                        </td>
-                                        <td>
-                                            <span style="text-decoration: line-through">
-                                                @Html.DisplayFor(modelItem => Model.ProductName)
-                                            </span>
+    <tr class="disabled old-order nonParcelRow plist_@inx @deletedRowClass" id='row-id-@trimedProdName-@Model.ProductId-@Model.Type'>
+        <td>
+            <span class="@deletedSpanClass">
+                                               
+                @if(Model.Type == 1){
+                    <input disabled="disabled" type="checkbox" checked="checked"  />
+                }
+                else{
+                    <input disabled="disabled" type="checkbox"  /> 
+                }
 
-                                        </td>
-                                        <td>
-                                            <span style="text-decoration: line-through">
-                                                @Html.DisplayFor(modelItem => Model.Price)
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <span style="text-decoration: line-through">
-                                                @Html.DisplayFor(modelItem => Model.Quantity)
-                                            </span>
-                                        </td>
-                                        <td id='unitTotal'>
-                                           <span style="text-decoration: line-through">
-                                            @Html.DisplayFor(modelItem => Model.Amount)
-                                            </span>
-                                        </td>
-                                        <td>
-                                            @{
-                                    /*Todo: Need to implement: when wiater clicks this images , he will see the popup with 'reason' message. and should hide this row from the table. Later cahsier will review and save or delete in bill page */
-                                            }
-                                            <a href='javascript:deleteDataRow("row-id-TEHC-176",1)'>
-                                                <img class="button-icon" src="images/button-remove.png"></a>
-                                        </td>
-                                    </tr>
+            </span>
+            <input type="hidden" name="oldItems[@inx].Status" value=@Model.Status id="Status"/>
+            <input type="hidden" name="oldItems[@inx].Id" value="@Model.Id" id="OldItemId_@inx"/>
+            @Html.HiddenFor(modelItem => Model.ProductName)
+            <input type="hidden" id="Reason" name="oldItems[@inx].Reason" value="@Model.Reason"/>
+            @Html.HiddenFor(modelItem => Model.Type)
+        </td>
+        <td>
+            <a id="imgIcon" class="@infoClass" href='javascript:promtReason("row-id-@trimedProdName-@Model.ProductId-@Model.Type",@inx)'>
+                <img class="button-icon" src="images/info.png">
+            </a>
+            <span class="@deletedSpanClass">
+                @Html.DisplayFor(modelItem => ProductDisplayName)
+                
+            </span>
+
+        </td>
+        <td>
+            <span class="@deletedSpanClass">
+                @Html.DisplayFor(modelItem => Model.Price)
+            </span>
+        </td>
+        <td>
+            <span class="@deletedSpanClass">
+                @Html.DisplayFor(modelItem => Model.Quantity)
+            </span>
+        </td>
+        <td id='unitTotal'>
+            <span class="@deletedSpanClass">
+            @Html.DisplayFor(modelItem => Model.Amount)
+            </span>
+        </td>
+        <td>
+            @{
+    /*Todo: Need to implement: when wiater clicks this images , he will see the popup with 'reason' message. and should hide this row from the table. Later cahsier will review and save or delete in bill page */
+            }
+            <a href='javascript:deleteDataRow("row-id-@trimedProdName-@Model.ProductId-@Model.Type",@inx)'>
+                <img class="button-icon" src="images/delete.png"></a>
+        </td>
+    </tr>
     
 
 

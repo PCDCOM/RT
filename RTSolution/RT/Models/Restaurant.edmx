@@ -7,8 +7,8 @@
       <Schema Namespace="RT.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityContainer Name="RTStoreContainer">
           <EntitySet Name="Bill" EntityType="RT.Store.Bill" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="CurrencyDenomination" EntityType="RT.Store.CurrencyDenomination" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Kitchen" EntityType="RT.Store.Kitchen" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="Logs" EntityType="RT.Store.Logs" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Order" EntityType="RT.Store.Order" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="OrderedProduct" EntityType="RT.Store.OrderedProduct" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Product" EntityType="RT.Store.Product" store:Type="Tables" Schema="dbo" />
@@ -50,28 +50,20 @@
           <Property Name="CreatedBy" Type="uniqueidentifier" />
           <Property Name="CreatedDate" Type="datetime" />
         </EntityType>
+        <EntityType Name="CurrencyDenomination">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Denomination" Type="nchar" MaxLength="10" />
+          <Property Name="Value" Type="int" />
+        </EntityType>
         <EntityType Name="Kitchen">
           <Key>
             <PropertyRef Name="KitchenID" />
           </Key>
           <Property Name="KitchenID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="KitchenName" Type="varchar" MaxLength="50" />
-        </EntityType>
-        <EntityType Name="Logs">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
-          <Property Name="EventDateTime" Type="datetime" Nullable="false" />
-          <Property Name="EventLevel" Type="nvarchar" MaxLength="100" />
-          <Property Name="UserName" Type="nvarchar" MaxLength="100" />
-          <Property Name="MachineName" Type="nvarchar" MaxLength="100" />
-          <Property Name="EventMessage" Type="nvarchar(max)" />
-          <Property Name="ErrorSource" Type="nvarchar" MaxLength="100" />
-          <Property Name="ErrorClass" Type="nvarchar" MaxLength="500" />
-          <Property Name="ErrorMethod" Type="nvarchar(max)" />
-          <Property Name="ErrorMessage" Type="nvarchar(max)" />
-          <Property Name="InnerErrorMessage" Type="nvarchar(max)" />
         </EntityType>
         <EntityType Name="Order">
           <Key>
@@ -86,10 +78,9 @@
         </EntityType>
         <EntityType Name="OrderedProduct">
           <Key>
-            <PropertyRef Name="OrderId" />
-            <PropertyRef Name="ProductId" />
-            <PropertyRef Name="Type" />
+            <PropertyRef Name="Id" />
           </Key>
+          <Property Name="Id" Type="bigint" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="OrderId" Type="bigint" Nullable="false" />
           <Property Name="ProductId" Type="bigint" Nullable="false" />
           <Property Name="Quantity" Type="int" />
@@ -98,6 +89,8 @@
           <Property Name="CreatedBy" Type="uniqueidentifier" />
           <Property Name="ProductName" Type="varchar" MaxLength="50" />
           <Property Name="Amount" Type="decimal" />
+          <Property Name="Status" Type="int" />
+          <Property Name="Reason" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="Product">
           <Key>
@@ -107,7 +100,7 @@
           <Property Name="ProductGroupID" Type="bigint" Nullable="false" />
           <Property Name="MasterProductID" Type="bigint" />
           <Property Name="Name" Type="varchar" Nullable="false" MaxLength="50" />
-          <Property Name="Details" Type="text" Nullable="false" />
+          <Property Name="Details" Type="text" />
           <Property Name="ExpiryDate" Type="date" />
           <Property Name="Stock" Type="int" />
           <Property Name="LowStockRange" Type="int" />
@@ -215,8 +208,8 @@
       <Schema Namespace="RT" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityContainer Name="RestaurantEntities" p1:LazyLoadingEnabled="true">
           <EntitySet Name="Bills" EntityType="RT.Bill" />
+          <EntitySet Name="CurrencyDenominations" EntityType="RT.CurrencyDenomination" />
           <EntitySet Name="Kitchens" EntityType="RT.Kitchen" />
-          <EntitySet Name="Logs" EntityType="RT.Log" />
           <EntitySet Name="Orders" EntityType="RT.Order" />
           <EntitySet Name="OrderedProducts" EntityType="RT.OrderedProduct" />
           <EntitySet Name="Products" EntityType="RT.Product" />
@@ -259,6 +252,14 @@
           <Property Name="CreatedDate" Type="DateTime" Precision="3" />
           <NavigationProperty Name="Order" Relationship="RT.FK_Bill_Order" FromRole="Bill" ToRole="Order" />
         </EntityType>
+        <EntityType Name="CurrencyDenomination">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="Denomination" Type="String" MaxLength="10" Unicode="true" FixedLength="true" />
+          <Property Name="Value" Type="Int32" />
+        </EntityType>
         <EntityType Name="Kitchen">
           <Key>
             <PropertyRef Name="KitchenID" />
@@ -266,22 +267,6 @@
           <Property Name="KitchenID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
           <Property Name="KitchenName" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
           <NavigationProperty Name="Products" Relationship="RT.FK_Product_Kitchen" FromRole="Kitchen" ToRole="Product" />
-        </EntityType>
-        <EntityType Name="Log">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
-          <Property Name="EventDateTime" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="EventLevel" Type="String" MaxLength="100" Unicode="true" FixedLength="false" />
-          <Property Name="UserName" Type="String" MaxLength="100" Unicode="true" FixedLength="false" />
-          <Property Name="MachineName" Type="String" MaxLength="100" Unicode="true" FixedLength="false" />
-          <Property Name="EventMessage" Type="String" MaxLength="Max" Unicode="true" FixedLength="false" />
-          <Property Name="ErrorSource" Type="String" MaxLength="100" Unicode="true" FixedLength="false" />
-          <Property Name="ErrorClass" Type="String" MaxLength="500" Unicode="true" FixedLength="false" />
-          <Property Name="ErrorMethod" Type="String" MaxLength="Max" Unicode="true" FixedLength="false" />
-          <Property Name="ErrorMessage" Type="String" MaxLength="Max" Unicode="true" FixedLength="false" />
-          <Property Name="InnerErrorMessage" Type="String" MaxLength="Max" Unicode="true" FixedLength="false" />
         </EntityType>
         <EntityType Name="Order">
           <Key>
@@ -298,10 +283,9 @@
         </EntityType>
         <EntityType Name="OrderedProduct">
           <Key>
-            <PropertyRef Name="OrderId" />
-            <PropertyRef Name="ProductId" />
-            <PropertyRef Name="Type" />
+            <PropertyRef Name="Id" />
           </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" p1:StoreGeneratedPattern="Identity" />
           <Property Name="OrderId" Type="Int64" Nullable="false" />
           <Property Name="ProductId" Type="Int64" Nullable="false" />
           <Property Name="Quantity" Type="Int32" />
@@ -310,6 +294,8 @@
           <Property Name="CreatedBy" Type="Guid" />
           <Property Name="ProductName" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
           <Property Name="Amount" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="Status" Type="Int32" />
+          <Property Name="Reason" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
           <NavigationProperty Name="Order" Relationship="RT.FK_OrderedProducts_Order" FromRole="OrderedProduct" ToRole="Order" />
           <NavigationProperty Name="Product" Relationship="RT.FK_OrderedProducts_Product" FromRole="OrderedProduct" ToRole="Product" />
         </EntityType>
@@ -321,7 +307,7 @@
           <Property Name="ProductGroupID" Type="Int64" Nullable="false" />
           <Property Name="MasterProductID" Type="Int64" />
           <Property Name="Name" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
-          <Property Name="Details" Type="String" Nullable="false" MaxLength="Max" Unicode="false" FixedLength="false" />
+          <Property Name="Details" Type="String" MaxLength="Max" Unicode="false" FixedLength="false" />
           <Property Name="ExpiryDate" Type="DateTime" Precision="0" />
           <Property Name="Stock" Type="Int32" />
           <Property Name="LowStockRange" Type="Int32" />
@@ -447,28 +433,20 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="CurrencyDenominations">
+            <EntityTypeMapping TypeName="RT.CurrencyDenomination">
+              <MappingFragment StoreEntitySet="CurrencyDenomination">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Denomination" ColumnName="Denomination" />
+                <ScalarProperty Name="Value" ColumnName="Value" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Kitchens">
             <EntityTypeMapping TypeName="RT.Kitchen">
               <MappingFragment StoreEntitySet="Kitchen">
                 <ScalarProperty Name="KitchenID" ColumnName="KitchenID" />
                 <ScalarProperty Name="KitchenName" ColumnName="KitchenName" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Logs">
-            <EntityTypeMapping TypeName="RT.Log">
-              <MappingFragment StoreEntitySet="Logs">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="EventDateTime" ColumnName="EventDateTime" />
-                <ScalarProperty Name="EventLevel" ColumnName="EventLevel" />
-                <ScalarProperty Name="UserName" ColumnName="UserName" />
-                <ScalarProperty Name="MachineName" ColumnName="MachineName" />
-                <ScalarProperty Name="EventMessage" ColumnName="EventMessage" />
-                <ScalarProperty Name="ErrorSource" ColumnName="ErrorSource" />
-                <ScalarProperty Name="ErrorClass" ColumnName="ErrorClass" />
-                <ScalarProperty Name="ErrorMethod" ColumnName="ErrorMethod" />
-                <ScalarProperty Name="ErrorMessage" ColumnName="ErrorMessage" />
-                <ScalarProperty Name="InnerErrorMessage" ColumnName="InnerErrorMessage" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -487,6 +465,7 @@
           <EntitySetMapping Name="OrderedProducts">
             <EntityTypeMapping TypeName="RT.OrderedProduct">
               <MappingFragment StoreEntitySet="OrderedProduct">
+                <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="OrderId" ColumnName="OrderId" />
                 <ScalarProperty Name="ProductId" ColumnName="ProductId" />
                 <ScalarProperty Name="Quantity" ColumnName="Quantity" />
@@ -495,6 +474,8 @@
                 <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
                 <ScalarProperty Name="ProductName" ColumnName="ProductName" />
                 <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Reason" ColumnName="Reason" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

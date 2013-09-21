@@ -22,7 +22,8 @@ color:black
     display: inline-block;
     margin-right: 5px;
     text-align:center;
-    vertical-align:baseline
+    vertical-align:baseline;
+    cursor:pointer
 
         
 }

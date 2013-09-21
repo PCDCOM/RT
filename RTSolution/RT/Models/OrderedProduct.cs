@@ -14,6 +14,7 @@ namespace RT.Models
     
     public partial class OrderedProduct
     {
+        public long Id { get; set; }
         public long OrderId { get; set; }
         public long ProductId { get; set; }
         public Nullable<int> Quantity { get; set; }
@@ -22,6 +23,8 @@ namespace RT.Models
         public Nullable<System.Guid> CreatedBy { get; set; }
         public string ProductName { get; set; }
         public Nullable<decimal> Amount { get; set; }
+        public Nullable<int> Status { get; set; }
+        public string Reason { get; set; }
     
         public virtual Order Order { get; set; }
         public virtual Product Product { get; set; }
