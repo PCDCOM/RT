@@ -6,16 +6,48 @@
 
 <h2>Create</h2>
 
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery-1.7.1.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery-ui-1.8.20.min.js")" type="text/javascript"></script>
 
 
 <script type="text/javascript">
 
     $(document).ready(function () {
-
+        LoadMasterProducts($("#MasterProductID").val());
         $("#ExpiryDate").datepicker({ dateFormat: 'dd/mm/yy' });
 
+        $("#ProductGroupID").change(function(event){
+            LoadMasterProducts(0);
+        });
+
+        $("#SelectMasterProduct").change(function (event) {
+           
+            $("#MasterProductID").val($("#SelectMasterProduct").val());
+        });
     });
   
+    function LoadMasterProducts(selectedmasterproductid)
+    {
+          var items = "";
+              var pgidval = $("#ProductGroupID").val();          
+
+        $.getJSON("@Url.Action("GetMasterProductsForProductGroup", "Product")", { pgid: pgidval },
+           function (data) {
+
+               $("#SelectMasterProduct").empty();
+               $("#SelectMasterProduct").append(new Option("Select MasterProduct", 0));
+
+               $.each(data, function () {
+                                  
+                   $("#SelectMasterProduct").append(new Option(this.name, this.id));
+               });
+
+               $("#SelectMasterProduct").val(selectedmasterproductid);
+           });
+    }
 
 </script>
 
@@ -45,7 +77,7 @@
                     @Html.ValidationMessageFor(model => model.ProductGroupID)             
                 </td>
             </tr>      
-          <tr>
+       @*   <tr>
                 <td>
                    Master Product Name
                 </td>
@@ -54,7 +86,17 @@
                      @Html.ValidationMessageFor(model => model.MasterProductID)            
                                
                 </td>
-            </tr>                        
+            </tr>    *@  
+            
+            <tr>
+                <td>
+                   Master Product
+                </td>
+                <td>                    
+                   <select id="SelectMasterProduct"></select>          
+                      @Html.HiddenFor(model => model.MasterProductID)      
+                </td>
+            </tr>                   
             <tr>
                 <td>
                     @Html.LabelFor(model => model.Details)

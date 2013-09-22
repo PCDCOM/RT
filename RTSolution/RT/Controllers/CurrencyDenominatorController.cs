@@ -5,7 +5,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using RT;
+using RT.Models;
 namespace CurrencyDenoDomo.Controllers
 {
     public class CurrencyDenominatorController : Controller

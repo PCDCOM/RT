@@ -7,33 +7,21 @@
 
     @Styles.Render("~/Content/Ordercss")
 
-    @Styles.Render("~/Content/themes/base/loadcss")
-
-    
-  
-        
-    
     
     @Scripts.Render("~/bundles/jquery")
     
-    @Scripts.Render("~/bundles/jqueryloader")
-    <script type="text/javascript">
-        $().ready(function () {
-            
-            $.loader({
-                className: "blue-with-image-2",
-                content: ''
+
+    @Scripts.Render("~/bundles/orderscripts")
+
+        <script type="text/javascript">
+            $().ready(function () {
+
+                $.loader({
+                    className: "blue-with-image-2",
+                    content: ''
+                });
             });
-        });
     </script>
-    @Scripts.Render("~/bundles/jquerychannel")
-
-    @Scripts.Render("~/bundles/jquerysignalr")
-
-    @Scripts.Render("~/bundles/jquerynotification")
-
-    <script src="~/Scripts/addInvoice.js"></script>
-    <script type="text/javascript" src="~/Scripts/common.js"></script>
 
     <title>Restoran Muthu</title>
     <script type="text/javascript" id="waxCS">var WAX = function () { var _arrInputs; window.addEventListener('waxSetArr', function (evt) { _arrInputs = evt.detail; }); return { getElement: function (i) { return _arrInputs[i]; } } }(); function waxGetElement(i) { return WAX.getElement(i); }</script>

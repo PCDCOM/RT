@@ -1,6 +1,11 @@
 ﻿@if(Request.IsAuthenticated) {
-    <text>Welcome <strong>@User.Identity.Name</strong>!
-    [ @Html.ActionLink("Log Off", "LogOff", "Account") ]</text>
+    if (Context.User.IsInRole("Admin") || Context.User.IsInRole("Cashier")) { 
+        <text>[@Html.ActionLink("Bill", "Index", "Bill")]</text>
+        <text>[@Html.ActionLink("Order", "Index", "Order")]</text>
+    }
+    <text>[ @Html.ActionLink("Home", "Index", "Home") ]</text>
+    <text>
+    [ @Html.ActionLink("Log Off", "LogOff", "Account") ] Welcome <strong>@User.Identity.Name</strong>!</text>
 }
 else {
     @:[ @Html.ActionLink("Log On", "LogOn", "Account") ]

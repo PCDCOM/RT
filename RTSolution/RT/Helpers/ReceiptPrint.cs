@@ -19,10 +19,11 @@ namespace PrintingSystem
         public long OrderNo { get; set; }
         public string CreatedBy { get; set; }
         public string CreateDate { get; set; }
+        public string PrinterName { get; set; }
         public ICollection<OrderedProduct> OrderedProducts { get; set; }
         public void print()
         {
-            string printerName = ConfigurationManager.AppSettings["PrinterName"].ToString();
+            
             pdoc = new PrintDocument();
             PrinterSettings ps = new PrinterSettings();
             Font font = new Font("Courier New", 15);
@@ -31,7 +32,7 @@ namespace PrintingSystem
             pdoc.DefaultPageSettings.PaperSize.Height = 820;
             pdoc.DefaultPageSettings.PaperSize.Width = 520;
 
-            pdoc.PrinterSettings.PrinterName = printerName;
+            pdoc.PrinterSettings.PrinterName = PrinterName;
             pdoc.PrintPage += new PrintPageEventHandler(pdoc_PrintPage);
             pdoc.Print();
 

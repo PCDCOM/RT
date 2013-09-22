@@ -179,6 +179,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AuthorizeAjaxAttribute.cs" />
+    <Compile Include="Check.cs" />
+    <Compile Include="Controllers\CurrencyDenominatorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\KitchenController.cs" />
     <Compile Include="CustomHandleErrorAttribute.cs" />
@@ -211,6 +213,9 @@
     <Compile Include="Models\Kitchen.cs">
       <DependentUpon>Restaurant.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Log.cs">
+      <DependentUpon>Restaurant.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Order.cs">
       <DependentUpon>Restaurant.tt</DependentUpon>
     </Compile>
@@ -221,6 +226,9 @@
       <DependentUpon>Restaurant.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ProductGroup.cs">
+      <DependentUpon>Restaurant.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\RePrint.cs">
       <DependentUpon>Restaurant.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Restaurant.Context.cs">
@@ -253,7 +261,7 @@
     <Content Include="Content\buttons.css" />
     <Content Include="Content\circle.css" />
     <Content Include="Content\themes\base\images\ajax-loader.gif" />
-    <Content Include="Content\themes\base\jquery.loader.css" />
+    <Content Include="Content\jquery.loader.css" />
     <Content Include="Content\pos.css" />
     <Content Include="Content\style.css" />
     <Content Include="Content\TableCSSCode.css" />
@@ -301,7 +309,7 @@
     <Content Include="Content\themes\base\minified\images\ui-icons_888888_256x240.png" />
     <Content Include="Content\themes\base\minified\images\ui-icons_cd0a0a_256x240.png" />
     <Content Include="Content\themes\base\minified\jquery-ui.min.css" />
-    <Content Include="Content\themes\base\minified\jquery.loader.min.css" />
+    <Content Include="Content\jquery.loader.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.accordion.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.autocomplete.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.button.min.css" />
@@ -316,7 +324,7 @@
     <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
-    <Content Include="Scripts\addInvoice.js" />
+    <Content Include="Scripts\orderscripts.js" />
     <Content Include="Content\navigation.css" />
     <Content Include="Scripts\common.js" />
     <Content Include="Content\orderstyles.css" />
@@ -423,6 +431,7 @@
     <Content Include="Views\CurrencyDenominator\Details.cshtml" />
     <Content Include="Views\CurrencyDenominator\Edit.cshtml" />
     <Content Include="Views\CurrencyDenominator\Index.cshtml" />
+    <Content Include="Views\Order\ListOrdersForReprint.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

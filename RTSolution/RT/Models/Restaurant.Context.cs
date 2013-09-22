@@ -28,9 +28,11 @@ namespace RT.Models
         public DbSet<Bill> Bills { get; set; }
         public DbSet<CurrencyDenomination> CurrencyDenominations { get; set; }
         public DbSet<Kitchen> Kitchens { get; set; }
+        public DbSet<Log> Logs { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderedProduct> OrderedProducts { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductGroup> ProductGroups { get; set; }
+        public DbSet<RePrint> RePrints { get; set; }
     }
 }

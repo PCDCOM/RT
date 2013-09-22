@@ -8,6 +8,7 @@
         @Styles.Render("~/Content/css")
         @Scripts.Render("~/bundles/modernizr")
 
+
     </head>
     <body>
 <div class="page">
@@ -20,14 +21,22 @@
             </div>
             <nav>
                 <ul id="menu">
+                    @if (Context.User.IsInRole("Admin")){
+                        <li>@Html.ActionLink("Register","Register","Account")</li>
+                    }
                     @if (Context.User.IsInRole("Admin") || Context.User.IsInRole("Cashier"))
                     {
+                        
+                        <li>@Html.ActionLink("Denomination","Index","CurrencyDenominator")</li>
                         <li>@Html.ActionLink("Kitchen", "Index", "Kitchen")</li>
                         <li>@Html.ActionLink("Product group", "Index", "ProductGroup")</li>                   
                         <li>@Html.ActionLink("Product", "Index", "Product")</li>
                         <li>@Html.ActionLink("Bill", "Index", "Bill")</li>
-                        <li>@Html.ActionLink("Denominator","Index","CurrencyDenominator")</li>
+                        <li>@Html.ActionLink("Close","DenominationCalculation","CurrencyDenominator")</li>
+                        <li>@Html.ActionLink("RePrint", "ListOrdersForReprint", "Order")</li>
+                        
                     }
+
                     @if (Context.User.IsInRole("Admin") || Context.User.IsInRole("Cashier") || Context.User.IsInRole("Waiter"))
                     {
                         <li>@Html.ActionLink("Order", "Index", "Order")</li>

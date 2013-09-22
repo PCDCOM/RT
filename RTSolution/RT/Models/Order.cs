@@ -18,6 +18,7 @@ namespace RT.Models
         {
             this.Bills = new HashSet<Bill>();
             this.OrderedProducts = new HashSet<OrderedProduct>();
+            this.RePrints = new HashSet<RePrint>();
         }
     
         public long Id { get; set; }
@@ -29,5 +30,6 @@ namespace RT.Models
     
         public virtual ICollection<Bill> Bills { get; set; }
         public virtual ICollection<OrderedProduct> OrderedProducts { get; set; }
+        public virtual ICollection<RePrint> RePrints { get; set; }
     }
 }

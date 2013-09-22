@@ -11,17 +11,17 @@ namespace RT.Models
     {
         public class ProductMetaData
         {
-            [Display(Name = "Product Name")]
-            [Required(ErrorMessage="Product Name is required")]
+            [Display(Name = "Product")]
+            [Required(ErrorMessage = "Product Name is required")]
             public string Name { get; set; }
 
             [Required(ErrorMessage = "Details are required")]
             public string Details { get; set; }
 
-            [Required(ErrorMessage = "Product group name is required")]
+            [Required(ErrorMessage = "Product group is required")]
             public long ProductGroupID { get; set; }
-            
-            
+
+
             [DisplayFormat(DataFormatString = "{dd/MM/yy}")]
             public Nullable<System.DateTime> ExpiryDate { get; set; }
 
@@ -37,7 +37,7 @@ namespace RT.Models
             [Required(ErrorMessage = "First Selling Price is required")]
             public Nullable<decimal> FirstSellingPrice { get; set; }
 
-            [Required(ErrorMessage = "Kitchen name is required")]
+            [Required(ErrorMessage = "Kitchen is required")]
             public Nullable<int> KitchenID { get; set; }
         }
     }
@@ -47,7 +47,7 @@ namespace RT.Models
     {
         public class ProducGroupMetaData
         {
-            [Display(Name = "Product Name")]
+            [Display(Name = "Product Group")]
             [Required(ErrorMessage = "Product Group Name is required")]
             public string Name { get; set; }
 
@@ -61,10 +61,25 @@ namespace RT.Models
     {
         public class KitchenMetaData
         {
-            [Display(Name = "Kitchen Name")]
+            [Display(Name = "Kitchen")]
             [Required(ErrorMessage = "Kitchen Name is required")]
             public string KitchenName { get; set; }
 
+        }
+    }
+
+    public partial class Order
+    {
+        public string BillCreatedBy;
+
+        public class OrderMetaData
+        {
+            [Display(Name = "Order Number")]
+            public string Id { get; set; }
+
+            [Display(Name = "Order Date")]
+
+            public string CreatedDate { get; set; }
         }
     }
 

@@ -96,6 +96,8 @@ namespace RT.Controllers
             string createdBy = Membership.GetUser(order.OrderedProducts.First().CreatedBy).UserName;
             PrintingSystem.ReceiptPrint rcpt = new PrintingSystem.ReceiptPrint();
 
+            rcpt.PrinterName = ConfigurationManager.AppSettings["CommonPrinter"].ToString();
+
             rcpt.TotalAmount = order.TotalAmount;
             rcpt.OrderNo = Id;
             rcpt.CreatedBy = createdBy;
@@ -154,17 +156,6 @@ namespace RT.Controllers
         public ActionResult Pay(long Id, OrderedProduct[] newItems, decimal TotalAmount, decimal PaidAmount,
             decimal BalanceAmount, string Seats,OrderedProduct[] oldItems, int Status = 0)
         {
-
-            string securityData = ConfigurationManager.AppSettings["SecurityKey"].ToString();
-            string securityFile = Environment.GetFolderPath(Environment.SpecialFolder.System) + "\\RTSetp.dbf";
-            FileInfo f = new FileInfo(securityFile);
-
-
-            //if (!f.Exists || securityData != FileReadWrite.ReadFile(securityFile))
-            //{
-            //    throw new Exception("The software is not genunie");
-            //}
-            
             Order orderToUpdate = null;
             if (Id == 0)
             {

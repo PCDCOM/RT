@@ -159,13 +159,22 @@ namespace RT.Controllers
                 Order order = db.Orders.Find(Id);
                 string createdBy = Membership.GetUser(order.OrderedProducts.First().CreatedBy).UserName;
                 PrintingSystem.ReceiptPrint rcpt = new PrintingSystem.ReceiptPrint();
-
+                char firstSeatNo = order.Seats.FirstOrDefault();
+                //TOD: Need to change this hardcode to dynamic
+                if ("ABCDEFGHI".Contains(firstSeatNo))
+                    rcpt.PrinterName = ConfigurationManager.AppSettings["DiamondFloorPrinter"].ToString();
+                else if ("JKLMNOPQ".Contains(firstSeatNo))
+                    rcpt.PrinterName = ConfigurationManager.AppSettings["GoldFloorPrinter"].ToString();
+                else if ("RSTUVWXYZ".Contains(firstSeatNo))
+                    rcpt.PrinterName = ConfigurationManager.AppSettings["SilverFloorPrinter"].ToString();
+                else
+                    rcpt.PrinterName = ConfigurationManager.AppSettings["CommonPrinter"].ToString();
                 rcpt.TotalAmount = order.TotalAmount;
                 rcpt.OrderNo = Id;
                 rcpt.CreatedBy = createdBy;
                 rcpt.CreateDate = order.CreatedDate.Value.ToString("dd-MM-yyyy HH:mm");
                 rcpt.OrderedProducts =  order.OrderedProducts.Where(i => i.Status == 1).ToList();
-
+                
                 if (rcpt.OrderedProducts != null && rcpt.OrderedProducts.Count > 0)
                 {
                     LogAdapter.Info("Before Prinint", "OrderController", "Bill");
@@ -228,7 +237,57 @@ namespace RT.Controllers
             ModelState.Clear();
             return View("OrderedProducts", order);
         }
+        public ViewResult ListOrdersForReprint(string FromDate = null)
+        {
 
+
+            // var orders = db.Orders.Where(x => x.Status == 2 && (DateTime.Compare(Convert.ToDateTime(FromDate),x.CreatedDate.Value) == 0 || String.IsNullOrEmpty(FromDate)));
+            //IQueryable<Order> orders;
+            //if (string.IsNullOrEmpty(FromDate))
+            //{
+            //    orders = db.Orders.Where(x => x.Status == 2);
+            //}
+            //else
+            //{
+
+            //    DateTime dtFromDate = Convert.ToDateTime(FromDate);
+            //    orders = db.Orders.Where(x => x.Status == 2 && DateTime.Compare(dtFromDate,Convert.ToDateTime(x.CreatedDate.Value.ToShortDateString())) > 0);
+            //}
+
+            var orders = db.Orders.Where(x => x.Status == 2);
+            var reprintorders = from MembershipUser u in Membership.GetAllUsers()
+                                join o in orders on u.ProviderUserKey equals o.OrderedProducts.First().Product.CreatedBy
+                                select new Order
+                                {
+                                    Id = o.Id,
+                                    CreatedDate = o.CreatedDate,
+                                    Seats = o.Seats,
+                                    TotalAmount = o.TotalAmount,
+                                    BillCreatedBy = u.UserName.ToString()
+                                };
+
+            return View(reprintorders);
+        }
+        public void SaveReOrderAndPrint(int orderid)
+        {
+            MembershipUser user = Membership.GetUser(HttpContext.User.Identity.Name);
+            var reprint = new RePrint
+            {
+                ReprintedBy = (Guid)user.ProviderUserKey,
+                OrderId = orderid,
+                ReprintedDate = DateTime.Now
+            };
+            if (ModelState.IsValid)
+            {
+                db.RePrints.Add(reprint);
+                db.SaveChanges();
+                //Do printing
+                PrintBill(orderid);
+            }
+
+        }
+
+        
 
     }
 }

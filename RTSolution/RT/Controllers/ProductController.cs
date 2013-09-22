@@ -138,5 +138,19 @@ namespace RT.Controllers
             db.SaveChanges();
             return RedirectToAction("Index");
         }
+        [Authorize(Roles = "Admin,Cashier")]
+        public JsonResult GetMasterProductsForProductGroup(int? pgid)
+        {
+            var masterproducts = db.Products.Where(x => x.MasterProductID == null && x.Status == true && (x.ProductGroupID == pgid || !pgid.HasValue));
+
+
+            return Json(
+                 masterproducts.Select(x => new
+                 {
+                     id = x.Id,
+                     name = x.Name
+                 }), JsonRequestBehavior.AllowGet
+                );
+        }
     }
 }

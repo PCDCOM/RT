@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using System.Web.Security;
+using Microsoft.Win32;
 using Restaurant.Models;
 using RT;
 
@@ -27,26 +28,19 @@ namespace Restaurant.Controllers
         //
         // POST: /Account/LogOn
 
+
+
         [HttpPost]
         public ActionResult LogOn(LogOnModel model, string returnUrl)
         {
             if (ModelState.IsValid)
             {
 
-                string securityData = ConfigurationManager.AppSettings["SecurityKey"].ToString();
-                string securityFile = Environment.GetFolderPath(Environment.SpecialFolder.System) + "\\RTSetp.dbf";
-                FileInfo f = new FileInfo(securityFile);
-                if (f.Exists)                    
-                    LogAdapter.Info("file exisits","Account","LogOn");
-                else
-                    LogAdapter.Info("File does no exists in " + securityFile,"Account","LogOn");
 
-                LogAdapter.Info("Key name" + FileReadWrite.ReadFile(securityFile), "Account", "LogOn");
-
-                    //if (!f.Exists || securityData != FileReadWrite.ReadFile(securityFile))
-                    //{
-                    //    throw new Exception("The software is not genunie");
-                    //}
+                if (Check.getValue() != "904CE530BA63BFEBFBFF0001067ADell Inc.Base Board.5bhg4bs.              .")
+                {
+                    throw new Exception("The software is not genunie");
+                }
 
                 if (returnUrl != null && returnUrl.IndexOf("/user/login", StringComparison.OrdinalIgnoreCase) >= 0)
                     returnUrl = null;

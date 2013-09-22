@@ -18,16 +18,16 @@ namespace RT
                         "~/Scripts/jquery.unobtrusive*",
                         "~/Scripts/jquery.validate*"));
             
-            bundles.Add(new ScriptBundle("~/bundles/jqueryloader").Include(
-                        "~/Scripts/jquery.loader.js"));
-            bundles.Add(new ScriptBundle("~/bundles/jquerychannel").Include(
-                        "~/Scripts/jquery.channel.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/jquerysignalr").Include(
-            "~/Scripts/jquery.signalR-{version}.js"));
+            bundles.Add(new ScriptBundle("~/bundles/orderscripts").Include(
+                "~/Scripts/jquery.loader.js",
+                "~/Scripts/jquery.signalR-{version}.js",
+                 "~/Scripts/jquery.channel.js",
+                "~/Scripts/orderscripts.js",
+                "~/Scripts/common.js",
+                "~/Scripts/notification.js"
 
-            bundles.Add(new ScriptBundle("~/bundles/jquerynotification").Include(
-            "~/Scripts/notification.js"));
+            ));
 
             bundles.Add(new ScriptBundle("~/bundles/denomination").Include(
             "~/Scripts/denomination.js"));
@@ -44,18 +44,17 @@ namespace RT
                 
                 ));
             bundles.Add(new StyleBundle("~/Content/Ordercss").Include(
+                "~/Content/jquery.loader.css",
+                
                 "~/Content/buttons.css",
                 "~/Content/navigation.css",
                 "~/Content/circle.css",
                 "~/Content/arrange.css",
                 "~/Content/pos.css",
-                
                 "~/Content/orderstyles.css"
                 
             ));
-            bundles.Add(new StyleBundle("~/Content/themes/base/loadcss").Include(
-                "~/Content/themes/base/jquery.loader.css"
-                ));
+
             bundles.Add(new StyleBundle("~/Content/themes/base/css").Include(
                         "~/Content/themes/base/jquery.ui.core.css",
                         "~/Content/themes/base/jquery.ui.resizable.css",
@@ -71,7 +70,7 @@ namespace RT
                         "~/Content/themes/base/jquery.ui.theme.css"
                         
                         ));
-
+            BundleTable.EnableOptimizations = true;
         }
     }
 }

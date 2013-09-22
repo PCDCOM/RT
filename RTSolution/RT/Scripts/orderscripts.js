@@ -37,14 +37,19 @@ function disableBill(val) {
         $('#saveBill').bind('click.saveBillClick', $.saveBillClick);
     }
 }
+
 function disablePayment(val) {
+    
     $('#savePayment').unbind('click.savePaymentClick');
     if (val) {
         $("#savePayment").removeClass("btn-success").addClass("btn-disabled");
+        $('#PaidAmount').attr('disabled', 'disabled');
         
     } else {
         $("#savePayment").removeClass("btn-disabled").addClass("btn-success");
         $('#savePayment').bind('click.savePaymentClick', $.savePaymentClick);
+        $('#PaidAmount').removeAttr('disabled');
+        
     }
 }
 function collapseOthers(currentID, type, setCookieVal) {
@@ -124,6 +129,7 @@ $(function () {
         });
         $.ajax({
             //"/" + from +"/OrderedProducts/"
+            
             url: $("#loadOrder").val() +"/" +  ordId,
             error: function (xhr, ajaxOptions, thrownError) {
                 $.loader('close');
@@ -293,7 +299,20 @@ $(document).ready(function () {
     });
 
     //$.setOrderedProductEvents();
-
+    $('#txtOrderId').keypress(function (e) {
+        
+        var key = 0;
+        var evt = (e) ? e : (window.event) ? window.event : null;
+        if (evt) {
+            key = (evt.charCode) ? evt.charCode : ((evt.keyCode) ? evt.keyCode : ((evt.which) ? evt.which : 0));
+        }
+        //evt.preventDefault();
+        if (key == 13) {
+            var ordId = $('#txtOrderId').val()
+            if (ordId && $.isNumeric(ordId))
+                $.loadOrder(ordId, "Order");
+        }
+    });
 
     $("#product-adder td div.circle").click(
         function () {
@@ -380,7 +399,7 @@ function enterPlaceBill(e) {
     }
 
     if (key == 13) {
-        alert('en');
+        
         var printcurrentinvoiceNo;
         printcurrentinvoiceNo = $("#Id").val();
         invoice_bill_no = printcurrentinvoiceNo;
