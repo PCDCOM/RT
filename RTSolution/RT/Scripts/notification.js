@@ -63,8 +63,10 @@ $(function () {
                         obj.append(btn);
                     } else if (obj.length > 0 ) {
                         //obj.find("option[text='ord" + ord.OrderId + "']").remove();
-                        obj.find(".ord" + ord.OrderId).remove();
-                        
+                        var objOrder = obj.find(".ord" + ord.OrderId).remove();
+                        if (objOrder.hasClass("btn-info-mini"))
+                            removeAll();
+                        objOrder.remove();
                     }
                 });
                 

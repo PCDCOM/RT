@@ -37,10 +37,10 @@ namespace Restaurant.Controllers
             {
 
 
-                if (Check.getValue() != "904CE530BA63BFEBFBFF0001067ADell Inc.Base Board.5bhg4bs.              .")
-                {
-                    throw new Exception("The software is not genunie");
-                }
+                //if (Check.getValue() != "08606E822BE5BFEBFBFF000306A9ASUSTeK COMPUTER INC.Base Board121003409109189")
+                //{
+                //    throw new Exception("Custom Error: The software is not genunie");
+                //}
 
                 if (returnUrl != null && returnUrl.IndexOf("/user/login", StringComparison.OrdinalIgnoreCase) >= 0)
                     returnUrl = null;

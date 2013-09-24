@@ -24,18 +24,17 @@
      }    
 
 	.csSeatList .seat{
-	 background:url("../images/vacantChair.png") no-repeat scroll 0 0 transparent;
-	 height:33px;
-	 width:33px;
+	 background:url("../images/chairs.png") no-repeat scroll 0 0 transparent;
+background-position: 0 -138px; width: 26px; height: 19px; 
 	 display:block;	 
 	 }
       .csSeatList .selectedSeat
       { 
-		background-image:url("../images/lockedChair.png");      	 
+		background-position: 0 0; width: 26px; height: 19px;
       }
 	   .csSeatList .selectingSeat
       { 
-		background-image:url("../images/selectedChair.png");      	 
+		background-position: 0 -69px; width: 26px; height: 19px;  	 
       }
        .csSeatList .payingSeat,
        .csSeatList .payingSeat1,

@@ -27,10 +27,11 @@
             <input type="hidden" name="oldItems[@inx].Id" value="@Model.Id" id="OldItemId_@inx"/>
             @Html.HiddenFor(modelItem => Model.ProductName)
             <input type="hidden" id="Reason" name="oldItems[@inx].Reason" value="@Model.Reason"/>
-            @Html.HiddenFor(modelItem => Model.Type)
+            <input type="hidden" id="type"@inx name="oldItems[@inx].Type" value="@Model.Reason"/>
+           
         </td>
         <td>
-            <a id="imgIcon" class="@infoClass" href='javascript:promtReason("row-id-@trimedProdName-@Model.ProductId-@Model.Type",@inx)'>
+            <a id="imgIcon" class="@infoClass" href='javascript:onInfoClick("row-id-@trimedProdName-@Model.ProductId-@Model.Type",@inx,"old-order")'>
                 <img class="button-icon" src="images/info.png">
             </a>
             <span class="@deletedSpanClass">
@@ -58,7 +59,7 @@
             @{
     /*Todo: Need to implement: when wiater clicks this images , he will see the popup with 'reason' message. and should hide this row from the table. Later cahsier will review and save or delete in bill page */
             }
-            <a href='javascript:deleteDataRow("row-id-@trimedProdName-@Model.ProductId-@Model.Type",@inx)'>
+            <a href='javascript:deleteDataRow("row-id-@trimedProdName-@Model.ProductId-@Model.Type",@inx,"old-order")'>
                 <img class="button-icon" src="images/delete.png"></a>
         </td>
     </tr>

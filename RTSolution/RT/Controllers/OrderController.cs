@@ -106,9 +106,9 @@ namespace RT.Controllers
             }
 
 
-            if (TryUpdateModel(orderToUpdate, "", new string[] { "Status", "Seats", "TotalAmount" }
-               ))
-            {
+            //if (TryUpdateModel(orderToUpdate, "", new string[] { "Status", "Seats", "TotalAmount" }
+            //   ))
+            //{
                 if(oldItems != null){
                     UpdateDeletedItem(oldItems, orderToUpdate);
                 }
@@ -132,7 +132,7 @@ namespace RT.Controllers
                 db.SaveChanges();
                 newId = db.Entry(orderToUpdate).Entity.Id;
 
-            }
+            //}
 
 
             return newId;
@@ -174,11 +174,12 @@ namespace RT.Controllers
                 rcpt.CreatedBy = createdBy;
                 rcpt.CreateDate = order.CreatedDate.Value.ToString("dd-MM-yyyy HH:mm");
                 rcpt.OrderedProducts =  order.OrderedProducts.Where(i => i.Status == 1).ToList();
-                
+
                 if (rcpt.OrderedProducts != null && rcpt.OrderedProducts.Count > 0)
                 {
                     LogAdapter.Info("Before Prinint", "OrderController", "Bill");
                     System.Threading.Tasks.Task.Run(() => rcpt.print());
+                    //rcpt.print();
                     LogAdapter.Info("After Prinint", "OrderController", "Bill");
                 }
             
@@ -231,7 +232,10 @@ namespace RT.Controllers
                 if (order == null)
                 {
                     order = new Order();
-                    throw new Exception("Could not load order");
+                    string strId = string.Empty;
+                    if (id != null)
+                        strId = id.ToString();
+                    throw new Exception("Custom Error: Could not load order OrderID: " + strId);
                 }
             }
             ModelState.Clear();

@@ -127,6 +127,7 @@ $(function () {
             className: "blue-with-image-2",
             content: ''
         });
+        $.arrangeOrders();
         $.ajax({
             //"/" + from +"/OrderedProducts/"
             
@@ -162,13 +163,25 @@ $(function () {
             }
         });
     };
+    $.arrangeOrders = function () {
+        
 
+        var newTRs = $('table#dataTable tr.new-order');
+        newTRs.each(function (mainindex, e) {
+            var elements = $(this).find("input[name^='newItems[']")
+            var num = mainindex;
+            elements.each(function (subindex, e) {
+                var val = this.name.split('.')[1];
+                this.name = "newItems[" + num + "]." + val;
+            });
+        });
+    }
     $.saveOrderClick =function (e) {
         
         e.preventDefault();
         
         if ($("#divOrderDetails #Seats").val() == "" && !($('.csChkAll').attr('checked'))) {
-            alert("Please select seat for some dining products");
+            alert("Please select a seat for some dining products");
             setFloor();
             return true;
         }
@@ -178,6 +191,7 @@ $(function () {
             content: ''
         });
 
+        $.arrangeOrders();
 
         $.ajax({
             type: "POST",
@@ -204,7 +218,7 @@ $(function () {
             
         e.preventDefault();
         if ($("#divOrderDetails #Seats").val() == "" && !($('.csChkAll').attr('checked'))) {
-            alert("Please select seat for some dining products");
+            alert("Please select a seat for some dining products");
             setFloor();
             return true;
         }
@@ -236,7 +250,7 @@ $(function () {
         
         e.preventDefault();
         if ($("#divOrderDetails #Seats").val() == "" && !($('.csChkAll').attr('checked'))) {
-            alert("Please select seat for some dining products");
+            alert("Please select a seat for a dining products");
             setFloor();
             return true;
         }
@@ -289,7 +303,11 @@ $(function () {
 
 $(document).ready(function () {
 
+    $('img').each(function () {
+        var image = new Image();
+        image.src = $(this).attr('src')
 
+    });
 
     $('#btnLoadOrder').click(function (e) {
         e.preventDefault();
@@ -435,7 +453,7 @@ function addRowRecord(value, id) {
         if (rowCount == 0) {
 
             if (JSON_seats == "" && !$('#parceloptionID').is(':checked')) {
-                alert("please select seatNo/Table or TakeAway check");
+                alert("Select any seat or take away");
 
                 setFloor();
                 return true;
@@ -534,7 +552,7 @@ function addRowRecord(value, id) {
             // alert("parceloptionID False");
             parcelClsName = ' class="new-order nonParcelRow plist_' + rowCount + '"';
             parcelValue = '0';
-            parceloption = '0';
+            parceloption = '';
         }
 
         //var rowId = 'row' + rowCount;
@@ -544,7 +562,7 @@ function addRowRecord(value, id) {
         //}
 
         var removeButton = "<a href='" + "javascript:deleteDataRow(\"" + rowId
-                + "\"," + rowCount + ");" + "' >"
+                + "\"," + rowCount + ",\"new-order\");" + "' >"
                 + "<img class='button-icon'	src='images/delete.png'>"
                 + "</a>";
         
@@ -752,8 +770,9 @@ function addRowRecord(value, id) {
                         var unit_price = $('#unitid' + row_count).val();
                         var quantity = parseInt($('#qtyid' + row_count).val());
                         var new_item_price = parcel_price * quantity;
-
+                        $('#type' + row_count).val(1);
                         if (isNumber(parcel_price) && parcel_price > 0) {
+                            
                             $('#unitid' + row_count).val(parcel_price.toFixed(2));
                             $('.number_button_unit_price', $row).text(
                                     parcel_price.toFixed(2));
@@ -774,8 +793,9 @@ function addRowRecord(value, id) {
                                 'unitprice'));
                         var quantity = parseInt($('#qtyid' + row_count).val());
                         var new_item_price = unit_price * quantity;
-
+                        $('#type' + row_count).val(0);
                         if (isNumber(unit_price) && unit_price > 0) {
+                            
                             $('#unitid' + row_count).val(unit_price.toFixed(2));
                             $('.number_button_unit_price', $row).text(
                                     unit_price.toFixed(2));
@@ -786,6 +806,7 @@ function addRowRecord(value, id) {
                         }
                     });
         }
+        
         updateInvoiceTotal();
 
         /*
@@ -848,6 +869,7 @@ function addRowRecord(value, id) {
         if (document.getElementById('parcelid' + rowCount).checked == true) {
             // var productName = $("#product-adder tr:nth-child(1)
             // td:nth-child(1)").html();
+            $(rowSelector + ' #type' + rowCount).val("1");
             $(rowSelector).removeClass('nonParcelRow');
             $(rowSelector).addClass('parcelRow');
 
@@ -866,6 +888,7 @@ function addRowRecord(value, id) {
                 updateInvoiceTotal();
             }
         } else if (document.getElementById('parcelid' + rowCount).checked == false) {
+            $(rowSelector + ' #type' + rowCount).val("0");
             $(rowSelector).removeClass('parcelRow');
             $(rowSelector).addClass('nonParcelRow');
             if (isNumber(unitPrice) && unitPrice > 0) {
@@ -892,8 +915,8 @@ function addRowRecord(value, id) {
 
     function productExists(productName, productId, prodtype) {
         var remove_space_productName = productName.split(' ').join('');
-        var rowSelector = "tr#row-id-" + remove_space_productName + "-" + productId + "-" + prodtype;
-        if ($(rowSelector).html() != null || $(rowSelector).hasClass('old_order')) {
+        var rowSelector = "tr#row-id-" + remove_space_productName + "-" + productId + "-" + prodtype + ".new-order";
+        if ($(rowSelector).html() != null) {
             return true;
         }
 
@@ -905,7 +928,7 @@ function addRowRecord(value, id) {
     function updateProduct(productName, qty, productId,prodtype) {
         var rowSelector = "tr#row-id-" + productName + "-" + productId + "-" + prodtype;
 
-        if ($(rowSelector).html() != null) {
+        if ($(rowSelector + " .new-order").html() != null) {
 
             var rowNumber = $(rowSelector).prevAll("tr").length - 1;
             if (rowNumber != 0) {
@@ -944,30 +967,36 @@ function addRowRecord(value, id) {
         var $prdDisplayName = $row.find("span:eq(1)");
         var $prdName = $row.find("#ProductName");
         var reason = window.prompt("Reason:", $reason.val());
-        $reason.val(reason);
-        $prdDisplayName.html($prdName.val() + "~ " + reason);
-        
+        if (reason) {
+            $reason.val(reason);
+            $prdDisplayName.html($prdName.val() + "~ " + reason);
+        }
+        return reason;
     }
-    function deleteDataRow(rowId, count) {
+    function onInfoClick(rowId, count,ordertype) {
+        var reason = promtReason(rowId, count, ordertype);
+    }
+    function deleteDataRow(rowId, count,ordertype) {
         // ////////////////alert(rowId);
         
         disableOrder(false);
         disableBill(false);
-        var $row = $('#' + rowId);
+        var $row = $('#' + rowId + "." + ordertype);
         var nextRow = $row.next('tr').find('td:nth-child(1)').text();
-        var isNew = $row.hasClass("new-order");
+        var isNew = (ordertype == "new-order");
         if ($row) {
             if (isNew) {
                 $('.plist_' + count).remove();
             } else {
                 var isDeleted = $row.hasClass("deleted-order");
                 if (!isDeleted) {
-                    promtReason(rowId, count);
-                    $row.find("#imgIcon").removeClass("none");
-                    $row.addClass("deleted-order")
-                    $row.find("span").addClass("deleted");
-                    $row.find("#Status").val(0);
-                    
+                    var reason = promtReason(rowId, count);
+                    if (reason) {
+                        $row.find("#imgIcon").removeClass("none");
+                        $row.addClass("deleted-order")
+                        $row.find("span").addClass("deleted");
+                        $row.find("#Status").val(0);
+                    }
                 } else {
                     $row.find("#imgIcon").addClass("none");
                     $row.removeClass("deleted-order");
@@ -1281,6 +1310,7 @@ function addRowRecord(value, id) {
             }
             str.push('</ul>');
             $('#' + options.groupId + ' .p_' + options.column).append(place);
+            //alert('#place-' + options.placeId);
             $('#place-' + options.placeId).html(str.join('')).width(
                     options.seatWidth * options.cols).height(
                     options.seatHeight * options.rows + 10)

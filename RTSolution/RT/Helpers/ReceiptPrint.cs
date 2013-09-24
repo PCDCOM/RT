@@ -7,6 +7,7 @@ using System.Threading;
 using RT.Models;
 using System.Configuration;
 using RT;
+using System.Security.Principal;
 
 
 namespace PrintingSystem
@@ -34,9 +35,11 @@ namespace PrintingSystem
 
             pdoc.PrinterSettings.PrinterName = PrinterName;
             pdoc.PrintPage += new PrintPageEventHandler(pdoc_PrintPage);
-            pdoc.Print();
-
-
+            using (WindowsImpersonationContext wic = WindowsIdentity.Impersonate(IntPtr.Zero))
+            {
+                pdoc.Print();
+            }
+            
 
         }
 
