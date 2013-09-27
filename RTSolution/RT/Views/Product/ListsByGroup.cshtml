@@ -8,33 +8,39 @@
     int inxcolor = 1;
     int inxUl = 0;
   }
-@foreach (var item in Model.Where(i => i.MasterProductID == null))
+@foreach (var item in Model.Where(i => i.MasterProductID == null && i.Status == true).OrderBy(p => p.Sno))
 {
-
-    
-    
-    foreach (var inneritem in Model.Where(j => j.MasterProductID == item.Id))
-    {
-        int val = inxcolor % 5;
-       
-        if (inxUl % 12 == 0)
+            if (inxUl == 0)
         { 
+            
             @:<ul class="cButton1">
         }
-        if(inxUl == 0){    
-            @:<li class="prod btn0" onclick="addRowRecord('@item.Name,@item.ActualPrice,@item.FirstSellingPrice' ,@item.Id) ;return false;">
-                @item.Name
-            @:</li>
-                inxUl++;
-        }
-            <li class='prod btn@(val)' onclick="addRowRecord('@inneritem.Name,@inneritem.ActualPrice,@inneritem.FirstSellingPrice' ,@inneritem.Id) ;return false;">
+
+    if (inxUl % 12 == 0 && inxUl != 0)
+    {
+            @:</ul>
+            @:<ul class="cButton1">
+    }
+
+        @:<li class="prod btnm" onclick="addRowRecord('@item.Name,@item.ActualPrice,@item.SecondSellingPrice' ,@item.Id) ;return false;">
+        @item.Name
+        @:</li>
+    inxUl++;
+    foreach (var inneritem in Model.Where(j => j.MasterProductID == item.Id && j.Status==true))
+    {
+        int val = inxcolor % 5;
+
+
+    if (inxUl % 12 == 0 && inxUl != 0)
+    {
+            @:</ul>
+            @:<ul class="cButton1">
+    }
+            <li class='prod btn@(val)' onclick="addRowRecord('@inneritem.Name,@inneritem.ActualPrice,@inneritem.SecondSellingPrice' ,@inneritem.Id) ;return false;">
                 @inneritem.Name
             </li>
         
-        if (inxUl % 12 == 11)
-        { 
-            @:</ul>
-        }
+
         inxUl++;
     }
     inxcolor++;

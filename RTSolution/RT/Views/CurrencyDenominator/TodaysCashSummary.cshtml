@@ -1,0 +1,45 @@
+﻿@{
+    ViewBag.Title = "TodaysCashSummary";
+}
+
+<h2>Todays Cash Summary</h2>
+@{
+int sum = 0 ;
+sum = Convert.ToInt32(ViewData["DenominatorTotal"]) + Convert.ToInt32(ViewData["OrderTotal"]);
+     }
+<table>
+    <tr>
+        <td>
+            Todays Date:
+         </td>
+        <td>
+
+            @DateTime.Now.ToShortDateString()
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Denominator Total: 
+
+        </td>
+        <td> 
+             @ViewData["DenominatorTotal"]
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Order total:
+        </td>
+        <td>   @ViewData["OrderTotal"]
+        </td>
+    </tr>
+     <tr>
+        <td>
+            Total:
+        </td>
+        <td>   
+                
+             @sum
+        </td>
+    </tr>
+ </table>

@@ -14,8 +14,8 @@ namespace RT.Models
     
     public partial class CurrencyDenomination
     {
-        public long Id { get; set; }
+        public int id { get; set; }
         public string Denomination { get; set; }
-        public Nullable<int> Value { get; set; }
+        public int Value { get; set; }
     }
 }

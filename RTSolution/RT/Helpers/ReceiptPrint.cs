@@ -19,6 +19,7 @@ namespace PrintingSystem
         public Nullable<decimal> TotalAmount { get; set; }
         public long OrderNo { get; set; }
         public string CreatedBy { get; set; }
+        public string Seats { get; set; }
         public string CreateDate { get; set; }
         public string PrinterName { get; set; }
         public ICollection<OrderedProduct> OrderedProducts { get; set; }
@@ -56,8 +57,11 @@ namespace PrintingSystem
             int startX = 3;
             int startY = 2;
             int Offset = 5;
-            graphics.DrawString("RESTORAN MUTHU", new Font("Courier New", 14, FontStyle.Bold),
+            graphics.DrawString("RESTORAN MUTHU", new Font("Courier New", 13, FontStyle.Bold),
                                 new SolidBrush(Color.Black), startX, startY + Offset);
+            graphics.DrawString(CreateDate,
+               font,
+                    new SolidBrush(Color.Black), startX + 180, startY + Offset);
             Offset = Offset + 30;
             graphics.DrawString("No:118, Jalan Trus, 80000 Johor Bahru.",
                  font, new SolidBrush(Color.Black), startX, startY + Offset);
@@ -68,7 +72,7 @@ namespace PrintingSystem
                fontBold,
                     new SolidBrush(Color.Black), startX, startY + Offset);
             Offset = Offset + 20;
-            graphics.DrawString(string.Format("{0}    Service: {1}", CreateDate, CreatedBy),
+            graphics.DrawString(string.Format("Service: {0}             {1}", CreatedBy, Seats),
                 font,
                     new SolidBrush(Color.Black), startX, startY + Offset);
 
@@ -95,7 +99,7 @@ namespace PrintingSystem
             stringFormat.Alignment = StringAlignment.Far;
             stringFormat.LineAlignment = StringAlignment.Center;
 
-            graphics.DrawString("Total: RM " + String.Format("{0:0.00}",TotalAmount), fontBold, Brushes.Blue, rf, stringFormat);
+            graphics.DrawString("Total: RM " + String.Format("{0:0.00}", TotalAmount), new Font("Georgia", 12, FontStyle.Bold), Brushes.Blue, rf, stringFormat);
 
             
                 graphics.DrawString("*" + OrderNo.ToString() + "*",

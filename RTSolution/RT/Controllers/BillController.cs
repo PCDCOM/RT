@@ -117,6 +117,7 @@ namespace RT.Controllers
             rcpt.TotalAmount = order.TotalAmount;
             rcpt.OrderNo = Id;
             rcpt.CreatedBy = createdBy;
+            rcpt.Seats = order.Seats;
             rcpt.CreateDate = order.CreatedDate.Value.ToString("dd-MM-yyyy HH:mm");
             rcpt.OrderedProducts = order.OrderedProducts.Where(i => i.Status == 1).ToList();
             if (rcpt.OrderedProducts != null && rcpt.OrderedProducts.Count > 0)

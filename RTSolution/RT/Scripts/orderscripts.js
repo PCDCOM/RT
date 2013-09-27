@@ -303,11 +303,7 @@ $(function () {
 
 $(document).ready(function () {
 
-    $('img').each(function () {
-        var image = new Image();
-        image.src = $(this).attr('src')
 
-    });
 
     $('#btnLoadOrder').click(function (e) {
         e.preventDefault();
@@ -561,10 +557,10 @@ function addRowRecord(value, id) {
             newTotal = newTotal + parseFloat(currentTotal);
         //}
 
-        var removeButton = "<a href='" + "javascript:deleteDataRow(\"" + rowId
-                + "\"," + rowCount + ",\"new-order\");" + "' >"
-                + "<img class='button-icon'	src='images/delete.png'>"
-                + "</a>";
+            var removeButton = "<div class='delete' onclick='deleteDataRow(\"" + rowId
+                + "\"," + rowCount + ",\"new-order\");'><a  href='#' >"
+                
+                + "</a></div>";
         
 
 
@@ -1047,7 +1043,7 @@ function addRowRecord(value, id) {
 
         $('.csChkAll').removeAttr('checked');
         $('#txtOrderId').val('');
-        $('#parceloptionID').removeAttr('checked');
+        //$('#parceloptionID').removeAttr('checked');
         disableOrder(true);
         disableBill(true);
     }

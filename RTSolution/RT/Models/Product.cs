@@ -40,6 +40,7 @@ namespace RT.Models
         public string Remarks { get; set; }
         public Nullable<int> KitchenID { get; set; }
         public Nullable<bool> Status { get; set; }
+        public Nullable<int> Sno { get; set; }
     
         public virtual Kitchen Kitchen { get; set; }
         public virtual ICollection<OrderedProduct> OrderedProducts { get; set; }

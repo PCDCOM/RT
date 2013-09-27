@@ -15,7 +15,7 @@ namespace RT.Controllers
         [Authorize]
         public ActionResult ListsByGroup(long ProductGoupId)
         {
-            List<Product> products = db.Products.Where(p => p.ProductGroupID == ProductGoupId).ToList();
+            List<Product> products = db.Products.Where(p => p.ProductGroupID == ProductGoupId).OrderBy( p => p.Sno).ToList();
             return View(products);
         }
         [Authorize]

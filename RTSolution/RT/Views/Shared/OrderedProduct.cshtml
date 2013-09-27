@@ -5,7 +5,7 @@
 
     string deletedRowClass = (Model.Status == 0) ? "deleted-order" : "";
     string deletedSpanClass = (Model.Status == 0) ? "deleted" : "";
-    string infoClass = (Model.Status == 0) ? "" : "none";
+    string infoClass = (Model.Status == 0) ? "info deleted " : "info none";
     string ProductDisplayName = (Model.Status == 0) ? Model.ProductName + " ~" + Model.Reason : Model.ProductName  ;
     string trimedProdName = System.Text.RegularExpressions.Regex.Replace(Model.ProductName, @"\s+", ""); 
 }
@@ -31,9 +31,10 @@
            
         </td>
         <td>
-            <a id="imgIcon" class="@infoClass" href='javascript:onInfoClick("row-id-@trimedProdName-@Model.ProductId-@Model.Type",@inx,"old-order")'>
-                <img class="button-icon" src="images/info.png">
+            <div id="imgIcon" class="@infoClass" onclick='onInfoClick("row-id-@trimedProdName-@Model.ProductId-@Model.Type",@inx,"old-order")'>
+            <a  href='#'>
             </a>
+            </div>
             <span class="@deletedSpanClass">
                 @Html.DisplayFor(modelItem => ProductDisplayName)
                 
@@ -59,8 +60,10 @@
             @{
     /*Todo: Need to implement: when wiater clicks this images , he will see the popup with 'reason' message. and should hide this row from the table. Later cahsier will review and save or delete in bill page */
             }
-            <a href='javascript:deleteDataRow("row-id-@trimedProdName-@Model.ProductId-@Model.Type",@inx,"old-order")'>
-                <img class="button-icon" src="images/delete.png"></a>
+            <div class='delete' onclick='deleteDataRow("row-id-@trimedProdName-@Model.ProductId-@Model.Type",@inx,"old-order")'>
+                <a href="#">
+                </a>
+            </div>
         </td>
     </tr>
     

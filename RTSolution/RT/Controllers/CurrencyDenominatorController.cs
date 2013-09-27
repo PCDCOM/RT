@@ -6,7 +6,9 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using RT.Models;
-namespace CurrencyDenoDomo.Controllers
+using System.Data.SqlClient;
+using RT;
+namespace Controllers
 {
     public class CurrencyDenominatorController : Controller
     {
@@ -17,6 +19,7 @@ namespace CurrencyDenoDomo.Controllers
 
         public ActionResult Index()
         {
+
             return View(db.CurrencyDenominations.ToList());
         }
 
@@ -25,10 +28,52 @@ namespace CurrencyDenoDomo.Controllers
 
         public ActionResult DenominationCalculation()
         {
+            IEnumerable<Order> newOrders = db.Orders.Where(i => (i.Status == (byte)StatusType.New) || (i.Status == (byte)StatusType.Bill));
+            if (newOrders.Count() > 0)
+            {
+                throw new Exception("Still there are some un Paid Orders");
+            }
             return View(db.CurrencyDenominations.ToList());
         }
 
-        //
+        //[HttpPost]
+        //public ActionResult StoreDenominations(CurrencyDenominationTran[] currencydenominationtrans)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        foreach (CurrencyDenominationTran ct in currencydenominationtrans)
+        //        {
+        //            db.CurrencyDenominationTrans.Add(ct);
+        //            db.SaveChanges();
+        //        }
+        //        return RedirectToAction("Index");
+        //    }
+
+        //    return View("index");
+        //}
+
+
+        [HttpPost]
+        public ActionResult StoreDenominations(CurrencyDenominationTran[] currencydenominationtrans)
+        {
+
+
+            foreach (CurrencyDenominationTran newcurrencydenomination in currencydenominationtrans)
+            {
+                db.CurrencyDenominationTrans.Add(newcurrencydenomination);
+                db.SaveChanges();
+            }
+
+            SqlParameter sqlparameter = null;
+            //var ietsParameterEmpName = new SqlParameter("@EmpName", txtEmployeeName.Text);
+            DateTime dt = DateTime.Parse(DateTime.Now.ToShortDateString());
+            ViewData["OrderTotal"] = db.Orders.Where(y => y.Status == 2).AsEnumerable().Sum(x => x.TotalAmount);
+            ViewData["DenominatorTotal"] = db.CurrencyDenominationTrans.Where(y => y.date == dt).AsEnumerable().Sum(x => x.denomitotal);
+            db.Database.ExecuteSqlCommand("[usp_MoveToOld]", sqlparameter);
+            return View("TodaysCashSummary");
+        }
+
+
         // GET: /CurrencyDenominator/Details/5
 
         public ActionResult Details(int id = 0)
@@ -118,6 +163,27 @@ namespace CurrencyDenoDomo.Controllers
             return RedirectToAction("Index");
         }
 
+        // GET: /CurrencyDenominator/TodaysCashSummary
+
+        public ActionResult TodaysCashSummary()
+        {
+            DateTime dt = DateTime.Parse(DateTime.Now.ToShortDateString());
+            //ViewData["DenominatorTotal"] = db.CurrencyDenominationTrans.Where(y => DateTime.Compare(y.date.Value.Date, DateTime.Now.Date) == 0).AsEnumerable().Sum(x => x.denomitotal);
+
+            // ViewData["DenominatorTotal"] = db.CurrencyDenominationTrans.Where(y => y.date == dt).AsEnumerable().Sum(x => x.denomitotal);
+            // DateTime todaysdate = Convert.ToDateTime(DateTime.Now.ToShortDateString());
+
+            // ViewData["DenominatorTotal"] = db.CurrencyDenominationTrans.Where(y => DateTime.Compare(Convert.ToDateTime(y.date.Value.Date.ToShortDateString()), todaysdate) == 0).Count();
+            // ViewData["FristDate"] = db.CurrencyDenominationTrans.First().date.Value.Date.ToShortDateString();
+
+
+            
+
+            
+            //ViewData["OrderTotal"] = db.
+
+            return View();
+        }
         protected override void Dispose(bool disposing)
         {
             db.Dispose();

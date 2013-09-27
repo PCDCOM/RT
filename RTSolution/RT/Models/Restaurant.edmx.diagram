@@ -4,14 +4,15 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="927dc45012f04034b1891d89cbc4b81b" Name="Diagram1">
+      <Diagram DiagramId="db1dbd5e0a584143a214d000c3e10bd3" Name="Diagram1">
         <EntityTypeShape EntityType="RestaurantModel.Bill" Width="1.5" PointX="5.25" PointY="8.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="RestaurantModel.CurrencyDenomination" Width="1.5" PointX="7.75" PointY="1.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="RestaurantModel.CurrencyDenomination" Width="1.5" PointX="7.75" PointY="1.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="RestaurantModel.CurrencyDenominationTran" Width="1.5" PointX="7.75" PointY="4.625" IsExpanded="true" />
         <EntityTypeShape EntityType="RestaurantModel.Kitchen" Width="1.5" PointX="0.75" PointY="4.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="RestaurantModel.Log" Width="1.5" PointX="7.75" PointY="4.75" IsExpanded="true" />
         <EntityTypeShape EntityType="RestaurantModel.Order" Width="1.5" PointX="3" PointY="9.625" IsExpanded="true" />
         <EntityTypeShape EntityType="RestaurantModel.OrderedProduct" Width="1.5" PointX="5.25" PointY="3.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="RestaurantModel.Product" Width="1.5" PointX="3" PointY="2.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="RestaurantModel.Printer" Width="1.5" PointX="7.75" PointY="7.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="RestaurantModel.Product" Width="1.5" PointX="3" PointY="2" IsExpanded="true" />
         <EntityTypeShape EntityType="RestaurantModel.ProductGroup" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="RestaurantModel.RePrint" Width="1.5" PointX="5.25" PointY="11.75" IsExpanded="true" />
         <AssociationConnector Association="RestaurantModel.FK_Bill_Order" ManuallyRouted="false" />

@@ -308,8 +308,9 @@ input.small[type="text"] {
     width :50px;
 }
 .btn-mini {
-    margin: 2px;
+    margin: 3px 5px;
     font-weight:bold;
+    
 }
 
 
@@ -318,7 +319,7 @@ table #dataTable {
 }
 table #dataTable tr.disabled {
     background-color:#dddddd;
-    color:white;
+    color:black;
     cursor:not-allowed; 
 }
 
@@ -331,6 +332,7 @@ table #dataTable tr span.deleted {
 .btn.btn-disabled {
     color:lightgray  ;
     cursor: not-allowed;
+    padding: 10px 20px;
 }
 
 /* primary mini starts*/
@@ -350,8 +352,8 @@ table #dataTable tr span.deleted {
     border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff5bc0de', endColorstr='#ff2f96b4', GradientType=0);
     filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
-    margin: 2px;
-    padding: 0 6px;
+    margin: 2px 2px;
+    padding: 10px 16px;
     font-size: 10.5px;
 }
 
@@ -382,7 +384,7 @@ table #dataTable tr span.deleted {
     border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25) rgba(0, 0, 0, 0.5);
     color: #FFFFFF;
     text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.35);
-
+   padding: 10px 20px;
 }
 .btn-greend:hover,
 .btn-greend:focus,
@@ -390,9 +392,11 @@ table #dataTable tr span.deleted {
 .btn-greend[disabled]{
     background: none repeat scroll 0 0 #029239;
     color: #FFFFFF;
+
 }
 .prod {
 }
+.prod.btnm,
 .prod.btn0,
 .prod.btn1,
 .prod.btn2,
@@ -404,4 +408,17 @@ table #dataTable tr span.deleted {
     text-align:center;
     margin-bottom:5px;
     display:block;
+    
+}
+.info {
+    background: url("../images/sprit.png") no-repeat;
+    background-position: 0 -149px; width: 19px; height: 19px;
+    cursor:pointer;
+    float:left;
+    padding-right: 7px;
+}
+.delete {
+    background: url("../images/sprit.png") no-repeat;
+    background-position: 0 -82px; width: 17px; height: 17px;
+    cursor:pointer;
 }

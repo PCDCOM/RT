@@ -3,14 +3,14 @@
 @{
     ViewBag.Title = "DenominationCalculation";
 }
-
+<script src="~/Scripts/jquery-1.7.1.min.js"></script>
 <script type="text/javascript">
     function calculate(value) {
-        if (document.getElementById("txtinput" + value).value == "") {
-            document.getElementById("txtoutput" + value).value = 0;
+        if (document.getElementById("countavai" + value).value == "") {
+            document.getElementById("denomitotal" + value).value = 0;
         }
         else {
-            document.getElementById("txtoutput" + value).value = (parseInt(document.getElementById("txtinput" + value).value) * parseInt(document.getElementById("LabelDenomination" + value).value)).toString();
+            document.getElementById("denomitotal" + value).value = (parseInt(document.getElementById("countavai" + value).value) * parseInt(document.getElementById("denomival" + value).value)).toString();
         }
     }
 
@@ -60,30 +60,30 @@
     function calculateDenomination(inputelement) {
         var inputval = inputelement.attr('id');
         // alert(inputval);
-        var inputid = inputval.substr(8, inputval.length);
+        var inputid = inputval.substr(9, inputval.length);
         // alert(inputid);
 
-        if (document.getElementById("txtinput" + inputid).value == "") {
+        if (document.getElementById("countavai" + inputid).value == "") {
 
-            document.getElementById("txtoutput" + inputid).value = "0";
+            document.getElementById("denomitotal" + inputid).value = "0";
         }
         else {
 
-            document.getElementById("txtoutput" + inputid).value = (parseInt(document.getElementById("txtinput" + inputid).value) * parseInt(document.getElementById("LabelDenomination" + inputid).value)).toString();
+            document.getElementById("denomitotal" + inputid).value = (parseInt(document.getElementById("countavai" + inputid).value) * parseInt(document.getElementById("denomival" + inputid).value)).toString();
             // alert(2);
         }
     }
 
 </script>
-<h2>Closing</h2>
+<h2>DenominationCalculation1</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
+
+@using(Html.BeginForm("StoreDenominations","CurrencyDenominator",FormMethod.Post)){
+<div>
 <table>
     <tr>
         <td>
-            
+            @Html.DisplayNameFor(model => model.Denomination)
         </td>
         <td>
           Number available
@@ -92,20 +92,28 @@
            Result
         </td> 
     </tr>
+    @{
+        int index=0;
+        }
+        @foreach (var item in Model) {
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            <input id="LabelDenomination@(item.Value)" type= "text" value="@(item.Value)" readonly="true"/>
-        </td>
-        <td>
-            <input id="txtinput@(item.Value)" type="text" class="inputtextbox"/>
-        </td>
-        <td>
-            <input id="txtoutput@(item.Value)" type="text" class="outputtextbox" readonly="true"/>
-        </td> 
-    </tr>
-}
+            index = Convert.ToInt32(item.id) - 1;
+            <tr>
+                <td>
+                    <input name="currencydenominationtrans[@index].denomival" id="denomival@(item.Value)" type= "text" value="@(item.Value)" readonly="true"/>
+                </td>
+                <td>
+                    <input  name="currencydenominationtrans[@index].countavai" id="countavai@(item.Value)" type="text" class="inputtextbox"/>
+                </td>
+                <td>
+                    <input name="currencydenominationtrans[@index].denomitotal" id="denomitotal@(item.Value)" type="text" class="outputtextbox" readonly="true"/>
+
+                    <input name="currencydenominationtrans[@index].date" id="date@(item.Value)" type="hidden" value ="@DateTime.Now.ToShortDateString()"/>
+                </td> 
+            </tr>
+        }
+
+
     <tr>
         <td>
 
@@ -115,7 +123,8 @@
     </tr>
 
 </table>
- @section Scripts {
-     @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/denomination")
-}   
+    </div>
+    <p>
+    <input type="submit" value="Save" />
+</p>
+}

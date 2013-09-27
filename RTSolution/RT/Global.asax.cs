@@ -17,7 +17,7 @@ namespace RT
     {
         protected void Application_Start()
         {
-            RouteTable.Routes.MapConnection<NotificationEngine>("echo", "/echo");
+            //RouteTable.Routes.MapConnection<NotificationEngine>("echo", "/echo");
             AreaRegistration.RegisterAllAreas();
             
             WebApiConfig.Register(GlobalConfiguration.Configuration);

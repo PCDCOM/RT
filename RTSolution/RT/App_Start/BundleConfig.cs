@@ -21,7 +21,7 @@ namespace RT
 
             bundles.Add(new ScriptBundle("~/bundles/orderscripts").Include(
                 "~/Scripts/jquery.loader.js",
-                "~/Scripts/jquery.signalR-{version}.js",
+                "~/Scripts/jquery.signalR-{version}-rc1.js",
                  "~/Scripts/jquery.channel.js",
                 "~/Scripts/orderscripts.js",
                 "~/Scripts/common.js",

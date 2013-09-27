@@ -10,8 +10,35 @@
         
         <table class="invoice-form-table">
             <tbody>
+                
                 <tr>
                     <td>
+                        <div id="invoice-payment-form">
+                            @if (Model != null)
+                            {
+                                        
+                                @Html.HiddenFor(model => Model.Id);
+                                @Html.TextBoxFor(model => Model.Seats, new { @readonly = "true", @placeholder = "Seats" });
+                                <br />
+                                @Html.TextBoxFor(mode => TotalAmount, new { @readonly = "true", @placeholder = "Total" });
+                                <input type="text" placeholder="PAY AMOUNT" onclick="setBalanceAmount()" onkeypress="enterPlaceBill(event)" onkeyup="setBalanceAmount()" onkeydown="setBalanceAmountValue()" value="" id="PaidAmount" disabled="disabled" name="PaidAmount" />
+                                        
+                                <input type="text" value="" placeholder="BALANCE" id="BalanceAmount" name="BalanceAmount" readonly="true"/>
+                                        
+                            }
+                        </div>
+                        @Html.Hidden("saveOrderUrl", Url.Action("SaveOrder"))
+                        <input type="button" value="Order" id="saveOrder" class="btn btn-disabled">
+                        <div style="float:left;width:350px;">
+        
+                        @Html.Hidden("savePayUrl", Url.Action("Pay"))
+                        <input type="button" value="Pay" id="savePayment" class="btn btn-disabled">
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+
                         <div style="min-height: 275px; position: inherit;">
 
                             <table id="dataTable">
@@ -53,33 +80,10 @@
                     </td>
                 </tr>
 
-                <tr>
-                    <td>
-                        <div id="invoice-payment-form">
-                            @if (Model != null)
-                            {
-                                        
-                                @Html.HiddenFor(model => Model.Id);
-                                @Html.TextBoxFor(model => Model.Seats, new { @readonly = "true", @placeholder = "Seats" });
-                                <br />
-                                @Html.TextBoxFor(mode => TotalAmount, new { @readonly = "true", @placeholder = "Total" });
-                                <input type="text" placeholder="PAY AMOUNT" onclick="setBalanceAmount()" onkeypress="enterPlaceBill(event)" onkeyup="setBalanceAmount()" onkeydown="setBalanceAmountValue()" value="" id="PaidAmount" disabled="disabled" name="PaidAmount" />
-                                        
-                                <input type="text" value="" placeholder="BALANCE" id="BalanceAmount" name="BalanceAmount" readonly="true"/>
-                                        
-                            }
-                        </div>
-                    </td>
-                </tr>
             </tbody>
         </table>
 
 
-            @Html.Hidden("saveOrderUrl", Url.Action("SaveOrder"))
-            <input type="button" value="Order" id="saveOrder" class="btn btn-disabled">
-           
-        
-        @Html.Hidden("savePayUrl", Url.Action("Pay"))
-       <input type="button" value="Pay" id="savePayment" class="btn btn-disabled">
+
     </div>
 }
