@@ -134,7 +134,7 @@ $(function () {
             url: $("#loadOrder").val() +"/" +  ordId,
             error: function (xhr, ajaxOptions, thrownError) {
                 $.loader('close');
-                var msg = "Unable to process";
+                var msg = "Unable to process : " + ajaxOptions;
                 msg = (xhr) ? ((xhr.status) ? xhr.status + " : " : msg) + ((xhr.responseText) ? xhr.responseText : msg) : msg;
                 alert(msg);
                 
@@ -205,17 +205,19 @@ $(function () {
                 setFloor();
                 removeAll();
             },
-            error: function (e) {
+            error: function (xhr, ajaxOptions, thrownError) {
                 $.loader('close');
-                alert(e);
+                var msg = "Unable to process : " + ajaxOptions;
+                msg = (xhr) ? ((xhr.status) ? xhr.status + " : " : msg) + ((xhr.responseText) ? xhr.responseText : msg) : msg;
+                alert(msg);
 
-            }
+            },
         });
 
     };
 
     $.saveBillClick = function (e) {
-            
+        
         e.preventDefault();
         if ($("#divOrderDetails #Seats").val() == "" && !($('.csChkAll').attr('checked'))) {
             alert("Please select a seat for some dining products");
@@ -227,6 +229,8 @@ $(function () {
             className: "blue-with-image-2",
             content: ''
         });
+        $.arrangeOrders();
+
         $.ajax({
             type: "POST",
             url: $("#saveBillUrl").val(),
@@ -239,10 +243,13 @@ $(function () {
                 setFloor();
                 removeAll();
             },
-            error: function (e) {
+            error: function (xhr, ajaxOptions, thrownError) {
                 $.loader('close');
-                alert(e);
-            }
+                var msg = "Unable to process : " + ajaxOptions;
+                msg = (xhr) ? ((xhr.status) ? xhr.status + " : " : msg) + ((xhr.responseText) ? xhr.responseText : msg) : msg;
+                alert(msg);
+
+            },
         });
             
     };
@@ -285,10 +292,13 @@ $(function () {
                 //$.setOrderedProductEvents();
                 removeAll();
             },
-            error: function (e) {
+            error: function (xhr, ajaxOptions, thrownError) {
                 $.loader('close');
-                alert(e);
-            }
+                var msg = "Unable to process : " + ajaxOptions;
+                msg = (xhr) ? ((xhr.status) ? xhr.status + " : " : msg) + ((xhr.responseText) ? xhr.responseText : msg) : msg;
+                alert(msg);
+
+            },
         });
     };
 
@@ -445,7 +455,7 @@ function placeBillEntered() {
 
 function addRowRecord(value, id) {
         var rowCount = $('table#dataTable tr').length - 1;
-
+        
         if (rowCount == 0) {
 
             if (JSON_seats == "" && !$('#parceloptionID').is(':checked')) {
@@ -460,6 +470,7 @@ function addRowRecord(value, id) {
         var data = value.split(",");
         var productName = trim(data[0]);
         var unitPrice = trim(data[1]);
+        var disPrice = unitPrice;
         var parcelPrice = trim(data[2]);
         var prodtype = 0;
         if (parcelPrice == 'null') {
@@ -469,8 +480,9 @@ function addRowRecord(value, id) {
 
 
         //check it the product type is parcel
-        if ($('.csChkAll').attr('checked') || $('#parceloptionID').attr('checked')) {
+        if ( $('#parceloptionID').attr('checked')) {
             prodtype = 1;
+            disPrice = parcelPrice;
         }
 
 
@@ -480,11 +492,11 @@ function addRowRecord(value, id) {
             $('.csChkParcel').each(function (index, e) {
                 $(this).attr('checked', 'checked');
             });
-            if (parcelPrice == '') {
-                unitPrice = trim(data[1]);
-            } else {
-                unitPrice = parcelPrice;
-            }
+            //if (parcelPrice == '') {
+            //    unitPrice = trim(data[1]);
+            //} else {
+            //    unitPrice = parcelPrice;
+            //}
         } 
         // set the values of product...
         $("#current-item-id").val(productId);
@@ -503,14 +515,14 @@ function addRowRecord(value, id) {
                     $('.csChkParcel').each(function (index, e) {
                         $(this).attr('checked', 'checked');
                     });
-                    unitPrice = parcelPrice;
+                    //disPrice = parcelPrice;
                 }
 
                 $("#prev-added-item-id").val(productId);
             }
         } else if (!$('.csChkAll').is(':disabled')) {
         
-            repeatedProductUpdate(productName, productId, unitPrice, parcelPrice,prodtype);
+            repeatedProductUpdate(productName, productId, disPrice, parcelPrice, prodtype);
             if ($('.csChkAll').attr('checked')) {
                 $('.csChkParcel').each(function (index, e) {
                     $(this).attr('checked', 'checked');
@@ -535,7 +547,7 @@ function addRowRecord(value, id) {
         var newTotal = parseFloat(unitprice);
         var remove_space_productName = name.split(' ').join('');
         var parceloption, parcelClsName, parcelValue;
-
+        var dispPice = 0;
 
 
         if (document.getElementById("parceloptionID").checked == true) {
@@ -543,12 +555,13 @@ function addRowRecord(value, id) {
             parceloption = ' checked="checked"';
             parcelClsName = ' class="new-order parcelRow  plist_' + rowCount + '"';
             parcelValue = '1';
-            unitprice = parcelPrice;
+            dispPice = parcelPrice;
         } else if (document.getElementById("parceloptionID").checked == false) {
             // alert("parceloptionID False");
             parcelClsName = ' class="new-order nonParcelRow plist_' + rowCount + '"';
             parcelValue = '0';
             parceloption = '';
+            dispPice = unitprice;
         }
 
         //var rowId = 'row' + rowCount;
@@ -598,14 +611,21 @@ function addRowRecord(value, id) {
                 + '<td> <a class="number_button_unit_price" href="#" onclick="changeUnitPrice(\''
                 + rowId
                 + '\')">'
-                + parseFloat(unitprice).toFixed(2)
+                + parseFloat(dispPice).toFixed(2)
                 + '</a>'
-                + '<input id="unitid'
+                + '<input id="actPrice'
                 + rowCount
                 + '" type="hidden" size="5" value="'
                 + unitprice
                 + '" data-unitprice="'
                 + unitprice
+                + '">'
+                + '<input id="unitid'
+                + rowCount
+                + '" type="hidden" size="5" value="'
+                + dispPice
+                + '" data-unitprice="'
+                + dispPice
                 + '" name="newItems['
                 + newItemCount
                 + '].Price">'
@@ -616,9 +636,9 @@ function addRowRecord(value, id) {
                 + '<input type="hidden" size="3" name="newItems[' + newItemCount
                 + '].Quantity" value="1" id="qtyid' + rowCount + '"></td>'
 
-                + '<td id="unitTotal"><span>' + parseFloat(unitprice).toFixed(2) + '</span>'
+                + '<td id="unitTotal"><span>' + parseFloat(dispPice).toFixed(2) + '</span>'
 
-                + '<input type="hidden" size="3" name="newItems[' + newItemCount + '].Amount" value="' + unitprice + '" id="Amount' + rowCount + '">'
+                + '<input type="hidden" size="3" name="newItems[' + newItemCount + '].Amount" value="' + dispPice + '" id="Amount' + rowCount + '">'
                 
                 + '</td>'
                 + '<td>' + removeButton + '</td>' + '</tr>';
@@ -685,7 +705,7 @@ function addRowRecord(value, id) {
     function repeatedProductUpdate(productName, productId, unitPrice, parcelPrice,prodtype) {
 
         var remove_space_productName = productName.split(' ').join('');
-        var rowSelector = "tr#row-id-" + remove_space_productName + "-" + productId + "-" + prodtype;
+        var rowSelector = "tr#row-id-" + remove_space_productName + "-" + productId + "-" + prodtype + ".new-order";
         var newRow = rowSelector + '.nonParcelRow';
         var parcelRow = rowSelector + '.parcelRow';
         if ($(newRow).length == 0 && $(parcelRow).length != 1) {
@@ -721,8 +741,7 @@ function addRowRecord(value, id) {
             rowSelector = rowSelector + '.parcelRow';
             if ($(rowSelector).html() != null) {
                 var qty = parseInt($(rowSelector + ' td:nth-child(4) input').val());
-                var unitPrice = parseFloat($(rowSelector + ' td:nth-child(3) input')
-                        .val());
+                var unitPrice = parcelPrice;
                 var newQty = parseInt(qty + 1);
 
                 if (isNumber(newQty) && newQty > 0) {
@@ -760,10 +779,12 @@ function addRowRecord(value, id) {
                     function (index, e) {
                         $(this).attr('checked', 'checked');
                         var $row = $(this).closest('tr');
-                        var row_count = index + 1;
+                        var row_count = $(this)[0].id.replace('parcelid', '');
+                        
                         var parcel_price = parseFloat($('#parcelid' + row_count)
                                 .val());
-                        var unit_price = $('#unitid' + row_count).val();
+
+                        
                         var quantity = parseInt($('#qtyid' + row_count).val());
                         var new_item_price = parcel_price * quantity;
                         $('#type' + row_count).val(1);
@@ -784,8 +805,8 @@ function addRowRecord(value, id) {
                     function (index, e) {
                         $(this).removeAttr('checked');
                         var $row = $(this).closest('tr');
-                        var row_count = index + 1;
-                        var unit_price = parseFloat($('#unitid' + row_count).data(
+                        var row_count = $(this)[0].id.replace('parcelid', '');
+                        var unit_price = parseFloat($('#actPrice' + row_count).data(
                                 'unitprice'));
                         var quantity = parseInt($('#qtyid' + row_count).val());
                         var new_item_price = unit_price * quantity;

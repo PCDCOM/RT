@@ -55,15 +55,20 @@ namespace RT.Controllers
                 }
                 else
                 {
-                    if (matchedOrder.Price != newOrderedProduct.Price)
-                    {
-                        needBill = true;
-                        matchedOrder.Price += newOrderedProduct.Price;
-                    }
+                    //if (matchedOrder.Price != newOrderedProduct.Price)
+                    //{
+                    //    needBill = true;
+                    //    matchedOrder.Price += newOrderedProduct.Price;
+                    //}
                     if (matchedOrder.Quantity != newOrderedProduct.Quantity)
                     {
                         needBill = true;
                         matchedOrder.Quantity += newOrderedProduct.Quantity;
+                    }
+                    if (matchedOrder.Amount != newOrderedProduct.Amount)
+                    {
+                        needBill = true;
+                        matchedOrder.Amount += newOrderedProduct.Amount;
                     }
                 }
             }

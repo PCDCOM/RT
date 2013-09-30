@@ -15,7 +15,7 @@ namespace RT.Controllers
         [Authorize]
         public ActionResult ListsByGroup(long ProductGoupId)
         {
-            List<Product> products = db.Products.Where(p => p.ProductGroupID == ProductGoupId).OrderBy( p => p.Sno).ToList();
+            List<Product> products = db.Products.Where(p => p.ProductGroupID == ProductGoupId).OrderBy(p => p.Sno).ToList();
             return View(products);
         }
         [Authorize]
@@ -24,14 +24,24 @@ namespace RT.Controllers
             List<Product> products = db.Products.Where(p => p.Status == true).ToList();
             return View(products);
         }
-        
+
+
         [OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")]
         [Authorize(Roles = "Admin,Cashier")]
-        public ViewResult Index()
+        public ViewResult Index(int? SearchProductGroup)
         {
-            return View(db.Products.Where(x=>x.Status==true).ToList());
-        }
+            ViewBag.ProductGroup = new SelectList(db.ProductGroups, "id", "Name");
+            if (SearchProductGroup.HasValue)
+            {
 
+                return View(db.Products.Where(x => x.Status == true && x.ProductGroupID == SearchProductGroup).ToList());
+            }
+            else
+            {
+                return View(db.Products.Where(x => x.Status == true));
+            }
+
+        }
         //
         // GET: /Product/Details/5
 
@@ -50,7 +60,7 @@ namespace RT.Controllers
         {
             ViewBag.ProductGroup = new SelectList(db.ProductGroups, "id", "Name");
             ViewBag.Kitchen = new SelectList(db.Kitchens, "KitchenID", "KitchenName");
-            ViewBag.MasterProduct = new SelectList(db.Products.Where(x => x.MasterProductID == null && x.Status==true), "id", "Name");
+            ViewBag.MasterProduct = new SelectList(db.Products.Where(x => x.MasterProductID == null && x.Status == true), "id", "Name");
             return View();
         }
 
@@ -64,18 +74,18 @@ namespace RT.Controllers
             MembershipUser user = Membership.GetUser(HttpContext.User.Identity.Name);
             ViewBag.ProductGroup = new SelectList(db.ProductGroups, "id", "Name");
             ViewBag.Kitchen = new SelectList(db.Kitchens, "KitchenID", "KitchenName");
-            ViewBag.MasterProduct = new SelectList(db.Products.Where(x => x.MasterProductID == null && x.Status==true), "id", "Name");
+            ViewBag.MasterProduct = new SelectList(db.Products.Where(x => x.MasterProductID == null && x.Status == true), "id", "Name");
             if (ModelState.IsValid)
             {
                 product.CreatedDate = DateTime.Now;
-                product.CreatedBy = (Guid)user.ProviderUserKey;     
+                product.CreatedBy = (Guid)user.ProviderUserKey;
                 product.Status = true;
                 db.Products.Add(product);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-           return View(product);
+            return View(product);
         }
 
         //
@@ -99,14 +109,14 @@ namespace RT.Controllers
         {
             ViewBag.ProductGroup = new SelectList(db.ProductGroups, "id", "Name");
             ViewBag.Kitchen = new SelectList(db.Kitchens, "KitchenID", "KitchenName");
-            ViewBag.MasterProduct = new SelectList(db.Products.Where(x => x.MasterProductID == null && x.Status == true), "id", "Name");          
+            ViewBag.MasterProduct = new SelectList(db.Products.Where(x => x.MasterProductID == null && x.Status == true), "id", "Name");
             if (ModelState.IsValid)
             {
                 product.ModifiedDate = DateTime.Now;
-                
+
                 db.Products.Attach(product);
-               
-               
+
+
                 db.Entry(product).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -130,7 +140,7 @@ namespace RT.Controllers
         [Authorize(Roles = "Admin,Cashier")]
         public ActionResult DeleteConfirmed(int id)
         {
-            Product product = db.Products.Single(p => p.Id == id);          
+            Product product = db.Products.Single(p => p.Id == id);
             product.ModifiedDate = DateTime.Now;
             product.Status = false;
             //db.products.Attach(product);

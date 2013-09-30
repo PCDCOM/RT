@@ -8,15 +8,21 @@ $(function () {
         var objData = jQuery.parseJSON(data);
         jQuery.channel('publish', objData.Key, objData.Value);
     });
+
     connection.error(function (data) {
-        alert('unable to connect the server pleaes try again');
+        
+        alert('connection error : unable to connect the server pleaes try again');
         $.loader('close');
+        window.location = "/Restaurant/";
     });
     connection.start().done(function (param) {
         
         $.notify().onload();
         connection.send("{'Key':'init','Value':''}");
     });
+
+
+
 });
 
 

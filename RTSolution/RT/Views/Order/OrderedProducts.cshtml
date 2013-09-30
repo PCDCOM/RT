@@ -71,10 +71,11 @@
 
         <input type="button" value="Order" id="saveOrder" class="btn btn-disabled">
         
-        @Html.Hidden("saveOrderUrl", Url.Action("SaveOrder"))
-        <div style="float:left;width:360px;">
-            <input type="button" value="Bill" id="saveBill" class="btn btn-disabled">
+        
             @Html.Hidden("saveBillUrl", Url.Action("SaveBill"))
+            <div style="float:left;width:360px;">
+            <input type="button" value="Bill" id="saveBill" class="btn btn-disabled">
+            @Html.Hidden("saveOrderUrl", Url.Action("SaveOrder"))
             </div>
         
     </div>

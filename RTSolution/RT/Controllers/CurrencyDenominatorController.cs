@@ -8,6 +8,8 @@ using System.Web.Mvc;
 using RT.Models;
 using System.Data.SqlClient;
 using RT;
+using System.Configuration;
+using System.Threading.Tasks;
 namespace Controllers
 {
     public class CurrencyDenominatorController : Controller
@@ -73,6 +75,21 @@ namespace Controllers
             return View("TodaysCashSummary");
         }
 
+        public void TotalSummaryPrint(decimal ordertotal, decimal denominatortotal)
+        {
+            PrintingSystem.TotalSummaryPrint tspt = new PrintingSystem.TotalSummaryPrint();
+
+            tspt.PrinterName = ConfigurationManager.AppSettings["CommonPrinter"].ToString();
+
+            tspt.OrderTotal = ordertotal;
+            tspt.DenominatorTotl = denominatortotal;
+            tspt.TodaysDate = DateTime.Now;
+            tspt.Difference = ordertotal - denominatortotal;
+            LogAdapter.Info("Before Print", "CurrencyDenominator", "TotalSummaryPrint");
+            Task.Run(() => tspt.print());
+            LogAdapter.Info("After print", "CurrencyDenominator", "TotalSummaryPrint");
+         
+        }
 
         // GET: /CurrencyDenominator/Details/5
 

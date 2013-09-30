@@ -190,6 +190,7 @@
     <Compile Include="Encryption.cs" />
     <Compile Include="FileReadWrite.cs" />
     <Compile Include="Helpers\ReceiptPrint.cs" />
+    <Compile Include="Helpers\TotalSummaryPrint.cs" />
     <Compile Include="LogActionFilter.cs" />
     <Compile Include="LogAdapter.cs" />
     <Compile Include="Models\AccountModels.cs" />

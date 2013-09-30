@@ -16,7 +16,7 @@
     
     $(document).ready(function () {
         LoadMasterProducts($("#MasterProductID").val());
-        $("#ExpiryDate").datepicker({ dateFormat: 'dd/mm/yy' });
+        
 
         $("#ProductGroupID").change(function (event) {
             LoadMasterProducts(0);
@@ -89,55 +89,8 @@
                                
                 </td>
             </tr>      
+ 
             <tr>
-                <td>
-                    @Html.LabelFor(model => model.Details)
-                </td>
-                <td>
-                    @Html.EditorFor(model => model.Details)
-                    @Html.ValidationMessageFor(model => model.Details)
-                </td>
-            </tr>
-              <tr>
-                <td>
-                    @Html.LabelFor(model => model.ExpiryDate)
-                </td>
-                <td>
-@*                    @if(Model.ExpiryDate.Value.ToString() == ""  || Model.ExpiryDate.Value == null)
-                    {
-                    @Html.TextBoxFor(model => model.ExpiryDate,"",false)
-                    @Html.ValidationMessageFor(model => model.ExpiryDate)
-                    }
-                    else
-                    {
-                    @Html.TextBoxFor(model => model.ExpiryDate,"dd/mm/yy",false)
-                    @Html.ValidationMessageFor(model => model.ExpiryDate)                        
-                    }
-*@
-                @*   @Html.TextBoxFor(model => model.ExpiryDate,"{0:dd/MM/yyyy}",false)*@
-                     @Html.TextBoxFor(model => model.ExpiryDate,"{0:dd/MM/yyyy}",false)
-                   @* @Html.ValidationMessageFor(model => model.ExpiryDate)             *@       
-
-                </td>
-            </tr>
-            <tr>    
-                <td>
-                    @Html.LabelFor(model => model.Stock)
-                </td>
-                <td>
-                    @Html.EditorFor(model => model.Stock)
-                    @Html.ValidationMessageFor(model => model.Stock)
-                </td>
-            </tr>
-              <tr>
-                <td>
-                    @Html.LabelFor(model => model.LowStockRange)
-                </td>
-                <td>
-                    @Html.EditorFor(model => model.LowStockRange)
-                    @Html.ValidationMessageFor(model => model.LowStockRange)
-                </td>
-            </tr>  <tr>
                 <td>
                     @Html.LabelFor(model => model.ActualPrice)
                 </td>
@@ -145,15 +98,8 @@
                     @Html.EditorFor(model => model.ActualPrice)
                     @Html.ValidationMessageFor(model => model.ActualPrice)
                 </td>
-            </tr>  <tr>
-                <td>
-                    @Html.LabelFor(model => model.FirstSellingPrice)
-                </td>
-                <td>
-                    @Html.EditorFor(model => model.FirstSellingPrice)
-                    @Html.ValidationMessageFor(model => model.FirstSellingPrice)
-                </td>
-            </tr>  <tr>
+            </tr>    
+            <tr>
                 <td>
                     @Html.LabelFor(model => model.SecondSellingPrice)
                 </td>
@@ -161,23 +107,8 @@
                     @Html.EditorFor(model => model.SecondSellingPrice)
                     @Html.ValidationMessageFor(model => model.SecondSellingPrice)
                 </td>
-            </tr>  <tr>
-                <td>
-                    @Html.LabelFor(model => model.ThirdSellingPrice)
-                </td>
-                <td>
-                    @Html.EditorFor(model => model.ThirdSellingPrice)
-                    @Html.ValidationMessageFor(model => model.ThirdSellingPrice)
-                </td>
-            </tr>  <tr>
-                <td>
-                    @Html.LabelFor(model => model.FourthSellingPrice)
-                </td>
-                <td>
-                    @Html.EditorFor(model => model.FourthSellingPrice)
-                    @Html.ValidationMessageFor(model => model.FourthSellingPrice)
-                </td>
-            </tr>
+            </tr> 
+
               <tr>
                 <td>
                     @Html.LabelFor(model => model.IsQuickProduct)
@@ -186,18 +117,10 @@
                     @Html.CheckBoxFor(model => model.IsQuickProduct)
                     @Html.ValidationMessageFor(model => model.IsQuickProduct)
                 </td>
-            </tr>  <tr>
-                <td>
-                    @Html.LabelFor(model => model.Remarks)
-                </td>
-                <td>
-                    @Html.EditorFor(model => model.Remarks)
-                    @Html.ValidationMessageFor(model => model.Remarks)
-                </td>
-            </tr>
+            </tr>  
               <tr>
                 <td>
-                    @Html.LabelFor(model => model.Details)
+                    @Html.LabelFor(model => model.Kitchen)
                 </td>
                 <td>
                    

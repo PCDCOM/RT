@@ -58,8 +58,9 @@ namespace RT.Controllers
                 }
                 else
                 {
-                    matchedOrder.Price += newOrderedProduct.Price;
+                    //matchedOrder.Price += newOrderedProduct.Price;
                     matchedOrder.Quantity += newOrderedProduct.Quantity;
+                    matchedOrder.Amount += newOrderedProduct.Amount;
                 }
             }
 
@@ -183,8 +184,8 @@ namespace RT.Controllers
                 if (rcpt.OrderedProducts != null && rcpt.OrderedProducts.Count > 0)
                 {
                     LogAdapter.Info("Before Prinint", "OrderController", "Bill");
-                    System.Threading.Tasks.Task.Run(() => rcpt.print());
-                    //rcpt.print();
+                    //System.Threading.Tasks.Task.Run(() => rcpt.print());
+                    rcpt.print();
                     LogAdapter.Info("After Prinint", "OrderController", "Bill");
                 }
             

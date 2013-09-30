@@ -4,9 +4,50 @@
 
 <h2>Todays Cash Summary</h2>
 @{
-int sum = 0 ;
-sum = Convert.ToInt32(ViewData["DenominatorTotal"]) + Convert.ToInt32(ViewData["OrderTotal"]);
+decimal difference = 0 ;
+decimal ordertotal = Convert.ToDecimal(ViewData["OrderTotal"]);
+decimal denominatortotal = Convert.ToDecimal(ViewData["DenominatorTotal"]);
+difference = Convert.ToInt32(ViewData["OrderTotal"]) - Convert.ToInt32(ViewData["DenominatorTotal"]);
      }
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery-1.7.1.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery-ui-1.8.20.min.js")" type="text/javascript"></script>
+
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+    
+        $("#printsummary").click(function (event) {
+            
+            var ordertotalval = $("#hiddenominatortotal").val();
+            var denominatortotalval =$("#hidordertotal").val();
+
+            $.ajax({
+                type: "GET",
+                dataType: 'html',
+                contentType: 'application/json; charset=utf-8',
+                url:'@Url.Action("TotalSummaryPrint", "CurrencyDenominator")',  
+                data: { ordertotal: ordertotalval, denominatortotal: denominatortotalval},
+                error: errorFunc
+            });
+
+          
+
+            function errorFunc(xhr, status, err) {            
+                alert('error'+err.toString());
+            }
+
+  
+
+        });
+  
+    });
+  </script>      
+<div class="CSSEditTableGenerator">
 <table>
     <tr>
         <td>
@@ -15,31 +56,41 @@ sum = Convert.ToInt32(ViewData["DenominatorTotal"]) + Convert.ToInt32(ViewData["
         <td>
 
             @DateTime.Now.ToShortDateString()
+          
         </td>
     </tr>
-    <tr>
+     <tr>
+        <td>
+            Order total:
+        </td>
+        <td>  @ordertotal.ToString()
+            @Html.Hidden("hidordertotal",ordertotal.ToString())
+        </td>
+    </tr>
+       <tr>
         <td>
             Denominator Total: 
 
         </td>
         <td> 
-             @ViewData["DenominatorTotal"]
+            @denominatortotal.ToString()
+              @Html.Hidden("hiddenominatortotal",denominatortotal.ToString())
         </td>
     </tr>
-    <tr>
-        <td>
-            Order total:
-        </td>
-        <td>   @ViewData["OrderTotal"]
-        </td>
-    </tr>
+
      <tr>
         <td>
-            Total:
+            Difference:
         </td>
-        <td>   
-                
-             @sum
+        <td>                  
+             @difference
         </td>
     </tr>
+        <tr>
+        <td colspan="2">
+              <input type="button" id="printsummary" value="Print Summary" name="printsummary" />
+        </td>
+ 
+    </tr>
  </table>
+    </div>

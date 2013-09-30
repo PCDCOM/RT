@@ -366,6 +366,7 @@ table #dataTable tr span.deleted {
   color: #ffffff;
   background-color: #2f96b4;
   *background-color: #2a85a0;
+  cursor:pointer;
 }
 
 .btn-info-mini:active,
@@ -386,13 +387,16 @@ table #dataTable tr span.deleted {
     text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.35);
    padding: 10px 20px;
 }
+
 .btn-greend:hover,
 .btn-greend:focus,
+.btn-greend:active,
+.btn-greend.active,
 .btn-greend.disabled,
 .btn-greend[disabled]{
     background: none repeat scroll 0 0 #029239;
     color: #FFFFFF;
-
+    cursor:pointer;
 }
 .prod {
 }

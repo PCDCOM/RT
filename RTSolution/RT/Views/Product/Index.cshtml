@@ -10,6 +10,11 @@
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
+@using (Html.BeginForm()) {
+
+   @Html.DropDownList("SearchProductGroup", (SelectList)ViewBag.ProductGroup ,"Select ProductGroup")   
+<input type="submit" value="search" />
+    
 <div class="CSSTableGenerator">
 <table>
     <tr>
@@ -22,20 +27,12 @@
       <td>
             Master Product
         </td>
-      <td>
-            Expiry Date
-        </td>
-      <td>
-            Stock
-        </td>
-      <td>
-            Low Stock
-        </td>
+
       <td>
            Actual Price
         </td>
       <td>
-            First Selling Price
+            Parcel Price
         </td>
 
 
@@ -53,27 +50,12 @@
         <td>
             @Html.DisplayFor(modelItem => item.Product2.Name)
         </td> 
-         <td>
-        @if (item.ExpiryDate == null)
-        {
-            @item.ExpiryDate
-        }
-        else
-        {
-            @item.ExpiryDate.Value.ToShortDateString();
-        }
-        </td>
-         <td>
-            @Html.DisplayFor(modelItem => item.Stock)
-        </td>
-         <td>
-            @Html.DisplayFor(modelItem => item.LowStockRange)
-        </td> 
+
          <td>
             @Html.DisplayFor(modelItem => item.ActualPrice)
         </td> 
          <td>
-            @Html.DisplayFor(modelItem => item.FirstSellingPrice)
+            @Html.DisplayFor(modelItem => item.SecondSellingPrice)
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
@@ -85,3 +67,4 @@
 
 </table>
 </div>
+}

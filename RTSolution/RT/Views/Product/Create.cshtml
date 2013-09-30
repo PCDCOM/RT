@@ -106,33 +106,9 @@
                     @Html.ValidationMessageFor(model => model.Details)
                 </td>
             </tr>
-              <tr>
-                <td>
-                    @Html.LabelFor(model => model.ExpiryDate)
-                </td>
-                <td>
-                    @Html.TextBoxFor(model => model.ExpiryDate,"",false)
-                    @Html.ValidationMessageFor(model => model.ExpiryDate)
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    @Html.LabelFor(model => model.Stock)
-                </td>
-                <td>
-                    @Html.EditorFor(model => model.Stock)
-                    @Html.ValidationMessageFor(model => model.Stock)
-                </td>
-            </tr>
-              <tr>
-                <td>
-                    @Html.LabelFor(model => model.LowStockRange)
-                </td>
-                <td>
-                    @Html.EditorFor(model => model.LowStockRange)
-                    @Html.ValidationMessageFor(model => model.LowStockRange)
-                </td>
-            </tr>  <tr>
+
+
+  <tr>
                 <td>
                     @Html.LabelFor(model => model.ActualPrice)
                 </td>
@@ -140,15 +116,7 @@
                     @Html.EditorFor(model => model.ActualPrice)
                     @Html.ValidationMessageFor(model => model.ActualPrice)
                 </td>
-            </tr>  <tr>
-                <td>
-                    @Html.LabelFor(model => model.FirstSellingPrice)
-                </td>
-                <td>
-                    @Html.EditorFor(model => model.FirstSellingPrice)
-                    @Html.ValidationMessageFor(model => model.FirstSellingPrice)
-                </td>
-            </tr>  <tr>
+            </tr>   <tr>
                 <td>
                     @Html.LabelFor(model => model.SecondSellingPrice)
                 </td>
@@ -156,23 +124,7 @@
                     @Html.EditorFor(model => model.SecondSellingPrice)
                     @Html.ValidationMessageFor(model => model.SecondSellingPrice)
                 </td>
-            </tr>  <tr>
-                <td>
-                    @Html.LabelFor(model => model.ThirdSellingPrice)
-                </td>
-                <td>
-                    @Html.EditorFor(model => model.ThirdSellingPrice)
-                    @Html.ValidationMessageFor(model => model.ThirdSellingPrice)
-                </td>
-            </tr>  <tr>
-                <td>
-                    @Html.LabelFor(model => model.FourthSellingPrice)
-                </td>
-                <td>
-                    @Html.EditorFor(model => model.FourthSellingPrice)
-                    @Html.ValidationMessageFor(model => model.FourthSellingPrice)
-                </td>
-            </tr>
+            </tr>  
               <tr>
                 <td>
                     @Html.LabelFor(model => model.IsQuickProduct)
@@ -181,15 +133,7 @@
                     @Html.CheckBoxFor(model => model.IsQuickProduct)
                     @Html.ValidationMessageFor(model => model.IsQuickProduct)
                 </td>
-            </tr>  <tr>
-                <td>
-                    @Html.LabelFor(model => model.Remarks)
-                </td>
-                <td>
-                    @Html.EditorFor(model => model.Remarks)
-                    @Html.ValidationMessageFor(model => model.Remarks)
-                </td>
-            </tr>
+            </tr>  
               <tr>
                 <td>
                     @Html.LabelFor(model => model.Kitchen.KitchenName)

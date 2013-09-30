@@ -15,8 +15,8 @@ namespace RT.Models
             [Required(ErrorMessage = "Product Name is required")]
             public string Name { get; set; }
 
-            [Required(ErrorMessage = "Details are required")]
-            public string Details { get; set; }
+            //[Required(ErrorMessage = "Details are required")]
+            //public string Details { get; set; }
 
             [Required(ErrorMessage = "Product group is required")]
             public long ProductGroupID { get; set; }
@@ -25,17 +25,17 @@ namespace RT.Models
             [DisplayFormat(DataFormatString = "{dd/MM/yy}")]
             public Nullable<System.DateTime> ExpiryDate { get; set; }
 
-            [Required(ErrorMessage = "Stock is required")]
-            public Nullable<int> Stock { get; set; }
+            //[Required(ErrorMessage = "Stock is required")]
+            //public Nullable<int> Stock { get; set; }
 
-            [Required(ErrorMessage = "Low Stock Range is required")]
-            public Nullable<int> LowStockRange { get; set; }
+            //[Required(ErrorMessage = "Low Stock Range is required")]
+            //public Nullable<int> LowStockRange { get; set; }
 
             [Required(ErrorMessage = "Actual Price is required")]
             public Nullable<decimal> ActualPrice { get; set; }
 
-            [Required(ErrorMessage = "First Selling Price is required")]
-            public Nullable<decimal> FirstSellingPrice { get; set; }
+            [Required(ErrorMessage = "Parcel Selling Price is required")]
+            public Nullable<decimal> SecondSellingPrice { get; set; }
 
             [Required(ErrorMessage = "Kitchen is required")]
             public Nullable<int> KitchenID { get; set; }

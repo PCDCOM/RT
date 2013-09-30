@@ -164,6 +164,7 @@ input[type="button"].btn-block {
 .btn-warning.active,
 .btn-danger.active,
 .btn-success.active,
+.btn-greend.active,
 .btn-info.active,
 .btn-inverse.active {
   color: rgba(255, 255, 255, 0.75);
@@ -191,12 +192,12 @@ input[type="button"].btn-block {
 .btn-primary:hover,
 .btn-primary:focus,
 .btn-primary:active,
-.btn-primary.active,
 .btn-primary.disabled,
 .btn-primary[disabled] {
   color: #ffffff;
   background-color: #0044cc;
   *background-color: #003bb3;
+  cursor:pointer;
 }
 
 .btn-primary:active,
@@ -293,7 +294,7 @@ input[type="button"].btn-block {
   border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff62c462', endColorstr='#ff51a351', GradientType=0);
   filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
-  padding: 10px 20px;
+ padding: 10px 20px;
 }
 
 .btn-success:hover,
@@ -305,6 +306,8 @@ input[type="button"].btn-block {
   color: #ffffff;
   background-color: #51a351;
   *background-color: #499249;
+   
+   cursor:pointer;
 }
 
 .btn-success:active,
@@ -338,6 +341,7 @@ input[type="button"].btn-block {
   color: #ffffff;
   background-color: #2f96b4;
   *background-color: #2a85a0;
+  cursor:pointer;
 }
 
 .btn-info:active,
