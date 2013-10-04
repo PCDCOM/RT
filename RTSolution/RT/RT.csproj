@@ -54,6 +54,10 @@
     <Reference Include="Microsoft.Owin.Security">
       <HintPath>..\packages\Microsoft.Owin.Security.2.0.0-rc1\lib\net45\Microsoft.Owin.Security.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.PointOfService, Version=1.12.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\Program Files (x86)\Microsoft Point Of Service\SDK\Microsoft.PointOfService.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.5.0.6\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -135,6 +139,10 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.20710.0\lib\net40\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
+    <Reference Include="Telerik.Web.UI, Version=2013.2.717.45, Culture=neutral, PublicKeyToken=121fae78165ba3d4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\Program Files (x86)\Telerik\RadControls for ASP.NET AJAX Q2 2013\Bin45\Telerik.Web.UI.dll</HintPath>
+    </Reference>
     <Reference Include="WebMatrix.Data, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.Data.2.0.20710.0\lib\net40\WebMatrix.Data.dll</HintPath>
@@ -189,6 +197,8 @@
     <Compile Include="CustomHandleErrorAttribute.cs" />
     <Compile Include="Encryption.cs" />
     <Compile Include="FileReadWrite.cs" />
+    <Compile Include="Helpers\OrderPrint.cs" />
+    <Compile Include="Helpers\POS.cs" />
     <Compile Include="Helpers\ReceiptPrint.cs" />
     <Compile Include="Helpers\TotalSummaryPrint.cs" />
     <Compile Include="LogActionFilter.cs" />
@@ -346,6 +356,7 @@
     <Content Include="Scripts\notification.js" />
     <Content Include="NLog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </Content>
     <EntityDeploy Include="Models\Restaurant.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
@@ -441,6 +452,8 @@
     <Content Include="Views\CurrencyDenominator\Index.cshtml" />
     <Content Include="Views\Order\ListOrdersForReprint.cshtml" />
     <Content Include="Views\CurrencyDenominator\TodaysCashSummary.cshtml" />
+    <Content Include="Views\Product\ArrangeProducts.cshtml" />
+    <Content Include="Views\Product\ProductList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

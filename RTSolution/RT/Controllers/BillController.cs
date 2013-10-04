@@ -108,28 +108,31 @@ namespace RT.Controllers
 
         }
         private void PrintBill(long Id) {
+
             Order order = db.Orders.Find(Id);
-            OrderedProduct firstOrderedProduct = order.OrderedProducts.FirstOrDefault();
-            string createdBy;
-            if(firstOrderedProduct !=null)
-                createdBy = Membership.GetUser(order.OrderedProducts.First().CreatedBy).UserName;
-            else
-                createdBy = Membership.GetUser().UserName;
-            PrintingSystem.ReceiptPrint rcpt = new PrintingSystem.ReceiptPrint();
-
-            rcpt.PrinterName = ConfigurationManager.AppSettings["CommonPrinter"].ToString();
-
-            rcpt.TotalAmount = order.TotalAmount;
-            rcpt.OrderNo = Id;
-            rcpt.CreatedBy = createdBy;
-            rcpt.Seats = order.Seats;
-            rcpt.CreateDate = order.CreatedDate.Value.ToString("dd-MM-yyyy HH:mm");
-            rcpt.OrderedProducts = order.OrderedProducts.Where(i => i.Status == 1).ToList();
-            if (rcpt.OrderedProducts != null && rcpt.OrderedProducts.Count > 0)
+            ICollection<OrderedProduct> orderedProducts = order.OrderedProducts.Where(i => i.Status == 1).ToList();
+            if (orderedProducts != null && orderedProducts.Count > 0)
             {
-                LogAdapter.Info("Before Prinint", "BillController", "Pay");
+                
+                OrderedProduct firstOrderedProduct = order.OrderedProducts.FirstOrDefault();
+                string createdBy;
+                if (firstOrderedProduct != null)
+                    createdBy = Membership.GetUser(order.OrderedProducts.First().CreatedBy).UserName;
+                else
+                    createdBy = Membership.GetUser().UserName;
+                PrintingSystem.ReceiptPrint rcpt = new PrintingSystem.ReceiptPrint();
+
+                rcpt.PrinterName = ConfigurationManager.AppSettings["CommonPrinter"].ToString();
+
+                rcpt.TotalAmount = order.TotalAmount;
+                rcpt.OrderNo = Id;
+                rcpt.CreatedBy = createdBy;
+                rcpt.Seats = order.Seats;
+                rcpt.CreateDate = order.CreatedDate.Value.ToString("dd-MM-yyyy HH:mm");
+                rcpt.OrderedProducts = orderedProducts;
+                
                 Task.Run(() => rcpt.print());
-                LogAdapter.Info("After Prinint", "BillController", "Pay");
+                
             }
 
             

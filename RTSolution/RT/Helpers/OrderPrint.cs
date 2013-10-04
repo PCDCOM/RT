@@ -12,22 +12,21 @@ using System.Security.Principal;
 
 namespace PrintingSystem
 {
-    public class TotalSummaryPrint
+    public class OrderPrint
     {
         PrintDocument pdoc = null;
-
-        public DateTime TodaysDate { get; set; }
-        public decimal DenominatorTotl { get; set; }
-        public decimal OrderTotal { get; set; }
-        public decimal Difference { get; set; }       
+        public OrderedProduct[] NewItems { get; set; }
+        public OrderedProduct[] OldItems { get; set; }
+        public string Seats { get; set; }
+        public long OrderId { get; set; }
         public string PrinterName { get; set; }
-
-        public void print()        {
+        public void print()
+        {
 
             using (pdoc = new PrintDocument())
             {
                 PrinterSettings ps = new PrinterSettings();
-                Font font = new Font("Courier New", 15);
+                Font font = new Font("Verdana", 15);
                 PaperSize psize = new PaperSize("Custom", 100, 200);
                 pdoc.DefaultPageSettings.PaperSize = psize;
                 pdoc.DefaultPageSettings.PaperSize.Height = 820;
@@ -35,49 +34,64 @@ namespace PrintingSystem
 
                 pdoc.PrinterSettings.PrinterName = PrinterName;
                 pdoc.PrintPage += new PrintPageEventHandler(pdoc_PrintPage);
+                LogAdapter.Info("user id : " + WindowsIdentity.GetCurrent().Name, "order", "printing");
 
                 pdoc.Print();
 
             }
-
         }
 
 
         void pdoc_PrintPage(object sender, PrintPageEventArgs e)
         {
             Graphics graphics = e.Graphics;
-            Font font = new Font("Georgia", 8);
-            Font fontBold = new Font("Georgia", 8, FontStyle.Bold);
-
+            Font font = new Font("Verdana", 8);
+            Font fontBold = new Font("Verdana", 8, FontStyle.Bold);
+            Font fontstriked = new Font("Verdana", 7, FontStyle.Strikeout);
             Pen boldPen = new Pen(Color.Black, 3);
             Pen lightPen = new Pen(Color.Black, 1);
+
             float fontHeight = font.GetHeight();
             int startX = 3;
             int startY = 2;
             int Offset = 5;
-            graphics.DrawString("RESTORAN MUTHU", new Font("Courier New", 13, FontStyle.Bold),
+            graphics.DrawString("RESTORAN MUTHU", new Font("Verdana", 10, FontStyle.Bold),
                                 new SolidBrush(Color.Black), startX, startY + Offset);
-            graphics.DrawString(TodaysDate.ToShortDateString(),
+            graphics.DrawString(DateTime.Now.ToShortDateString(),
                font,
                     new SolidBrush(Color.Black), startX + 180, startY + Offset);
-            Offset = Offset + 30;
 
-     
-            //Total
-            graphics.DrawString(string.Format("Order Total : {0}", OrderTotal),
-               font,
+            Offset = Offset + 20;
+            graphics.DrawString(string.Format("Bill No : {0}     {1}", OrderId, Seats),
+                font,
                     new SolidBrush(Color.Black), startX, startY + Offset);
-            Offset = Offset + 20;
 
-            graphics.DrawString(string.Format("Denominator Total : {0}", DenominatorTotl),
-             font,
-                  new SolidBrush(Color.Black), startX, startY + Offset);
-            Offset = Offset + 20;
 
-            graphics.DrawString(string.Format("Difference : {0}", Difference),
-             font,
-                  new SolidBrush(Color.Black), startX, startY + Offset);
-                                   
+            string[] headerTxts = { "No", "Item", "Qty", "TA." };
+            DrawRow(startX, startY = Offset + 20, graphics, lightPen, headerTxts, fontBold);
+
+
+            int Sno = 0;
+            if (OldItems != null)
+            {
+                foreach (OrderedProduct item in OldItems)
+                {
+                    string parcel = (item.Type == 1) ? ((char)0x221A).ToString() : "X";
+                    string[] rowTxt = { (++Sno).ToString(), item.ProductName, item.Quantity.ToString(), parcel };
+                    DrawRow(startX, startY = startY + 20, graphics, lightPen, rowTxt, fontstriked);
+
+                }
+            }
+            if (NewItems != null)
+            {
+                foreach (OrderedProduct item in NewItems)
+                {
+                    string parcel = (item.Type == 1)? ((char)0x221A).ToString() : "X";
+                    string[] rowTxt = { (++Sno).ToString(), item.ProductName, item.Quantity.ToString(), parcel };
+                    DrawRow(startX, startY = startY + 20, graphics, lightPen, rowTxt, font);
+
+                }
+            }
         }
 
         void DrawRow(int startX, int startY, Graphics graphics, Pen lightPen, string[] txts, Font font)
@@ -86,10 +100,9 @@ namespace PrintingSystem
 
             var rectObjects = new[] { 
                 new { rect = new RectangleF (startX , startY , celltWidth = 25, 20), txt = txts[0], alignment = StringAlignment.Far },
-                new { rect = new RectangleF (startX = startX + celltWidth, startY, celltWidth =  105, 20), txt = txts[1] ,alignment = StringAlignment.Near},
+                new { rect = new RectangleF (startX = startX + celltWidth, startY, celltWidth =  115, 20), txt = txts[1] ,alignment = StringAlignment.Near},
                 new { rect = new RectangleF (startX = startX + celltWidth, startY, celltWidth =  30, 20), txt = txts[2] ,alignment = StringAlignment.Far},
-                new { rect = new RectangleF (startX =startX + celltWidth, startY, celltWidth =  60, 20), txt = txts[3],alignment = StringAlignment.Far },
-                new { rect = new RectangleF (startX =startX + celltWidth, startY, celltWidth = 60, 20), txt = txts[4] ,alignment = StringAlignment.Far}
+                new { rect = new RectangleF (startX = startX + celltWidth, startY, celltWidth =  30, 20), txt =txts[3] ,alignment = StringAlignment.Center},
             };
 
 
@@ -111,7 +124,7 @@ namespace PrintingSystem
 
             g.DrawString(text, font, Brushes.Blue, cell, stringFormat);
         }
-
-
     }
+
+        
 }

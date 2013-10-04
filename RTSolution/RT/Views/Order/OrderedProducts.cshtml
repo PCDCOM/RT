@@ -8,7 +8,7 @@
 @using (Html.BeginForm("SaveBill", "Order", FormMethod.Post))
 {
     <div id="divOrderDetails">
-        <div id="invoice-payment-form">
+        <div id="invoice-payment-form" style="padding-top:10px;">
             @if (Model != null)
             {
                 //Tod: Need to change total and seats as read only
@@ -19,7 +19,21 @@
             }
 
         </div> 
+                    <div style="padding:10px 0 10px 0;width:100%">
+        @Html.Hidden("saveBillUrl", Url.Action("SaveBill"))
 
+<div style="float:left;width:360px;">
+         @if(Model != null && Model.Status != 1 && Model.Status != 2){
+             <input type="button" value="Order" id="saveOrder" class="btn btn-disabled">
+                        
+         }
+              </div>      
+                       
+                            <input type="button" value="Bill" id="saveBill" class="btn btn-disabled">
+                        
+                        @Html.Hidden("saveOrderUrl", Url.Action("SaveOrder"))
+                    
+        </div>
                         <div style="min-height: 275px; position: inherit;">
 
                             <table id="dataTable">
@@ -60,23 +74,13 @@
                                             
                                         }
                                     }
-                                    <tr>
 
-                                    </tr>
                                 </tbody>
                             </table>
                         </div>
 
 
 
-        <input type="button" value="Order" id="saveOrder" class="btn btn-disabled">
-        
-        
-            @Html.Hidden("saveBillUrl", Url.Action("SaveBill"))
-            <div style="float:left;width:360px;">
-            <input type="button" value="Bill" id="saveBill" class="btn btn-disabled">
-            @Html.Hidden("saveOrderUrl", Url.Action("SaveOrder"))
-            </div>
         
     </div>
 }

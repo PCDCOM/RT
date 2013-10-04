@@ -5,11 +5,11 @@ using System.Configuration;
 using System.Data;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 using Newtonsoft.Json;
-
 using RT.Models;
 
 namespace RT.Controllers
@@ -159,36 +159,56 @@ namespace RT.Controllers
 
                 Order order = db.Orders.Find(Id);
                 string createdBy = Membership.GetUser(order.OrderedProducts.First().CreatedBy).UserName;
-                PrintingSystem.ReceiptPrint rcpt = new PrintingSystem.ReceiptPrint();
-                rcpt.Seats = order.Seats;
-                char firstSeatNo = rcpt.Seats.FirstOrDefault();
-                //TOD: Need to change this hardcode to dynamic
-                bool anyDinining = order.OrderedProducts.Where(i => i.Status == 1).Any(i => i.Type == 0);
-                if(!anyDinining)
-                    rcpt.PrinterName = ConfigurationManager.AppSettings["ParcelPrinter"].ToString();
-                else if (ConfigurationManager.AppSettings["DiamondFloorPrinterFloor"].ToString().Contains(firstSeatNo))
-                    rcpt.PrinterName = ConfigurationManager.AppSettings["DiamondFloorPrinter"].ToString();
-                else if (ConfigurationManager.AppSettings["GoldFloorPrinterFloor"].ToString().Contains(firstSeatNo))
-                    rcpt.PrinterName = ConfigurationManager.AppSettings["GoldFloorPrinter"].ToString();
-                else if (ConfigurationManager.AppSettings["SilverFloorPrinterFloor"].ToString().Contains(firstSeatNo))
-                    rcpt.PrinterName = ConfigurationManager.AppSettings["SilverFloorPrinter"].ToString();
-                else
-                    rcpt.PrinterName = ConfigurationManager.AppSettings["CommonPrinter"].ToString();
-                rcpt.TotalAmount = order.TotalAmount;
-                rcpt.OrderNo = Id;
-                rcpt.CreatedBy = createdBy;
-                
-                rcpt.CreateDate = order.CreatedDate.Value.ToString("dd-MM-yyyy HH:mm");
-                rcpt.OrderedProducts =  order.OrderedProducts.Where(i => i.Status == 1).ToList();
+                ICollection<OrderedProduct> orderedProducts = order.OrderedProducts.Where(i => i.Status == 1).ToList();
 
-                if (rcpt.OrderedProducts != null && rcpt.OrderedProducts.Count > 0)
+                if (orderedProducts != null && orderedProducts.Count > 0)
                 {
-                    LogAdapter.Info("Before Prinint", "OrderController", "Bill");
-                    //System.Threading.Tasks.Task.Run(() => rcpt.print());
-                    rcpt.print();
-                    LogAdapter.Info("After Prinint", "OrderController", "Bill");
+                    PrintingSystem.ReceiptPrint rcpt = new PrintingSystem.ReceiptPrint();
+                    rcpt.Seats = order.Seats;
+                    char firstSeatNo = rcpt.Seats.FirstOrDefault();
+                    //TOD: Need to change this hardcode to dynamic
+                    bool anyDinining = order.OrderedProducts.Where(i => i.Status == 1).Any(i => i.Type == 0);
+                    if (!anyDinining)
+                        rcpt.PrinterName = ConfigurationManager.AppSettings["ParcelPrinter"].ToString();
+                    else if (ConfigurationManager.AppSettings["DiamondFloorPrinterFloor"].ToString().Contains(firstSeatNo))
+                        rcpt.PrinterName = ConfigurationManager.AppSettings["DiamondFloorPrinter"].ToString();
+                    else if (ConfigurationManager.AppSettings["GoldFloorPrinterFloor"].ToString().Contains(firstSeatNo))
+                        rcpt.PrinterName = ConfigurationManager.AppSettings["GoldFloorPrinter"].ToString();
+                    else if (ConfigurationManager.AppSettings["SilverFloorPrinterFloor"].ToString().Contains(firstSeatNo))
+                        rcpt.PrinterName = ConfigurationManager.AppSettings["SilverFloorPrinter"].ToString();
+                    else
+                        rcpt.PrinterName = ConfigurationManager.AppSettings["CommonPrinter"].ToString();
+                    rcpt.TotalAmount = order.TotalAmount;
+                    rcpt.OrderNo = Id;
+                    rcpt.CreatedBy = createdBy;
+
+                    rcpt.CreateDate = order.CreatedDate.Value.ToString("dd-MM-yyyy HH:mm");
+                    rcpt.OrderedProducts = orderedProducts;
+
+                    Task.Run(() => rcpt.print());
+                    
                 }
             
+        }
+        private void PrintOrder(OrderedProduct[] newItems, OrderedProduct[] oldItems, string Seats, long OrderId) {
+
+            if (newItems != null || oldItems != null)
+            {
+                PrintingSystem.OrderPrint rcpt = new PrintingSystem.OrderPrint() { NewItems=newItems,OldItems=oldItems,Seats=Seats,OrderId=OrderId};
+                string PrinterName = "";
+                char firstSeatNo = Seats.FirstOrDefault();
+                if (ConfigurationManager.AppSettings["DiamondFloorPrinterFloor"].ToString().Contains(firstSeatNo))
+                    PrinterName = ConfigurationManager.AppSettings["DiamondFloorPrinter"].ToString();
+                else if (ConfigurationManager.AppSettings["GoldFloorPrinterFloor"].ToString().Contains(firstSeatNo))
+                    PrinterName = ConfigurationManager.AppSettings["GoldFloorPrinter"].ToString();
+                else if (ConfigurationManager.AppSettings["SilverFloorPrinterFloor"].ToString().Contains(firstSeatNo))
+                    PrinterName = ConfigurationManager.AppSettings["SilverFloorPrinter"].ToString();
+                else
+                    PrinterName = ConfigurationManager.AppSettings["ParcelPrinter"].ToString();
+                rcpt.PrinterName = PrinterName;
+                Task.Run(() => rcpt.print());
+            }
+
         }
         [HttpPost]
         public ActionResult SaveBill(long Id, FormCollection formcollection, OrderedProduct[] newItems, string Seats, decimal TotalAmount,OrderedProduct[] oldItems, int Status = 0)
@@ -219,6 +239,7 @@ namespace RT.Controllers
             {
                 PushToClient(newId, SeatType.Locked);
             }
+            PrintOrder(newItems, oldItems, Seats, newId);
             ModelState.Clear();
             return View("OrderedProducts", new Order());
             
@@ -234,13 +255,19 @@ namespace RT.Controllers
                 order = new Order();
             else
             {
-                order = db.Orders.Where(x => x.Id == id && x.Status == (byte)StatusType.New).SingleOrDefault<Order>();
+                order = db.Orders.Where(x => x.Id == id && (x.Status == (byte)StatusType.New || x.Status == (byte)StatusType.Bill)).SingleOrDefault<Order>();
                 if (order == null)
                 {
-                    order = new Order();
-                    string strId = string.Empty;
-                    strId = id.ToString();
-                    throw new Exception("Custom Error: Could not load order OrderID: " + strId);
+                    order = db.Orders.Where(x => x.Id == id).SingleOrDefault<Order>();
+                    if (order != null && order.Status == (byte)StatusType.Paid) {
+                        throw new Exception("Paid already - Could not order/bill again");
+                    }
+                    else
+                    {
+                        string strId = string.Empty;
+                        strId = id.ToString();
+                        throw new Exception("Invalid order Id" + strId);
+                    }
                 }
             }
             ModelState.Clear();

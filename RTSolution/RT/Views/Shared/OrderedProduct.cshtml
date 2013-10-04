@@ -23,6 +23,8 @@
                 }
 
             </span>
+            <input type="hidden" name="oldItems[@inx].ProductName" value=@Model.ProductName id="ProductName"/>
+            <input type="hidden" name="oldItems[@inx].Quantity" value=@Model.Quantity id="Quantity"/>
             <input type="hidden" name="oldItems[@inx].Status" value=@Model.Status id="Status"/>
             <input type="hidden" name="oldItems[@inx].Id" value="@Model.Id" id="OldItemId_@inx"/>
             @Html.HiddenFor(modelItem => Model.ProductName)

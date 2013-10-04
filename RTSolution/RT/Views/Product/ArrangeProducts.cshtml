@@ -1,0 +1,380 @@
+﻿@*@{
+    ViewBag.Title = "ProductList";
+}
+@foreach (var prod in ViewBag.prodList.lstProdMapRow)
+{
+              <h2>@prod.masterProdId</h2>
+             <h2>@prod.sNo</h2>
+               
+    foreach (var chilProd in prod.childProdIds)
+    {
+        <h2>@chilProd</h2>
+    }
+    <br />
+    <br />
+}
+
+<h2>ProductList</h2>*@
+
+
+<html>
+<head>
+ <script src=@Url.Content("~/Scripts/jquery-1.7.1.js")></script> 
+ <style>
+     .lstDetails, .childList
+     {
+         width:250px;height:300px;overflow:auto;border:1px solid gray;cursor:pointer;
+     }
+     .fl 
+     {
+         float:left;
+     }
+     .childList
+     {
+         margin-left:40px;
+         background-color:
+         
+     }
+     .bgGray
+     {
+         background-color:Gray;
+     }
+     .bgNone
+     {
+         background-color:"";
+     }
+     .none
+     {
+         display:none;
+         
+     }
+     .block
+     {
+         display:block;
+         
+     }
+     .positionArrow
+     {
+         position:relative;
+         top:-19px;
+         left:200px;
+         width:20px;
+         display:none;
+     }
+     .H40
+     {
+         height:40px;
+     }
+     .bgGray{
+    border:1px solid #616261; -webkit-border-radius: 3px; -moz-border-radius: 3px;border-radius: 3px;font-size:12px;font-family:arial, helvetica, sans-serif; 
+    text-decoration:none; display:inline-block;text-shadow: -1px -1px 0 rgba(0,0,0,0.3);font-weight:bold; color: #FFFFFF;
+    background-color: #7d7e7d;
+    width:248px; 
+    /*background-image: -webkit-gradient(linear, left top, left bottom, from(#7d7e7d), to(#0e0e0e));
+    background-image: -webkit-linear-gradient(top, #7d7e7d, #0e0e0e);
+    background-image: -moz-linear-gradient(top, #7d7e7d, #0e0e0e);
+    background-image: -ms-linear-gradient(top, #7d7e7d, #0e0e0e);
+    background-image: -o-linear-gradient(top, #7d7e7d, #0e0e0e);
+    background-image: linear-gradient(to bottom, #7d7e7d, #0e0e0e);filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#7d7e7d, endColorstr=#0e0e0e);*/
+}
+.btnm{
+    border:1px solid #616261; -webkit-border-radius: 3px; -moz-border-radius: 3px;border-radius: 3px;font-size:12px;font-family:arial, helvetica, sans-serif; 
+    padding: 10px 10px 10px 10px; text-decoration:none; display:inline-block;text-shadow: -1px -1px 0 rgba(0,0,0,0.3);font-weight:bold; color: #FFFFFF;
+    background-color: #7d7e7d; background-image: -webkit-gradient(linear, left top, left bottom, from(#7d7e7d), to(#0e0e0e));
+    background-image: -webkit-linear-gradient(top, #7d7e7d, #0e0e0e);
+    background-image: -moz-linear-gradient(top, #7d7e7d, #0e0e0e);
+    background-image: -ms-linear-gradient(top, #7d7e7d, #0e0e0e);
+    background-image: -o-linear-gradient(top, #7d7e7d, #0e0e0e);
+    background-image: linear-gradient(to bottom, #7d7e7d, #0e0e0e);filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#7d7e7d, endColorstr=#0e0e0e);
+}
+.divSave
+{
+    clear:both;margin: 0px auto;width: 580px;padding-top: 20px;
+}
+.triangle {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 0;
+    height: 0;
+    border-left: 50px solid transparent;
+    border-right: 50px solid transparent;
+    border-top: 100px solid red;
+    z-index: 0;
+}
+.ArrowTop, .ArrowBottom
+{
+background:url(@Url.Content("~/images/arrows.jpg"));
+width: 76px;
+height:74px;
+background-position:-77px 2px;   
+cursor:pointer;
+}
+.ArrowBottom
+{
+
+background-position:-77px -141px;   
+margin-top:20px;
+}
+ </style>
+ <script type="text/javascript">
+     var DishesList = "";
+     function bindMasterData() {
+         var selectedDish = $(this).attr("masterId").toString().trim();
+         $('#masterDivList div').removeClass("bgGray").addClass("bgNone");
+         $('#masterDivList > div').removeClass("bgNone").addClass("H20");
+         $('#masterDivList div.positionArrow').removeClass("none").addClass("block");
+
+         $(this).siblings(".positionArrow").removeClass("block").addClass("none");
+         //$('#childDivList > div').css("background-color", "");
+         $(this).removeClass("bgNone").addClass("bgGray");
+         $("#childDivList > div").removeClass("block").addClass("none"); //.css("display", "none");
+         $('#childList option').remove();
+         if ($("#" + selectedDish + "_child").length == 0) {
+             $('#childDivList').append("<div id=" + selectedDish + "_child" + " class='block'></div>");
+             $.each(DishesList, function () {
+                 $("#" + selectedDish + "_child > div").removeClass("bgGray").addClass("bgNone");
+                 if (this['MasterId'] == selectedDish)
+                     $("#" + selectedDish + "_child").append($("<div></div>").attr("masterId", this['Id']).html(this['Name']).on("click", { "selectedDish": selectedDish }, bindChildEvents));
+             });
+         } else {
+             $("#" + selectedDish + "_child").removeClass("none").addClass("block"); //.css("display", "block");
+         }
+     }
+     function bindChildData(selectedDish) {
+         
+         $('#childDivList').append("<div id=" + selectedDish + "_child" + " class='none'></div>");
+         $.each(DishesList, function () {
+             //$("#" + selectedDish + "_child > div").removeClass("bgGray").addClass("bgNone");
+             if (this['MasterId'] == selectedDish)
+                 $("#" + selectedDish + "_child").append($("<div></div>").attr("masterId", this['Id']).html(this['Name']).on("click", { "selectedDish": selectedDish }, bindChildEvents));
+         });
+
+     }
+     function bindChildEvents(event) {
+         var selectedDish = event.data.selectedDish;
+         $("#" + selectedDish + "_child > div").removeClass("bgGray").addClass("bgNone");
+         $(this).removeClass("bgNone").addClass("bgGray");
+     }
+     function moveLeftToright(event) {
+
+         var selectedElement = $(this).prev();
+         var masterId = $(selectedElement).attr("masterid");
+         
+         if ($("#"+masterId + "_child").children().length == 0) {
+             //var selectedElement = $(sourceDiv); //.remove();
+             $(this).prev().remove();
+             $("#" + masterId + "_child > div").removeClass("bgGray").addClass("bgNone");
+             $("#childDivList").find("div.block").append($(selectedElement).on('click', function (e) {
+                 // $("#" + selectedDish + "_child > div").removeClass("bgGray").addClass("bgNone");
+                 //alert("hai");
+                 $(this).siblings().removeClass("bgGray").addClass("bgNone");
+                 $(this).removeClass("bgNone").addClass("bgGray");
+             }).addClass("bgGray"));
+             $(this).parent().remove();
+         } else {
+            alert($(selectedElement).text() +" has child dishes, kindly move those dishes to some other categories and move this dish");
+         }
+
+    }
+      function filterByCategory(categoryId) {
+                $.ajax({
+             url: '@Url.Action("GetMasterDishDetails", "Product")?categoryId=' + categoryId,
+             type: "get",
+             data: { categoryId: categoryId },
+             success: function (response, textStatus, jqXHR) {
+                 DishesList = response;
+                 $.each(response, function () {
+                     if (this['MasterId'] == null) {
+
+                         $('#masterDivList').append($("<div></div>").append($("<div></div>").attr("masterId", this['Id']).html(this['Name']).on("click", bindMasterData)).append($("<div class='positionArrow none'>>></div>").on("click", moveLeftToright)));
+                         bindChildData(this['Id']);
+                     }
+                 });
+
+
+             },
+             error: function (jqXHR, textStatus, errorThrown) {
+                 alert("error");
+             }, complete: function () {
+
+             }
+            });
+         }
+
+         $(document).ready(function () {
+
+             $.ajax({
+                 url: '@Url.Action("GetCategoriesMaster", "Product")',
+                 type: "get",
+                 data: { userName: "emma" },
+                 success: function (response, textStatus, jqXHR) {
+
+                     $.each(response, function () {
+                         $('#prodCategories').append($("<option></option>").val(this['Id']).html(this['Name']));
+                     });
+
+
+                 },
+                 error: function (jqXHR, textStatus, errorThrown) {
+                     alert("error");
+                 }, complete: function () {
+
+                 }
+             });
+
+             $("#prodCategories").on("change", function (e) {
+                 $("#masterDivList > div").remove();
+                 $("#childDivList > div").remove();
+                 if ($(this).val() != "")
+                     filterByCategory($(this).val());
+
+             });
+             $("#rightUp , #rightDown").on("click", function (e) {
+                 var controllingDiv = $(this).attr("controlDiv");
+                 var movement = $(this).attr("movement");
+                 if (movement == "up") {
+                     
+                     var parentDiv = $("#" + controllingDiv).find("div.block");
+                     var selectedElement = $("#" + controllingDiv).find("div.block").find("div.bgGray"); //.remove();
+                     var prevElement = $("#" + controllingDiv).find("div.block").find("div.bgGray").prev();
+                     $(selectedElement).insertBefore($(prevElement));
+                 } else if (movement == "down") {
+                     var parentDiv = $("#" + controllingDiv).find("div.block");
+                     var selectedElement = $("#" + controllingDiv).find("div.block").find("div.bgGray"); //.remove();
+                     var nextElement = $("#" + controllingDiv).find("div.block").find("div.bgGray").next();
+                     $(selectedElement).insertAfter($(nextElement));
+                 }
+
+             });
+             $("#leftUp , #leftDown").on("click", function (e) {
+                 var controllingDiv = $(this).attr("controlDiv");
+                 var movement = $(this).attr("movement");
+                 if (movement == "up") {
+                     
+                     var parentDiv = $("#" + controllingDiv);
+                     var selectedElement = $("#" + controllingDiv).find("div.bgGray").parent(); //.remove();
+                     var prevElement = $("#" + controllingDiv).find("div.bgGray").parent().prev();
+                     $(selectedElement).insertBefore($(prevElement));
+                 } else if (movement == "down") {
+                     var parentDiv = $("#" + controllingDiv);
+                     var selectedElement = $("#" + controllingDiv).find("div.bgGray").parent(); //.remove();
+                     var nextElement = $("#" + controllingDiv).find("div.bgGray").parent().next();
+                     $(selectedElement).insertAfter($(nextElement));
+                 }
+
+             });
+             $("#middleRight , #middleLeft").on("click", function (e) {
+                 var movement = $(this).attr("movement");
+                 if (movement == "right") {
+                     
+                     var selectedElement = $("#masterDivList").find("div.bgGray").remove();
+                     //var selectedElement = $(sourceDiv); //.remove();
+                     $("#childDivList").find("div.block").append($(selectedElement).on('click', function (e) {
+                         // $("#" + selectedDish + "_child > div").removeClass("bgGray").addClass("bgNone");
+                         alert("hai");
+                         $(this).removeClass("bgNone").addClass("bgGray");
+                     }));
+                     //  $(selectedElement).insertBefore($(prevElement));
+                 } else if (movement == "left") {
+                     var selectedElement = $("#childDivList").find("div.block").find("div.bgGray").remove();
+                     $('#masterDivList div').removeClass("bgGray").addClass("bgNone");
+
+                     $(selectedElement).removeClass("bgNone").addClass("bgGray");
+                     $('#masterDivList div.positionArrow').removeClass("none").addClass("block");
+                     $("#masterDivList").append($("<div></div>").append($(selectedElement).on('click', function (e) {
+                         //alert("hai");
+                         $(this).siblings(".positionArrow").removeClass("block").addClass("none");
+                         $('#masterDivList div.positionArrow').removeClass("none").addClass("block");
+                         $('#masterDivList div').removeClass("bgGray").addClass("bgNone");
+                         $(this).removeClass("bgNone").addClass("bgGray");
+                     })).append($("<div class='positionArrow none'>>></div>").on("click", moveLeftToright))); //.remove();
+
+                 }
+
+             });
+             $("#btnSaveDish").on("click", function (e) {
+                 
+                 var data = { "data": JSON.stringify({ "data": [{ 'masterProdId': "1", 'sNo': "1", 'childProdIds': ["2", "13"] }, { 'masterProdId': "14", 'sNo': "2", 'childProdIds': ["16", "15"]}] }) };
+                 var tempd = { "data": [] };
+                 var prodRows = { 'masterProdId': "", 'sNo': "", 'childProdIds': [] };
+                 // var p = new prodRows();
+                 $('#masterDivList > div').each(function (index) {
+
+                     var objTmp = { 'masterProdId': "", 'sNo': "", 'childProdIds': [] };
+                     var masterId = objTmp["masterProdId"] = $(this).children().first().attr("masterId");
+                     objTmp["sNo"] = index + 1;
+                     $('#' + masterId + '_child > div').each(function (indexes) {
+                         objTmp["childProdIds"].push($(this).attr("masterId"));
+                     });
+                     tempd["data"].push(objTmp);
+                 });
+                 //var data = { data: JSON.stringify({ 'masterProdId': "14", 'sNo': "1", 'childProdIds': ["15", "16"] }) };
+                 $.ajax({
+                     url: '@Url.Action("SaveMAsterDishes", "Product")',
+                     type: "POST",
+                     data: { "data": JSON.stringify(tempd["data"]) },
+                     success: function (response, textStatus, jqXHR) {
+                         DishesList = response;
+                         alert(response.message);
+                     },
+                     error: function (jqXHR, textStatus, errorThrown) {
+                         alert("error");
+                     }, complete: function () {
+
+                     }
+                 });
+
+             });
+
+         });
+ </script>
+</head>
+<body>
+<div style="clear:both">
+<label>Categories</label>
+<select id="prodCategories">
+    <option value="">---Select---</option>
+</select>
+</div>
+
+<div class="fl" style="position: relative;
+    top: 55px;
+    left: -16px;
+">
+<div class="ArrowTop" controlDiv="masterDivList" movement="up" id="leftDown"></div>
+   
+<div class="ArrowBottom" controlDiv="masterDivList" movement="down" id="leftUp"></div>
+</div>
+<div id="masterDivList" class="lstDetails  fl "></div>
+
+
+<div class="fl">
+    <input type="button" movement="right" value="Move Right" id="middleRight" style="display:none"/><br />
+<input type="button" movement="left" value="Move Left" id="middleLeft" style="display:none"/>
+</div>
+
+ 
+
+<div id="childDivList" class="childList fl">
+    
+</div>
+
+<div class="fl" style="position: relative;
+    top: 55px;
+    left: 16px;
+">
+<div class="ArrowTop" controlDiv="childDivList" movement="up"  id="rightUp"></div>
+   
+<div class="ArrowBottom" controlDiv="childDivList" movement="down" id="rightDown"></div>
+
+</div>
+
+<div class="divSave">
+<input  type="button" value="Save Dishes" id="btnSaveDish" class="btnm"/>
+    <div style="color:red">If you change the Category without saving , your arrangement will not be saved</div>
+</div>
+</body>
+</html>
+
+

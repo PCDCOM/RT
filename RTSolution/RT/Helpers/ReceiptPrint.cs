@@ -25,22 +25,22 @@ namespace PrintingSystem
         public ICollection<OrderedProduct> OrderedProducts { get; set; }
         public void print()
         {
-            
-            pdoc = new PrintDocument();
-            PrinterSettings ps = new PrinterSettings();
-            Font font = new Font("Courier New", 15);
-            PaperSize psize = new PaperSize("Custom", 100, 200);
-            pdoc.DefaultPageSettings.PaperSize = psize;
-            pdoc.DefaultPageSettings.PaperSize.Height = 820;
-            pdoc.DefaultPageSettings.PaperSize.Width = 520;
 
-            pdoc.PrinterSettings.PrinterName = PrinterName;
-            pdoc.PrintPage += new PrintPageEventHandler(pdoc_PrintPage);
-            using (WindowsImpersonationContext wic = WindowsIdentity.Impersonate(IntPtr.Zero))
+            using (pdoc = new PrintDocument())
             {
+                PrinterSettings ps = new PrinterSettings();
+                Font font = new Font("Courier New", 15);
+                PaperSize psize = new PaperSize("Custom", 100, 200);
+                pdoc.DefaultPageSettings.PaperSize = psize;
+                pdoc.DefaultPageSettings.PaperSize.Height = 820;
+                pdoc.DefaultPageSettings.PaperSize.Width = 520;
+
+                pdoc.PrinterSettings.PrinterName = PrinterName;
+                pdoc.PrintPage += new PrintPageEventHandler(pdoc_PrintPage);
+
                 pdoc.Print();
+
             }
-            
 
         }
 
@@ -48,8 +48,8 @@ namespace PrintingSystem
         void pdoc_PrintPage(object sender, PrintPageEventArgs e)
         {
             Graphics graphics = e.Graphics;
-            Font font = new Font("Georgia", 8);
-            Font fontBold = new Font("Georgia", 8, FontStyle.Bold);
+            Font font = new Font("Verdana", 8);
+            Font fontBold = new Font("Verdana", 8, FontStyle.Bold);
 
             Pen boldPen = new Pen(Color.Black, 3);
             Pen lightPen = new Pen(Color.Black, 1);
@@ -99,7 +99,7 @@ namespace PrintingSystem
             stringFormat.Alignment = StringAlignment.Far;
             stringFormat.LineAlignment = StringAlignment.Center;
 
-            graphics.DrawString("Total: RM " + String.Format("{0:0.00}", TotalAmount), new Font("Georgia", 12, FontStyle.Bold), Brushes.Blue, rf, stringFormat);
+            graphics.DrawString("Total: RM " + String.Format("{0:0.00}", TotalAmount), new Font("Verdana", 12, FontStyle.Bold), Brushes.Blue, rf, stringFormat);
 
             
                 graphics.DrawString("*" + OrderNo.ToString() + "*",

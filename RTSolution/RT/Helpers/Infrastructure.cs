@@ -77,4 +77,34 @@ namespace RT
         }
 
     }
+    public class ProductContainer
+    {
+        public ProductContainer(string json)
+        {
+            lstProdMapRow = JsonConvert.DeserializeObject<List<ProductMappingRow>>(json); 
+            //JToken jUser = tempjObject["data"];
+            // lstProdMapRow = jUser.ToObject<ProductMappingRow>();
+            //Array temp = jUser.ToArray();
+            //lstProdMapRow = new List<ProductMappingRow>();
+            //foreach (var item in temp)
+            //{
+            //    ProductMappingRow tempRowObj = new ProductMappingRow();
+            //    JObject StrTempRowObject = JObject.Parse(item.ToString());
+            //    tempRowObj.masterProdId = StrTempRowObject["masterProdId"].ToString();
+            //    tempRowObj.sNo = StrTempRowObject["sNo"].ToString();
+            //    tempRowObj.childProdIds = StrTempRowObject["childProdIds"].ToArray();
+
+            //    lstProdMapRow.Add(tempRowObj);
+            //}
+        }
+        public List<ProductMappingRow> lstProdMapRow;
+    }
+
+    public class ProductMappingRow
+    {
+        public ProductMappingRow() { }
+        public string masterProdId { get; set; }
+        public string sNo { get; set; }
+        public int[] childProdIds { get; set; }
+    }
 }

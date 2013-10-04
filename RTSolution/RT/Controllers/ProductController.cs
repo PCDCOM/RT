@@ -162,5 +162,89 @@ namespace RT.Controllers
                  }), JsonRequestBehavior.AllowGet
                 );
         }
+        
+        public ActionResult ArrangeProducts()
+        {
+            return View();
+        }
+        public ActionResult GetCategoriesMaster()
+        {
+            dynamic masterProds;
+            
+
+            masterProds = (from a in db.ProductGroups
+                           select new { Id = a.Id, Name = a.Name }
+                           ).ToList();
+
+            //ViewBag.prodList = masterProd;
+            // ViewBag.jsonString = Json(masterProd, JsonRequestBehavior.AllowGet);
+            return Json(masterProds, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult GetMasterDishDetails(string categoryId)
+        {
+            dynamic masterProds;
+            
+            Int32 intCategoryId = Convert.ToInt32(categoryId);
+            masterProds = (from a in db.Products
+                           where a.ProductGroupID == intCategoryId
+                           orderby a.Sno ascending
+                           select new { Id = a.Id, MasterId = a.MasterProductID, Name = a.Name, ProductGroupId = a.ProductGroupID, SNo = a.Sno }
+                           ).ToList();
+
+            //ViewBag.prodList = masterProd;
+            // ViewBag.jsonString = Json(masterProd, JsonRequestBehavior.AllowGet);
+            return Json(masterProds, JsonRequestBehavior.AllowGet);
+        }
+        [HttpPost]
+
+        public ActionResult SaveMAsterDishes(string data)
+        {
+            // string j = @"{""data"":[{""masterProdId"":""14"",""sNo"":""1"",""childProdIds"":[""15"",""16""]},{""masterProdId"":""17"",""sNo"":""2"",""childProdIds"":[""18"",""19""]},{""masterProdId"":""14"",""sNo"":""1"",""childProdIds"":[""15"",""16""]}]}";
+            ProductContainer pro = new ProductContainer(data);
+
+
+            foreach (var iter in pro.lstProdMapRow)
+            {
+                int tempID = Convert.ToInt32(iter.masterProdId);
+                var prod = db.Products.First(i => i.Id == tempID);
+                prod.Sno = Convert.ToInt32(iter.sNo);
+                prod.MasterProductID = null;
+                for (int incre = 0; incre < iter.childProdIds.Length; incre++)
+                {
+                    int childId = Convert.ToInt32(iter.childProdIds.GetValue(incre).ToString());
+                    var childProd = db.Products.First(j => j.Id == childId);
+                    childProd.Sno = Convert.ToInt32(incre + 1);
+                    childProd.MasterProductID = Convert.ToInt32(iter.masterProdId);
+                    db.Entry(childProd).State = EntityState.Modified;
+                }
+                db.Entry(prod).State = EntityState.Modified;
+                try
+                {
+                    db.SaveChanges();
+                }
+                catch (System.Data.Entity.Validation.DbEntityValidationException ex) {
+                    System.Text.StringBuilder sb = new System.Text.StringBuilder();
+
+                    foreach (var failure in ex.EntityValidationErrors)
+                    {
+                        sb.AppendFormat("{0} failed validation\n", failure.Entry.Entity.GetType());
+                        foreach (var error in failure.ValidationErrors)
+                        {
+                            sb.AppendFormat("- {0} : {1}", error.PropertyName, error.ErrorMessage);
+                            sb.AppendLine();
+                        }
+                    }
+
+                    //throw new System.Data.Entity.Validation.DbEntityValidationException(
+                    //    "Entity Validation Failed - errors follow:\n" +
+                    //    sb.ToString(), ex
+                    //); // Add the original exception as the innerException
+                    LogAdapter.Info(sb.ToString(), "aa", "bb");
+                }
+            }
+            
+        return Json(new { message = "Successfully Saved the Dishes Order" }, JsonRequestBehavior.AllowGet); ;
+        }
     }
 }
