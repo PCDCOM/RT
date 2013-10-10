@@ -426,3 +426,6 @@ table #dataTable tr span.deleted {
     background-position: 0 -82px; width: 17px; height: 17px;
     cursor:pointer;
 }
+#PrinterInfo {
+    float:left;color:white;background-color:#1E90FF;font-size:12px;
+}

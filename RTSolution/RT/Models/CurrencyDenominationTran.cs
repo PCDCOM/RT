@@ -15,9 +15,9 @@ namespace RT.Models
     public partial class CurrencyDenominationTran
     {
         public int id { get; set; }
-        public Nullable<int> denomival { get; set; }
+        public Nullable<decimal> denomival { get; set; }
         public Nullable<int> countavai { get; set; }
-        public Nullable<long> denomitotal { get; set; }
+        public Nullable<decimal> denomitotal { get; set; }
         public Nullable<System.DateTime> date { get; set; }
     }
 }

@@ -10,7 +10,9 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
+using Microsoft.PointOfService;
 using Newtonsoft.Json;
+using RT.Helpers;
 using RT.Models;
 
 namespace RT.Controllers
@@ -185,6 +187,11 @@ namespace RT.Controllers
         public ActionResult Pay(long Id, OrderedProduct[] newItems, decimal TotalAmount, decimal PaidAmount,
             decimal BalanceAmount, string Seats,OrderedProduct[] oldItems, int Status = 0)
         {
+
+            RTCashDrawer cd = new RTCashDrawer();
+            cd.OpenDrawer();
+            cd.Dispose();
+
             bool needPrint = false;
             Order orderToUpdate = null;
             if (Id == 0)

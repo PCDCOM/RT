@@ -1,0 +1,70 @@
+﻿@model IEnumerable<RT.Models.Printer>
+
+@{
+    ViewBag.Title = "Index";
+}
+<script src="~/Scripts/common.js"></script>
+<script>
+    function setPrinterCookie() {
+        var OverridePrinter = document.getElementById("OverridePrinter");
+        var printername = OverridePrinter.options[OverridePrinter.selectedIndex].text;
+        var printerfullname = OverridePrinter.options[OverridePrinter.selectedIndex].value;
+        setCookie("printername", printername, 365);
+        setCookie("printerfullname", printerfullname, 365);
+        alert("Sucess - Printer directed to " + printername);
+        //var printerName = getCookie("printername");
+        //alert(printerName);
+    }
+</script>
+                    @Html.DropDownList("OverridePrinter", (SelectList)ViewBag.Printers ,"Dynamic")       
+                    <input type="button" value ="Overrid Printer" onclick="setPrinterCookie()"/>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Tables)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.IsDefault)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.IsParcel)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FullName)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Tables)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.IsDefault)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.IsParcel)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FullName)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
+            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+        </td>
+    </tr>
+}
+
+</table>

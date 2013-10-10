@@ -1,0 +1,53 @@
+﻿@model RT.Models.Printer
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<fieldset>
+    <legend>Printer</legend>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Name)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Name)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Tables)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Tables)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.IsDefault)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.IsDefault)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.IsParcel)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.IsParcel)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.FullName)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.FullName)
+    </div>
+</fieldset>
+@using (Html.BeginForm()) {
+    <p>
+        <input type="submit" value="Delete" /> |
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+}

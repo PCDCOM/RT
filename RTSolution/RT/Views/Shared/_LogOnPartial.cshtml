@@ -1,4 +1,5 @@
 ﻿@if(Request.IsAuthenticated) {
+    <div id="PrinterInfo"></div>
     if (Context.User.IsInRole("Admin") || Context.User.IsInRole("Cashier")) { 
         <text>[@Html.ActionLink("Bill", "Index", "Bill")]</text>
         <text>[@Html.ActionLink("Order", "Index", "Order")]</text>

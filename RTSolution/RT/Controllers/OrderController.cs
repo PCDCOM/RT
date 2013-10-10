@@ -5,6 +5,7 @@ using System.Configuration;
 using System.Data;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -155,6 +156,39 @@ namespace RT.Controllers
                 notificationengine.PushFromServer(dictSeats);
             }
         }
+        private string getPrinterName(bool anyDinining,char firstSeatNo) {
+            string forcePrinter = string.Empty;
+
+
+            if (Request.Cookies["printerfullname"] != null)
+            {
+
+                //var encryptedBytes = Convert.FromBase64String(Request.Cookies["printerfullname"].Value);
+                //var decryptedBytes = System.Security.Cryptography.ProtectedData.Unprotect(encryptedBytes, null, System.Security.Cryptography.DataProtectionScope.CurrentUser);
+                forcePrinter = HttpUtility.UrlDecode(Request.Cookies["printerfullname"].Value);
+
+
+            }
+            if (string.IsNullOrEmpty(forcePrinter) || forcePrinter.Equals("Dynamic"))
+            {
+                string strfirstSeatNo = firstSeatNo.ToString();
+
+                if (!anyDinining)
+                    forcePrinter = ConfigurationManager.AppSettings["ParcelPrinter"].ToString();
+                else
+                {
+                    Printer printer = db.Printers.Where(p => p.Tables.Contains(strfirstSeatNo)).FirstOrDefault();
+                     if (printer != null)
+                         forcePrinter = printer.FullName;
+                     else
+                        forcePrinter = ConfigurationManager.AppSettings["CommonPrinter"].ToString();
+                }
+
+
+            }
+
+            return forcePrinter;
+        }
         private void PrintBill(long Id) {
 
                 Order order = db.Orders.Find(Id);
@@ -166,18 +200,9 @@ namespace RT.Controllers
                     PrintingSystem.ReceiptPrint rcpt = new PrintingSystem.ReceiptPrint();
                     rcpt.Seats = order.Seats;
                     char firstSeatNo = rcpt.Seats.FirstOrDefault();
-                    //TOD: Need to change this hardcode to dynamic
                     bool anyDinining = order.OrderedProducts.Where(i => i.Status == 1).Any(i => i.Type == 0);
-                    if (!anyDinining)
-                        rcpt.PrinterName = ConfigurationManager.AppSettings["ParcelPrinter"].ToString();
-                    else if (ConfigurationManager.AppSettings["DiamondFloorPrinterFloor"].ToString().Contains(firstSeatNo))
-                        rcpt.PrinterName = ConfigurationManager.AppSettings["DiamondFloorPrinter"].ToString();
-                    else if (ConfigurationManager.AppSettings["GoldFloorPrinterFloor"].ToString().Contains(firstSeatNo))
-                        rcpt.PrinterName = ConfigurationManager.AppSettings["GoldFloorPrinter"].ToString();
-                    else if (ConfigurationManager.AppSettings["SilverFloorPrinterFloor"].ToString().Contains(firstSeatNo))
-                        rcpt.PrinterName = ConfigurationManager.AppSettings["SilverFloorPrinter"].ToString();
-                    else
-                        rcpt.PrinterName = ConfigurationManager.AppSettings["CommonPrinter"].ToString();
+                    //TOD: Need to change this hardcode to dynamic
+                    rcpt.PrinterName = getPrinterName(anyDinining, firstSeatNo);
                     rcpt.TotalAmount = order.TotalAmount;
                     rcpt.OrderNo = Id;
                     rcpt.CreatedBy = createdBy;
@@ -185,7 +210,10 @@ namespace RT.Controllers
                     rcpt.CreateDate = order.CreatedDate.Value.ToString("dd-MM-yyyy HH:mm");
                     rcpt.OrderedProducts = orderedProducts;
 
-                    Task.Run(() => rcpt.print());
+                    
+                    
+
+                    rcpt.print();
                     
                 }
             
@@ -195,16 +223,9 @@ namespace RT.Controllers
             if (newItems != null || oldItems != null)
             {
                 PrintingSystem.OrderPrint rcpt = new PrintingSystem.OrderPrint() { NewItems=newItems,OldItems=oldItems,Seats=Seats,OrderId=OrderId};
-                string PrinterName = "";
+                
                 char firstSeatNo = Seats.FirstOrDefault();
-                if (ConfigurationManager.AppSettings["DiamondFloorPrinterFloor"].ToString().Contains(firstSeatNo))
-                    PrinterName = ConfigurationManager.AppSettings["DiamondFloorPrinter"].ToString();
-                else if (ConfigurationManager.AppSettings["GoldFloorPrinterFloor"].ToString().Contains(firstSeatNo))
-                    PrinterName = ConfigurationManager.AppSettings["GoldFloorPrinter"].ToString();
-                else if (ConfigurationManager.AppSettings["SilverFloorPrinterFloor"].ToString().Contains(firstSeatNo))
-                    PrinterName = ConfigurationManager.AppSettings["SilverFloorPrinter"].ToString();
-                else
-                    PrinterName = ConfigurationManager.AppSettings["ParcelPrinter"].ToString();
+                string PrinterName = getPrinterName(true, firstSeatNo);
                 rcpt.PrinterName = PrinterName;
                 Task.Run(() => rcpt.print());
             }
@@ -259,7 +280,8 @@ namespace RT.Controllers
                 if (order == null)
                 {
                     order = db.Orders.Where(x => x.Id == id).SingleOrDefault<Order>();
-                    if (order != null && order.Status == (byte)StatusType.Paid) {
+                    if (order != null && order.Status == (byte)StatusType.Paid)
+                    {
                         throw new Exception("Paid already - Could not order/bill again");
                     }
                     else
@@ -268,6 +290,9 @@ namespace RT.Controllers
                         strId = id.ToString();
                         throw new Exception("Invalid order Id" + strId);
                     }
+                }
+                else { 
+
                 }
             }
             ModelState.Clear();

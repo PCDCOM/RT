@@ -8,6 +8,7 @@ using RT.Models;
 using System.Configuration;
 using RT;
 using System.Security.Principal;
+using System.Threading.Tasks;
 
 
 namespace PrintingSystem
@@ -38,8 +39,21 @@ namespace PrintingSystem
                 pdoc.PrinterSettings.PrinterName = PrinterName;
                 pdoc.PrintPage += new PrintPageEventHandler(pdoc_PrintPage);
 
-                pdoc.Print();
+                LogAdapter.Info("user id : " + WindowsIdentity.GetCurrent().Name, "order", "billing");
+                LogAdapter.Info("pdoc.PrinterSettings.PrinterName  : " + pdoc.PrinterSettings.PrinterName, "order", "billing");
+                LogAdapter.Info("isvalid : " + pdoc.PrinterSettings.IsValid.ToString(), "order", "billing");
+                
+                LogAdapter.Info("user id : " + WindowsIdentity.GetCurrent().Name, "order", "billing");
 
+
+
+                Task.Run(() => pdoc.Print());
+                //foreach (string printerName in PrinterSettings.InstalledPrinters)
+                //{
+                    
+                //    LogAdapter.Info("Printer lists: " + printerName, "", "");
+
+                //}
             }
 
         }

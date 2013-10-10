@@ -27,6 +27,7 @@
                 <ul id="menu">
                     @if (Context.User.IsInRole("Admin")){
                         <li>@Html.ActionLink("Register","Register","Account")</li>
+                        <li>@Html.ActionLink("Reports", "Index", "Report")</li>
                     }
                     @if (Context.User.IsInRole("Admin") || Context.User.IsInRole("Cashier"))
                     {
@@ -38,11 +39,11 @@
                         <li>@Html.ActionLink("Bill", "Index", "Bill")</li>
                         <li>@Html.ActionLink("Close","DenominationCalculation","CurrencyDenominator")</li>
                         <li>@Html.ActionLink("RePrint", "ListOrdersForReprint", "Order")</li>
-                        
-                    }
+                        <li>@Html.ActionLink("Arrange", "ArrangeProducts", "Product")</li>                    }
 
                     @if (Context.User.IsInRole("Admin") || Context.User.IsInRole("Cashier") || Context.User.IsInRole("Waiter"))
                     {
+                        <li>@Html.ActionLink("Printers", "Index", "Printer")</li>
                         <li>@Html.ActionLink("Order", "Index", "Order")</li>
                         <li>@Html.ActionLink("Home", "Index", "Home")</li>
                     }

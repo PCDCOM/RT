@@ -7,7 +7,7 @@
 decimal difference = 0 ;
 decimal ordertotal = Convert.ToDecimal(ViewData["OrderTotal"]);
 decimal denominatortotal = Convert.ToDecimal(ViewData["DenominatorTotal"]);
-difference = Convert.ToInt32(ViewData["OrderTotal"]) - Convert.ToInt32(ViewData["DenominatorTotal"]);
+difference = Convert.ToDecimal(ViewData["OrderTotal"]) - Convert.ToDecimal(ViewData["DenominatorTotal"]);
      }
 <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
 <script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>

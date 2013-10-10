@@ -10,6 +10,12 @@
           <EntitySet Name="CurrencyDenomination" EntityType="RestaurantModel.Store.CurrencyDenomination" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="CurrencyDenominationTrans" EntityType="RestaurantModel.Store.CurrencyDenominationTrans" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Kitchen" EntityType="RestaurantModel.Store.Kitchen" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Logs" EntityType="RestaurantModel.Store.Logs" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="OldBill" EntityType="RestaurantModel.Store.OldBill" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="OldCurrencyDenominationTrans" EntityType="RestaurantModel.Store.OldCurrencyDenominationTrans" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="OldOrder" EntityType="RestaurantModel.Store.OldOrder" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="OldOrderedProduct" EntityType="RestaurantModel.Store.OldOrderedProduct" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="OldRePrint" EntityType="RestaurantModel.Store.OldRePrint" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Order" EntityType="RestaurantModel.Store.Order" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="OrderedProduct" EntityType="RestaurantModel.Store.OrderedProduct" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Printer" EntityType="RestaurantModel.Store.Printer" store:Type="Tables" Schema="dbo" />
@@ -19,6 +25,22 @@
           <AssociationSet Name="FK_Bill_Order" Association="RestaurantModel.Store.FK_Bill_Order">
             <End Role="Order" EntitySet="Order" />
             <End Role="Bill" EntitySet="Bill" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OldBill_OldOrder" Association="RestaurantModel.Store.FK_OldBill_OldOrder">
+            <End Role="OldOrder" EntitySet="OldOrder" />
+            <End Role="OldBill" EntitySet="OldBill" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OldOrderedProducts_OldOrder" Association="RestaurantModel.Store.FK_OldOrderedProducts_OldOrder">
+            <End Role="OldOrder" EntitySet="OldOrder" />
+            <End Role="OldOrderedProduct" EntitySet="OldOrderedProduct" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OldOrderedProducts_Product" Association="RestaurantModel.Store.FK_OldOrderedProducts_Product">
+            <End Role="Product" EntitySet="Product" />
+            <End Role="OldOrderedProduct" EntitySet="OldOrderedProduct" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OldRePrint_OldOrder" Association="RestaurantModel.Store.FK_OldRePrint_OldOrder">
+            <End Role="OldOrder" EntitySet="OldOrder" />
+            <End Role="OldRePrint" EntitySet="OldRePrint" />
           </AssociationSet>
           <AssociationSet Name="FK_OrderedProducts_Order" Association="RestaurantModel.Store.FK_OrderedProducts_Order">
             <End Role="Order" EntitySet="Order" />
@@ -63,16 +85,16 @@
           </Key>
           <Property Name="id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="Denomination" Type="varchar" Nullable="false" MaxLength="50" />
-          <Property Name="Value" Type="int" Nullable="false" />
+          <Property Name="Value" Type="money" />
         </EntityType>
         <EntityType Name="CurrencyDenominationTrans">
           <Key>
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
-          <Property Name="denomival" Type="int" />
+          <Property Name="denomival" Type="money" />
           <Property Name="countavai" Type="int" />
-          <Property Name="denomitotal" Type="bigint" />
+          <Property Name="denomitotal" Type="money" />
           <Property Name="date" Type="datetime" />
         </EntityType>
         <EntityType Name="Kitchen">
@@ -81,6 +103,80 @@
           </Key>
           <Property Name="KitchenID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="KitchenName" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Logs">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="EventDateTime" Type="datetime" Nullable="false" />
+          <Property Name="EventLevel" Type="nvarchar" MaxLength="100" />
+          <Property Name="UserName" Type="nvarchar" MaxLength="100" />
+          <Property Name="MachineName" Type="nvarchar" MaxLength="100" />
+          <Property Name="EventMessage" Type="nvarchar(max)" />
+          <Property Name="ErrorSource" Type="nvarchar" MaxLength="100" />
+          <Property Name="ErrorClass" Type="nvarchar" MaxLength="500" />
+          <Property Name="ErrorMethod" Type="nvarchar(max)" />
+          <Property Name="ErrorMessage" Type="nvarchar(max)" />
+          <Property Name="InnerErrorMessage" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="OldBill">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="binary" Nullable="false" MaxLength="8" />
+          <Property Name="OrderId" Type="bigint" />
+          <Property Name="TotalAmount" Type="money" />
+          <Property Name="PaidAmount" Type="money" />
+          <Property Name="BalanceAmount" Type="money" />
+          <Property Name="CreatedBy" Type="uniqueidentifier" />
+          <Property Name="CreatedDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="OldCurrencyDenominationTrans">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="denomival" Type="int" />
+          <Property Name="countavai" Type="int" />
+          <Property Name="denomitotal" Type="bigint" />
+          <Property Name="date" Type="datetime" />
+        </EntityType>
+        <EntityType Name="OldOrder">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" Nullable="false" />
+          <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="Status" Type="tinyint" />
+          <Property Name="TotalAmount" Type="money" />
+          <Property Name="Seats" Type="varchar" MaxLength="200" />
+          <Property Name="CreatedBy" Type="uniqueidentifier" />
+        </EntityType>
+        <EntityType Name="OldOrderedProduct">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" Nullable="false" />
+          <Property Name="OrderId" Type="bigint" Nullable="false" />
+          <Property Name="ProductId" Type="bigint" Nullable="false" />
+          <Property Name="Quantity" Type="int" />
+          <Property Name="Price" Type="money" />
+          <Property Name="Type" Type="int" Nullable="false" />
+          <Property Name="CreatedBy" Type="uniqueidentifier" />
+          <Property Name="ProductName" Type="varchar" MaxLength="50" />
+          <Property Name="Amount" Type="money" />
+          <Property Name="Status" Type="int" />
+          <Property Name="Reason" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="OldRePrint">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" Nullable="false" />
+          <Property Name="OrderId" Type="bigint" />
+          <Property Name="ReprintedDate" Type="datetime" />
+          <Property Name="ReprintedBy" Type="uniqueidentifier" />
         </EntityType>
         <EntityType Name="Order">
           <Key>
@@ -114,9 +210,11 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="nchar" MaxLength="10" />
-          <Property Name="Tables" Type="nchar" MaxLength="10" />
+          <Property Name="Name" Type="nchar" MaxLength="70" />
+          <Property Name="Tables" Type="nchar" MaxLength="70" />
           <Property Name="IsDefault" Type="bit" />
+          <Property Name="IsParcel" Type="bit" />
+          <Property Name="FullName" Type="varchar" MaxLength="90" />
         </EntityType>
         <EntityType Name="Product">
           <Key>
@@ -173,6 +271,54 @@
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="Bill">
+              <PropertyRef Name="OrderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OldBill_OldOrder">
+          <End Role="OldOrder" Type="RestaurantModel.Store.OldOrder" Multiplicity="0..1" />
+          <End Role="OldBill" Type="RestaurantModel.Store.OldBill" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OldOrder">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="OldBill">
+              <PropertyRef Name="OrderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OldOrderedProducts_OldOrder">
+          <End Role="OldOrder" Type="RestaurantModel.Store.OldOrder" Multiplicity="1" />
+          <End Role="OldOrderedProduct" Type="RestaurantModel.Store.OldOrderedProduct" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OldOrder">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="OldOrderedProduct">
+              <PropertyRef Name="OrderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OldOrderedProducts_Product">
+          <End Role="Product" Type="RestaurantModel.Store.Product" Multiplicity="1" />
+          <End Role="OldOrderedProduct" Type="RestaurantModel.Store.OldOrderedProduct" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="OldOrderedProduct">
+              <PropertyRef Name="ProductId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OldRePrint_OldOrder">
+          <End Role="OldOrder" Type="RestaurantModel.Store.OldOrder" Multiplicity="0..1" />
+          <End Role="OldRePrint" Type="RestaurantModel.Store.OldRePrint" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OldOrder">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="OldRePrint">
               <PropertyRef Name="OrderId" />
             </Dependent>
           </ReferentialConstraint>
@@ -249,6 +395,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="usp_MoveToOld" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
       </Schema>
     </edmx:StorageModels>
     <!-- CSDL content -->
@@ -259,6 +406,12 @@
           <EntitySet Name="CurrencyDenominations" EntityType="RestaurantModel.CurrencyDenomination" />
           <EntitySet Name="CurrencyDenominationTrans" EntityType="RestaurantModel.CurrencyDenominationTran" />
           <EntitySet Name="Kitchens" EntityType="RestaurantModel.Kitchen" />
+          <EntitySet Name="Logs" EntityType="RestaurantModel.Log" />
+          <EntitySet Name="OldBills" EntityType="RestaurantModel.OldBill" />
+          <EntitySet Name="OldCurrencyDenominationTrans" EntityType="RestaurantModel.OldCurrencyDenominationTran" />
+          <EntitySet Name="OldOrders" EntityType="RestaurantModel.OldOrder" />
+          <EntitySet Name="OldOrderedProducts" EntityType="RestaurantModel.OldOrderedProduct" />
+          <EntitySet Name="OldRePrints" EntityType="RestaurantModel.OldRePrint" />
           <EntitySet Name="Orders" EntityType="RestaurantModel.Order" />
           <EntitySet Name="OrderedProducts" EntityType="RestaurantModel.OrderedProduct" />
           <EntitySet Name="Printers" EntityType="RestaurantModel.Printer" />
@@ -272,6 +425,22 @@
           <AssociationSet Name="FK_Product_Kitchen" Association="RestaurantModel.FK_Product_Kitchen">
             <End Role="Kitchen" EntitySet="Kitchens" />
             <End Role="Product" EntitySet="Products" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OldBill_OldOrder" Association="RestaurantModel.FK_OldBill_OldOrder">
+            <End Role="OldOrder" EntitySet="OldOrders" />
+            <End Role="OldBill" EntitySet="OldBills" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OldOrderedProducts_OldOrder" Association="RestaurantModel.FK_OldOrderedProducts_OldOrder">
+            <End Role="OldOrder" EntitySet="OldOrders" />
+            <End Role="OldOrderedProduct" EntitySet="OldOrderedProducts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OldRePrint_OldOrder" Association="RestaurantModel.FK_OldRePrint_OldOrder">
+            <End Role="OldOrder" EntitySet="OldOrders" />
+            <End Role="OldRePrint" EntitySet="OldRePrints" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OldOrderedProducts_Product" Association="RestaurantModel.FK_OldOrderedProducts_Product">
+            <End Role="Product" EntitySet="Products" />
+            <End Role="OldOrderedProduct" EntitySet="OldOrderedProducts" />
           </AssociationSet>
           <AssociationSet Name="FK_OrderedProducts_Order" Association="RestaurantModel.FK_OrderedProducts_Order">
             <End Role="Order" EntitySet="Orders" />
@@ -293,6 +462,7 @@
             <End Role="ProductGroup" EntitySet="ProductGroups" />
             <End Role="Product" EntitySet="Products" />
           </AssociationSet>
+          <FunctionImport Name="usp_MoveToOld" />
         </EntityContainer>
         <EntityType Name="Bill">
           <Key>
@@ -313,16 +483,16 @@
           </Key>
           <Property Name="id" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
           <Property Name="Denomination" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
-          <Property Name="Value" Type="Int32" Nullable="false" />
+          <Property Name="Value" Type="Decimal" Precision="19" Scale="4" />
         </EntityType>
         <EntityType Name="CurrencyDenominationTran">
           <Key>
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
-          <Property Name="denomival" Type="Int32" />
+          <Property Name="denomival" Type="Decimal" Precision="19" Scale="4" />
           <Property Name="countavai" Type="Int32" />
-          <Property Name="denomitotal" Type="Int64" />
+          <Property Name="denomitotal" Type="Decimal" Precision="19" Scale="4" />
           <Property Name="date" Type="DateTime" Precision="3" />
         </EntityType>
         <EntityType Name="Kitchen">
@@ -332,6 +502,87 @@
           <Property Name="KitchenID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
           <Property Name="KitchenName" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
           <NavigationProperty Name="Products" Relationship="RestaurantModel.FK_Product_Kitchen" FromRole="Kitchen" ToRole="Product" />
+        </EntityType>
+        <EntityType Name="Log">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="EventDateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="EventLevel" Type="String" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="UserName" Type="String" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="MachineName" Type="String" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="EventMessage" Type="String" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="ErrorSource" Type="String" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="ErrorClass" Type="String" MaxLength="500" Unicode="true" FixedLength="false" />
+          <Property Name="ErrorMethod" Type="String" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="ErrorMessage" Type="String" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="InnerErrorMessage" Type="String" MaxLength="Max" Unicode="true" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="OldBill">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" />
+          <Property Name="OrderId" Type="Int64" />
+          <Property Name="TotalAmount" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="PaidAmount" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="BalanceAmount" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="CreatedBy" Type="Guid" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="OldOrder" Relationship="RestaurantModel.FK_OldBill_OldOrder" FromRole="OldBill" ToRole="OldOrder" />
+        </EntityType>
+        <EntityType Name="OldCurrencyDenominationTran">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="denomival" Type="Int32" />
+          <Property Name="countavai" Type="Int32" />
+          <Property Name="denomitotal" Type="Int64" />
+          <Property Name="date" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="OldOrder">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="Status" Type="Byte" />
+          <Property Name="TotalAmount" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="Seats" Type="String" MaxLength="200" Unicode="false" FixedLength="false" />
+          <Property Name="CreatedBy" Type="Guid" />
+          <NavigationProperty Name="OldBills" Relationship="RestaurantModel.FK_OldBill_OldOrder" FromRole="OldOrder" ToRole="OldBill" />
+          <NavigationProperty Name="OldOrderedProducts" Relationship="RestaurantModel.FK_OldOrderedProducts_OldOrder" FromRole="OldOrder" ToRole="OldOrderedProduct" />
+          <NavigationProperty Name="OldRePrints" Relationship="RestaurantModel.FK_OldRePrint_OldOrder" FromRole="OldOrder" ToRole="OldRePrint" />
+        </EntityType>
+        <EntityType Name="OldOrderedProduct">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" />
+          <Property Name="OrderId" Type="Int64" Nullable="false" />
+          <Property Name="ProductId" Type="Int64" Nullable="false" />
+          <Property Name="Quantity" Type="Int32" />
+          <Property Name="Price" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="Type" Type="Int32" Nullable="false" />
+          <Property Name="CreatedBy" Type="Guid" />
+          <Property Name="ProductName" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="Amount" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="Status" Type="Int32" />
+          <Property Name="Reason" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <NavigationProperty Name="OldOrder" Relationship="RestaurantModel.FK_OldOrderedProducts_OldOrder" FromRole="OldOrderedProduct" ToRole="OldOrder" />
+          <NavigationProperty Name="Product" Relationship="RestaurantModel.FK_OldOrderedProducts_Product" FromRole="OldOrderedProduct" ToRole="Product" />
+        </EntityType>
+        <EntityType Name="OldRePrint">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" />
+          <Property Name="OrderId" Type="Int64" />
+          <Property Name="ReprintedDate" Type="DateTime" Precision="3" />
+          <Property Name="ReprintedBy" Type="Guid" />
+          <NavigationProperty Name="OldOrder" Relationship="RestaurantModel.FK_OldRePrint_OldOrder" FromRole="OldRePrint" ToRole="OldOrder" />
         </EntityType>
         <EntityType Name="Order">
           <Key>
@@ -370,9 +621,11 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="10" Unicode="true" FixedLength="true" />
-          <Property Name="Tables" Type="String" MaxLength="10" Unicode="true" FixedLength="true" />
+          <Property Name="Name" Type="String" MaxLength="70" Unicode="true" FixedLength="true" />
+          <Property Name="Tables" Type="String" MaxLength="70" Unicode="true" FixedLength="true" />
           <Property Name="IsDefault" Type="Boolean" />
+          <Property Name="IsParcel" Type="Boolean" />
+          <Property Name="FullName" Type="String" MaxLength="90" Unicode="false" FixedLength="false" />
         </EntityType>
         <EntityType Name="Product">
           <Key>
@@ -400,6 +653,7 @@
           <Property Name="Status" Type="Boolean" />
           <Property Name="Sno" Type="Int32" />
           <NavigationProperty Name="Kitchen" Relationship="RestaurantModel.FK_Product_Kitchen" FromRole="Product" ToRole="Kitchen" />
+          <NavigationProperty Name="OldOrderedProducts" Relationship="RestaurantModel.FK_OldOrderedProducts_Product" FromRole="Product" ToRole="OldOrderedProduct" />
           <NavigationProperty Name="OrderedProducts" Relationship="RestaurantModel.FK_OrderedProducts_Product" FromRole="Product" ToRole="OrderedProduct" />
           <NavigationProperty Name="Product1" Relationship="RestaurantModel.FK_Product_Product" FromRole="Product" ToRole="Product1" />
           <NavigationProperty Name="Product2" Relationship="RestaurantModel.FK_Product_Product" FromRole="Product1" ToRole="Product" />
@@ -449,6 +703,54 @@
             </Principal>
             <Dependent Role="Product">
               <PropertyRef Name="KitchenID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OldBill_OldOrder">
+          <End Role="OldOrder" Type="RestaurantModel.OldOrder" Multiplicity="0..1" />
+          <End Role="OldBill" Type="RestaurantModel.OldBill" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OldOrder">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="OldBill">
+              <PropertyRef Name="OrderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OldOrderedProducts_OldOrder">
+          <End Role="OldOrder" Type="RestaurantModel.OldOrder" Multiplicity="1" />
+          <End Role="OldOrderedProduct" Type="RestaurantModel.OldOrderedProduct" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OldOrder">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="OldOrderedProduct">
+              <PropertyRef Name="OrderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OldRePrint_OldOrder">
+          <End Role="OldOrder" Type="RestaurantModel.OldOrder" Multiplicity="0..1" />
+          <End Role="OldRePrint" Type="RestaurantModel.OldRePrint" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OldOrder">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="OldRePrint">
+              <PropertyRef Name="OrderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OldOrderedProducts_Product">
+          <End Role="Product" Type="RestaurantModel.Product" Multiplicity="1" />
+          <End Role="OldOrderedProduct" Type="RestaurantModel.OldOrderedProduct" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="OldOrderedProduct">
+              <PropertyRef Name="ProductId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -559,6 +861,86 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Logs">
+            <EntityTypeMapping TypeName="RestaurantModel.Log">
+              <MappingFragment StoreEntitySet="Logs">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="EventDateTime" ColumnName="EventDateTime" />
+                <ScalarProperty Name="EventLevel" ColumnName="EventLevel" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="MachineName" ColumnName="MachineName" />
+                <ScalarProperty Name="EventMessage" ColumnName="EventMessage" />
+                <ScalarProperty Name="ErrorSource" ColumnName="ErrorSource" />
+                <ScalarProperty Name="ErrorClass" ColumnName="ErrorClass" />
+                <ScalarProperty Name="ErrorMethod" ColumnName="ErrorMethod" />
+                <ScalarProperty Name="ErrorMessage" ColumnName="ErrorMessage" />
+                <ScalarProperty Name="InnerErrorMessage" ColumnName="InnerErrorMessage" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OldBills">
+            <EntityTypeMapping TypeName="RestaurantModel.OldBill">
+              <MappingFragment StoreEntitySet="OldBill">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="OrderId" ColumnName="OrderId" />
+                <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
+                <ScalarProperty Name="PaidAmount" ColumnName="PaidAmount" />
+                <ScalarProperty Name="BalanceAmount" ColumnName="BalanceAmount" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OldCurrencyDenominationTrans">
+            <EntityTypeMapping TypeName="RestaurantModel.OldCurrencyDenominationTran">
+              <MappingFragment StoreEntitySet="OldCurrencyDenominationTrans">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="denomival" ColumnName="denomival" />
+                <ScalarProperty Name="countavai" ColumnName="countavai" />
+                <ScalarProperty Name="denomitotal" ColumnName="denomitotal" />
+                <ScalarProperty Name="date" ColumnName="date" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OldOrders">
+            <EntityTypeMapping TypeName="RestaurantModel.OldOrder">
+              <MappingFragment StoreEntitySet="OldOrder">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
+                <ScalarProperty Name="Seats" ColumnName="Seats" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OldOrderedProducts">
+            <EntityTypeMapping TypeName="RestaurantModel.OldOrderedProduct">
+              <MappingFragment StoreEntitySet="OldOrderedProduct">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="OrderId" ColumnName="OrderId" />
+                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Reason" ColumnName="Reason" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OldRePrints">
+            <EntityTypeMapping TypeName="RestaurantModel.OldRePrint">
+              <MappingFragment StoreEntitySet="OldRePrint">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="OrderId" ColumnName="OrderId" />
+                <ScalarProperty Name="ReprintedDate" ColumnName="ReprintedDate" />
+                <ScalarProperty Name="ReprintedBy" ColumnName="ReprintedBy" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Orders">
             <EntityTypeMapping TypeName="RestaurantModel.Order">
               <MappingFragment StoreEntitySet="Order">
@@ -595,6 +977,8 @@
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Tables" ColumnName="Tables" />
                 <ScalarProperty Name="IsDefault" ColumnName="IsDefault" />
+                <ScalarProperty Name="IsParcel" ColumnName="IsParcel" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -648,6 +1032,7 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="usp_MoveToOld" FunctionName="RestaurantModel.Store.usp_MoveToOld" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

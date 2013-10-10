@@ -12,10 +12,16 @@ namespace RT.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class CurrencyDenomination
+    public partial class OldBill
     {
-        public int id { get; set; }
-        public string Denomination { get; set; }
-        public Nullable<decimal> Value { get; set; }
+        public byte[] Id { get; set; }
+        public Nullable<long> OrderId { get; set; }
+        public Nullable<decimal> TotalAmount { get; set; }
+        public Nullable<decimal> PaidAmount { get; set; }
+        public Nullable<decimal> BalanceAmount { get; set; }
+        public Nullable<System.Guid> CreatedBy { get; set; }
+        public Nullable<System.DateTime> CreatedDate { get; set; }
+    
+        public virtual OldOrder OldOrder { get; set; }
     }
 }

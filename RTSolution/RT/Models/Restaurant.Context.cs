@@ -12,6 +12,9 @@ namespace RT.Models
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
+    using System.Data.Objects;
+    using System.Data.Objects.DataClasses;
+    using System.Linq;
     
     public partial class RestaurantEntities : DbContext
     {
@@ -29,11 +32,22 @@ namespace RT.Models
         public DbSet<CurrencyDenomination> CurrencyDenominations { get; set; }
         public DbSet<CurrencyDenominationTran> CurrencyDenominationTrans { get; set; }
         public DbSet<Kitchen> Kitchens { get; set; }
+        public DbSet<Log> Logs { get; set; }
+        public DbSet<OldBill> OldBills { get; set; }
+        public DbSet<OldCurrencyDenominationTran> OldCurrencyDenominationTrans { get; set; }
+        public DbSet<OldOrder> OldOrders { get; set; }
+        public DbSet<OldOrderedProduct> OldOrderedProducts { get; set; }
+        public DbSet<OldRePrint> OldRePrints { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderedProduct> OrderedProducts { get; set; }
         public DbSet<Printer> Printers { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductGroup> ProductGroups { get; set; }
         public DbSet<RePrint> RePrints { get; set; }
+    
+        public virtual int usp_MoveToOld()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("usp_MoveToOld");
+        }
     }
 }

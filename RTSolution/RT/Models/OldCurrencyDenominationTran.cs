@@ -12,10 +12,12 @@ namespace RT.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class CurrencyDenomination
+    public partial class OldCurrencyDenominationTran
     {
         public int id { get; set; }
-        public string Denomination { get; set; }
-        public Nullable<decimal> Value { get; set; }
+        public Nullable<int> denomival { get; set; }
+        public Nullable<int> countavai { get; set; }
+        public Nullable<long> denomitotal { get; set; }
+        public Nullable<System.DateTime> date { get; set; }
     }
 }

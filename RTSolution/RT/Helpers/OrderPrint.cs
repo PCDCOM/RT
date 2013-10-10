@@ -8,6 +8,7 @@ using RT.Models;
 using System.Configuration;
 using RT;
 using System.Security.Principal;
+using System.Threading.Tasks;
 
 
 namespace PrintingSystem
@@ -36,8 +37,8 @@ namespace PrintingSystem
                 pdoc.PrintPage += new PrintPageEventHandler(pdoc_PrintPage);
                 LogAdapter.Info("user id : " + WindowsIdentity.GetCurrent().Name, "order", "printing");
 
-                pdoc.Print();
-
+                Task.Run(() => pdoc.Print());
+                
             }
         }
 

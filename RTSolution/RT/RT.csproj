@@ -58,6 +58,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\Program Files (x86)\Microsoft Point Of Service\SDK\Microsoft.PointOfService.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.ReportViewer.WebForms, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL" />
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.5.0.6\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -194,10 +195,18 @@
     <Compile Include="Controllers\CurrencyDenominatorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\KitchenController.cs" />
+    <Compile Include="Controllers\PrinterController.cs" />
+    <Compile Include="Controllers\ReportController.cs" />
     <Compile Include="CustomHandleErrorAttribute.cs" />
     <Compile Include="Encryption.cs" />
     <Compile Include="FileReadWrite.cs" />
+    <Compile Include="Helpers\CashDrawer.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Helpers\OrderPrint.cs" />
+    <Compile Include="Helpers\PoleDisplay.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Helpers\POS.cs" />
     <Compile Include="Helpers\ReceiptPrint.cs" />
     <Compile Include="Helpers\TotalSummaryPrint.cs" />
@@ -228,6 +237,24 @@
       <DependentUpon>Restaurant.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Kitchen.cs">
+      <DependentUpon>Restaurant.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Log.cs">
+      <DependentUpon>Restaurant.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\OldBill.cs">
+      <DependentUpon>Restaurant.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\OldCurrencyDenominationTran.cs">
+      <DependentUpon>Restaurant.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\OldOrder.cs">
+      <DependentUpon>Restaurant.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\OldOrderedProduct.cs">
+      <DependentUpon>Restaurant.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\OldRePrint.cs">
       <DependentUpon>Restaurant.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Order.cs">
@@ -265,6 +292,20 @@
     </Compile>
     <Compile Include="Models\Validation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SalesDrillDownReport.aspx.cs">
+      <DependentUpon>SalesDrillDownReport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="SalesDrillDownReport.aspx.designer.cs">
+      <DependentUpon>SalesDrillDownReport.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ServedByDrillDownReport.aspx.cs">
+      <DependentUpon>ServedByDrillDownReport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ServedByDrillDownReport.aspx.designer.cs">
+      <DependentUpon>ServedByDrillDownReport.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Server\Process\ProcessObject.cs" />
     <Compile Include="Server\Process\ProcessInit.cs" />
     <Compile Include="Server\NotificationEngine.cs" />
@@ -342,6 +383,7 @@
     <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
+    <Content Include="SalesDrillDownReport.aspx" />
     <Content Include="Scripts\jquery.signalR-2.0.0-rc1.js" />
     <Content Include="Scripts\jquery.signalR-2.0.0-rc1.min.js" />
     <Content Include="Scripts\orderscripts.js" />
@@ -358,6 +400,8 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="Content\Report\SalesDrillDownReport.rdl" />
+    <Content Include="Content\Report\ServedByDrillDownReport.rdl" />
     <EntityDeploy Include="Models\Restaurant.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>Restaurant.Designer.cs</LastGenOutput>
@@ -394,6 +438,7 @@
     <Content Include="Scripts\knockout-2.1.0.debug.js" />
     <Content Include="Scripts\knockout-2.1.0.js" />
     <Content Include="Scripts\modernizr-2.5.3.js" />
+    <Content Include="ServedByDrillDownReport.aspx" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -454,6 +499,13 @@
     <Content Include="Views\CurrencyDenominator\TodaysCashSummary.cshtml" />
     <Content Include="Views\Product\ArrangeProducts.cshtml" />
     <Content Include="Views\Product\ProductList.cshtml" />
+    <Content Include="Views\Printer\Index.cshtml" />
+    <Content Include="Views\Printer\Details.cshtml" />
+    <Content Include="Views\Printer\Create.cshtml" />
+    <Content Include="Views\Printer\Edit.cshtml" />
+    <Content Include="Views\Printer\Delete.cshtml" />
+    <Content Include="Views\Report\Index.cshtml" />
+    <Content Include="Views\Shared\AccessDenied.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

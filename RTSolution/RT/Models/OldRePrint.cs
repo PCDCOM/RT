@@ -12,10 +12,13 @@ namespace RT.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class CurrencyDenomination
+    public partial class OldRePrint
     {
-        public int id { get; set; }
-        public string Denomination { get; set; }
-        public Nullable<decimal> Value { get; set; }
+        public long Id { get; set; }
+        public Nullable<long> OrderId { get; set; }
+        public Nullable<System.DateTime> ReprintedDate { get; set; }
+        public Nullable<System.Guid> ReprintedBy { get; set; }
+    
+        public virtual OldOrder OldOrder { get; set; }
     }
 }

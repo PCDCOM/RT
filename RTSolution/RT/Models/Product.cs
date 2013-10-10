@@ -16,6 +16,7 @@ namespace RT.Models
     {
         public Product()
         {
+            this.OldOrderedProducts = new HashSet<OldOrderedProduct>();
             this.OrderedProducts = new HashSet<OrderedProduct>();
             this.Product1 = new HashSet<Product>();
         }
@@ -43,6 +44,7 @@ namespace RT.Models
         public Nullable<int> Sno { get; set; }
     
         public virtual Kitchen Kitchen { get; set; }
+        public virtual ICollection<OldOrderedProduct> OldOrderedProducts { get; set; }
         public virtual ICollection<OrderedProduct> OrderedProducts { get; set; }
         public virtual ICollection<Product> Product1 { get; set; }
         public virtual Product Product2 { get; set; }

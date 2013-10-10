@@ -1,0 +1,50 @@
+﻿@model RT.Models.Printer
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<fieldset>
+    <legend>Printer</legend>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Name)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Name)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Tables)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Tables)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.IsDefault)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.IsDefault)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.IsParcel)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.IsParcel)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.FullName)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.FullName)
+    </div>
+</fieldset>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id=Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

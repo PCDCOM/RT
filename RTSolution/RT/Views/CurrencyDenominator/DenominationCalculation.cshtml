@@ -4,15 +4,28 @@
     ViewBag.Title = "DenominationCalculation";
 }
 <script src="~/Scripts/jquery-1.7.1.min.js"></script>
-<script type="text/javascript">
-    function calculate(value) {
-        if (document.getElementById("countavai" + value).value == "") {
-            document.getElementById("denomitotal" + value).value = 0;
-        }
-        else {
-            document.getElementById("denomitotal" + value).value = (parseInt(document.getElementById("countavai" + value).value) * parseInt(document.getElementById("denomival" + value).value)).toString();
-        }
+<style>
+    .tableheaders {
+    font-size:18px;
+	font-family:Arial;
+	font-weight:bold;    
     }
+
+    /*.inputtextbox, .outputtextbox,.txtdemonival{
+    font-size:3px;
+	font-family:Arial;
+	font-weight:normal;    
+    }*/
+</style>
+<script type="text/javascript">
+    //function calculate(value) {
+    //    if (document.getElementById("countavai" + value).value == "") {
+    //        document.getElementById("denomitotal" + value).value = 0;
+    //    }
+    //    else {
+    //        document.getElementById("denomitotal" + value).value = (document.getElementById("countavai" + value).value * parseFloat(document.getElementById("denomival" + value).value)).toString();
+    //    }
+    //}
 
 
     $(document).ready(function () {
@@ -49,28 +62,30 @@
 
             //add only if the value is number
             if (!isNaN(this.value) && this.value.length != 0) {
-                sum += parseInt(this.value);
+                sum += parseFloat(this.value);
             }
 
         });
         //.toFixed() method will roundoff the final sum to 2 decimal places
-        $("#sum").html(sum);
+        $("#sum").html(sum.toFixed(2));
     }
 
     function calculateDenomination(inputelement) {
         var inputval = inputelement.attr('id');
-        // alert(inputval);
+        
         var inputid = inputval.substr(9, inputval.length);
-        // alert(inputid);
 
-        if (document.getElementById("countavai" + inputid).value == "") {
+        var countavai = document.getElementById("countavai" + inputid).value;
+        var denomival = document.getElementById("denomival" + inputid).value;
+
+
+        if (countavai == "") {
 
             document.getElementById("denomitotal" + inputid).value = "0";
         }
         else {
 
-            document.getElementById("denomitotal" + inputid).value = (parseInt(document.getElementById("countavai" + inputid).value) * parseInt(document.getElementById("denomival" + inputid).value)).toString();
-            // alert(2);
+            document.getElementById("denomitotal" + inputid).value = (countavai * denomival).toFixed(2).toString();
         }
     }
 
@@ -80,46 +95,47 @@
 
 @using(Html.BeginForm("StoreDenominations","CurrencyDenominator",FormMethod.Post)){
 <div>
-<table>
+<table class="tableheaders">
     <tr>
-        <td>
+        <td  style="text-align:center">
             @Html.DisplayNameFor(model => model.Denomination)
         </td>
-        <td>
+        <td  style="text-align:center">
           Number available
         </td>
-         <td>
+         <td  style="text-align:center">
            Result
         </td> 
     </tr>
     @{
-        int index=0;
+        int index=-1;
         }
         @foreach (var item in Model) {
-
-            index = Convert.ToInt32(item.id) - 1;
+            index = index + 1;
+            
             <tr>
                 <td>
-                    <input name="currencydenominationtrans[@index].denomival" id="denomival@(item.Value)" type= "text" value="@(item.Value)" readonly="true"/>
+                    <input name="currencydenominationtrans[@index].denomival" id="denomival@(item.Value)" type= "text" value="@(item.Value.Value.ToString("0.00"))" readonly="true" style="text-align:right;font-size:16px" class="txtdemonival" />
                 </td>
                 <td>
-                    <input  name="currencydenominationtrans[@index].countavai" id="countavai@(item.Value)" type="text" class="inputtextbox"/>
+                    <input  name="currencydenominationtrans[@index].countavai" id="countavai@(item.Value)" type="text" class="inputtextbox" style="text-align:right;font-size:16px"/>
                 </td>
                 <td>
-                    <input name="currencydenominationtrans[@index].denomitotal" id="denomitotal@(item.Value)" type="text" class="outputtextbox" readonly="true"/>
+                    <input name="currencydenominationtrans[@index].denomitotal" id="denomitotal@(item.Value)" type="text" class="outputtextbox" readonly="true" style="text-align:right;font-size:16px"/>
 
                     <input name="currencydenominationtrans[@index].date" id="date@(item.Value)" type="hidden" value ="@DateTime.Now.ToShortDateString()"/>
                 </td> 
             </tr>
+                
+        
         }
-
 
     <tr>
         <td>
 
         </td>
         <td><b>Total:</b></td>
-        <td><div id="sum" ></div></td>
+        <td><div id="sum" style="text-align:right"></div></td>
     </tr>
 
 </table>
