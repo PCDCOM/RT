@@ -34,7 +34,7 @@ namespace RT.Controllers
         [OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")]
         public ViewResult Details(int id)
         {
-            ProductGroup productgroup = db.ProductGroups.Single(p => p.Id == id);
+            ProductGroup productgroup = db.ProductGroups.Single(p => p.Id == id && p.Status == true);
             return View(productgroup);
         }
 

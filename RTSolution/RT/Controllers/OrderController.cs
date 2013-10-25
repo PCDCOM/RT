@@ -51,7 +51,6 @@ namespace RT.Controllers
                         Status = newOrderedProduct.Status,
                         Price = newOrderedProduct.Price,
                         CreatedBy = (Guid)user.ProviderUserKey,
-                        Amount = newOrderedProduct.Amount,
                         ProductName = newOrderedProduct.ProductName
                          
                     };
@@ -61,7 +60,7 @@ namespace RT.Controllers
                 {
                     //matchedOrder.Price += newOrderedProduct.Price;
                     matchedOrder.Quantity += newOrderedProduct.Quantity;
-                    matchedOrder.Amount += newOrderedProduct.Amount;
+                    //matchedOrder.Amount += newOrderedProduct.Amount;
                 }
             }
 
@@ -94,7 +93,7 @@ namespace RT.Controllers
             };
             orderToUpdate.Bills.Add(bill);
         }
-        private long Save(long Id, ref Order orderToUpdate, StatusType statustype, FormCollection formcollection, OrderedProduct[] newItems, string Seats, decimal TotalAmount,OrderedProduct[] oldItems, int Status = 0)
+        private long Save(long Id, ref Order orderToUpdate, StatusType statustype, FormCollection formcollection, OrderedProduct[] newItems, string Seats, OrderedProduct[] oldItems, int Status = 0)
         {
             long newId = 0;
             MembershipUser user = Membership.GetUser(HttpContext.User.Identity.Name);
@@ -118,7 +117,7 @@ namespace RT.Controllers
                 {
                     UpdateOrderedProducts(newItems, orderToUpdate);
                 }
-                orderToUpdate.TotalAmount = TotalAmount;
+                
                 orderToUpdate.Seats = Seats;
                 orderToUpdate.SetStatusType(statustype);
                 if (Id == 0)
@@ -203,17 +202,17 @@ namespace RT.Controllers
                     bool anyDinining = order.OrderedProducts.Where(i => i.Status == 1).Any(i => i.Type == 0);
                     //TOD: Need to change this hardcode to dynamic
                     rcpt.PrinterName = getPrinterName(anyDinining, firstSeatNo);
-                    rcpt.TotalAmount = order.TotalAmount;
+                    rcpt.TotalAmount = order.OrderedProducts.Where(op => op.Status == 1).Sum(op => (op.Quantity * op.Price));
                     rcpt.OrderNo = Id;
                     rcpt.CreatedBy = createdBy;
 
                     rcpt.CreateDate = order.CreatedDate.Value.ToString("dd-MM-yyyy HH:mm");
                     rcpt.OrderedProducts = orderedProducts;
 
-                    
-                    
 
-                    rcpt.print();
+
+
+                    Task.Run(() => rcpt.print());
                     
                 }
             
@@ -232,11 +231,11 @@ namespace RT.Controllers
 
         }
         [HttpPost]
-        public ActionResult SaveBill(long Id, FormCollection formcollection, OrderedProduct[] newItems, string Seats, decimal TotalAmount,OrderedProduct[] oldItems, int Status = 0)
+        public ActionResult SaveBill(long Id, FormCollection formcollection, OrderedProduct[] newItems, string Seats, OrderedProduct[] oldItems, int Status = 0)
         {
 
             Order orderToUpdate = null;
-            long newId = Save(Id, ref orderToUpdate, StatusType.Bill, formcollection, newItems, Seats, TotalAmount,oldItems, Status);
+            long newId = Save(Id, ref orderToUpdate, StatusType.Bill, formcollection, newItems, Seats, oldItems, Status);
             //Todo: Need to pass userid here
 
 
@@ -249,12 +248,12 @@ namespace RT.Controllers
 
         [HttpPost]
         [AjaxAuthorizationFilter]
-        public ActionResult SaveOrder(long Id, FormCollection formcollection, OrderedProduct[] newItems, string Seats, decimal TotalAmount,  OrderedProduct[] oldItems, int Status = 0)
+        public ActionResult SaveOrder(long Id, FormCollection formcollection, OrderedProduct[] newItems, string Seats,   OrderedProduct[] oldItems, int Status = 0)
         {
     
 
             Order orderToUpdate = null;
-            long newId = Save(Id, ref orderToUpdate, StatusType.New, formcollection, newItems, Seats, TotalAmount,oldItems, Status);
+            long newId = Save(Id, ref orderToUpdate, StatusType.New, formcollection, newItems, Seats, oldItems, Status);
             //Todo: Need to pass userid here
             if (Id == 0)
             {
@@ -291,9 +290,7 @@ namespace RT.Controllers
                         throw new Exception("Invalid order Id" + strId);
                     }
                 }
-                else { 
 
-                }
             }
             ModelState.Clear();
             return View("OrderedProducts", order);
@@ -323,7 +320,7 @@ namespace RT.Controllers
                                     Id = o.Id,
                                     CreatedDate = o.CreatedDate,
                                     Seats = o.Seats,
-                                    TotalAmount = o.TotalAmount,
+                                    OrderedProducts = o.OrderedProducts,
                                     BillCreatedBy = u.UserName.ToString()
                                 };
 

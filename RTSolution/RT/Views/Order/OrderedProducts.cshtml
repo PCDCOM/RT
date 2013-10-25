@@ -1,8 +1,8 @@
 ﻿@model RT.Models.Order
 @{
     Layout = null;
-    
-    string TotalAmount = Model.TotalAmount.HasValue ? Model.TotalAmount.Value.ToString("#,##0.00#") : "";
+    Nullable<decimal> dtot = Model.OrderedProducts.Where(op => op.Status == 1).Sum(op => (op.Quantity * op.Price));
+    string TotalAmount = dtot.HasValue ? dtot.Value.ToString("#,##0.00#") : "";
     bool anyDinining = Model.OrderedProducts.Where(i=>i.Status==1).Any(i => i.Type == 0);
 }
 @using (Html.BeginForm("SaveBill", "Order", FormMethod.Post))
@@ -32,6 +32,37 @@
                             <input type="button" value="Bill" id="saveBill" class="btn btn-disabled">
                         
                         @Html.Hidden("saveOrderUrl", Url.Action("SaveOrder"))
+                    
+        </div>
+        <div>
+
+                            <input type="hidden" id="current-item-id">
+                            <input type="hidden" id="current-item-name">
+                            <input type="hidden" id="prev-added-item-id">
+                            <input type="hidden" id="current-item-unitprice">
+                            <input type="hidden" id="current-item-type">
+                            <table id="product-adder" style="margin-top: 0;">
+                                <tbody>
+                                    <tr>
+                                        <td nowrap="nowrap">
+                                            <div id="circleButton" class="circle">0</div>
+                                            <div id="circleButton" class="circle">1</div>
+                                            <div id="circleButton" class="circle">2</div>
+                                            <div id="circleButton" class="circle">3</div>
+                                            <div id="circleButton" class="circle">4</div>
+                                            <div id="circleButton" class="circle">5</div>
+                                            <div id="circleButton" class="circle">6</div>
+                                            <div id="circleButton" class="circle">7</div>
+                                            <div id="circleButton" class="circle">8</div>
+                                            <div id="circleButton" class="circle">9</div>
+                                            <div id="circleButton" class="circle">C</div>
+                                        </td>
+                                        <td nowrap="nowrap">
+                                            <input id="quantity" name="quantity" size="2">
+                                            <input type="button" onclick="addProductsWithQuantitySelection();" name="add-product" id="add-product" value="+"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
                     
         </div>
                         <div style="min-height: 275px; position: inherit;">

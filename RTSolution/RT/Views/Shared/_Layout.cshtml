@@ -27,7 +27,7 @@
                 <ul id="menu">
                     @if (Context.User.IsInRole("Admin")){
                         <li>@Html.ActionLink("Register","Register","Account")</li>
-                        <li>@Html.ActionLink("Reports", "Index", "Report")</li>
+                       <li><a href="http://localhost/RTRepts/Logon.aspx" >Reports</a></li>
                     }
                     @if (Context.User.IsInRole("Admin") || Context.User.IsInRole("Cashier"))
                     {

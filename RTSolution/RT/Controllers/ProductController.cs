@@ -15,7 +15,7 @@ namespace RT.Controllers
         [Authorize]
         public ActionResult ListsByGroup(long ProductGoupId)
         {
-            List<Product> products = db.Products.Where(p => p.ProductGroupID == ProductGoupId).OrderBy(p => p.Sno).ToList();
+            List<Product> products = db.Products.Where(p => p.ProductGroupID == ProductGoupId && p.Status == true).OrderBy(p => p.Sno).ToList();
             return View(products);
         }
         [Authorize]
@@ -30,7 +30,7 @@ namespace RT.Controllers
         [Authorize(Roles = "Admin,Cashier")]
         public ViewResult Index(int? SearchProductGroup)
         {
-            ViewBag.ProductGroup = new SelectList(db.ProductGroups, "id", "Name");
+            ViewBag.ProductGroup = new SelectList(db.ProductGroups.Where(pg => pg.Status == true), "id", "Name");
             if (SearchProductGroup.HasValue)
             {
 
@@ -58,7 +58,7 @@ namespace RT.Controllers
         [Authorize(Roles = "Admin,Cashier")]
         public ActionResult Create()
         {
-            ViewBag.ProductGroup = new SelectList(db.ProductGroups, "id", "Name");
+            ViewBag.ProductGroup = new SelectList(db.ProductGroups.Where(pg => pg.Status == true), "id", "Name");
             ViewBag.Kitchen = new SelectList(db.Kitchens, "KitchenID", "KitchenName");
             ViewBag.MasterProduct = new SelectList(db.Products.Where(x => x.MasterProductID == null && x.Status == true), "id", "Name");
             return View();
@@ -72,7 +72,7 @@ namespace RT.Controllers
         public ActionResult Create(Product product)
         {
             MembershipUser user = Membership.GetUser(HttpContext.User.Identity.Name);
-            ViewBag.ProductGroup = new SelectList(db.ProductGroups, "id", "Name");
+            ViewBag.ProductGroup = new SelectList(db.ProductGroups.Where(pg => pg.Status == true), "id", "Name");
             ViewBag.Kitchen = new SelectList(db.Kitchens, "KitchenID", "KitchenName");
             ViewBag.MasterProduct = new SelectList(db.Products.Where(x => x.MasterProductID == null && x.Status == true), "id", "Name");
             if (ModelState.IsValid)
@@ -93,7 +93,7 @@ namespace RT.Controllers
         [Authorize(Roles = "Admin,Cashier")]
         public ActionResult Edit(int id)
         {
-            ViewBag.ProductGroup = new SelectList(db.ProductGroups, "id", "Name");
+            ViewBag.ProductGroup = new SelectList(db.ProductGroups.Where(pg => pg.Status == true), "id", "Name");
             ViewBag.Kitchen = new SelectList(db.Kitchens, "KitchenID", "KitchenName");
             ViewBag.MasterProduct = new SelectList(db.Products.Where(x => x.MasterProductID == null && x.Status == true), "id", "Name");
             Product product = db.Products.Single(p => p.Id == id);
@@ -107,7 +107,7 @@ namespace RT.Controllers
         [Authorize(Roles = "Admin,Cashier")]
         public ActionResult Edit(Product product)
         {
-            ViewBag.ProductGroup = new SelectList(db.ProductGroups, "id", "Name");
+            ViewBag.ProductGroup = new SelectList(db.ProductGroups.Where(pg => pg.Status == true), "id", "Name");
             ViewBag.Kitchen = new SelectList(db.Kitchens, "KitchenID", "KitchenName");
             ViewBag.MasterProduct = new SelectList(db.Products.Where(x => x.MasterProductID == null && x.Status == true), "id", "Name");
             if (ModelState.IsValid)
@@ -172,7 +172,7 @@ namespace RT.Controllers
             dynamic masterProds;
             
 
-            masterProds = (from a in db.ProductGroups
+            masterProds = (from a in db.ProductGroups where a.Status == true
                            select new { Id = a.Id, Name = a.Name }
                            ).ToList();
 
@@ -187,7 +187,7 @@ namespace RT.Controllers
             
             Int32 intCategoryId = Convert.ToInt32(categoryId);
             masterProds = (from a in db.Products
-                           where a.ProductGroupID == intCategoryId
+                           where a.ProductGroupID == intCategoryId && a.Status == true
                            orderby a.Sno ascending
                            select new { Id = a.Id, MasterId = a.MasterProductID, Name = a.Name, ProductGroupId = a.ProductGroupID, SNo = a.Sno }
                            ).ToList();

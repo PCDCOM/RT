@@ -353,7 +353,7 @@ table #dataTable tr span.deleted {
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff5bc0de', endColorstr='#ff2f96b4', GradientType=0);
     filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
     margin: 2px 2px;
-    padding: 10px 16px;
+    padding: 5px 10px;
     font-size: 10.5px;
 }
 
@@ -374,30 +374,9 @@ table #dataTable tr span.deleted {
   background-color: #24748c \9;
 }
 /*Primary mini ends*/
-.btn-greend {
-    background-color: #66CDAA;
-    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#45bf70), to(#66CDAA));
-    background-image: -webkit-linear-gradient(top, #45bf70, #66CDAA);
-    background-image: -o-linear-gradient(top, #45bf70, #66CDAA);
-    background-image: linear-gradient(to bottom, #45bf70, #66CDAA);
-    background-image: -moz-linear-gradient(center top , #45bf70, #66CDAA);
-    background-repeat: repeat-x;
-    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25) rgba(0, 0, 0, 0.5);
-    color: #FFFFFF;
-    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.35);
-   padding: 10px 20px;
-}
 
-.btn-greend:hover,
-.btn-greend:focus,
-.btn-greend:active,
-.btn-greend.active,
-.btn-greend.disabled,
-.btn-greend[disabled]{
-    background: none repeat scroll 0 0 #029239;
-    color: #FFFFFF;
-    cursor:pointer;
-}
+
+
 .prod {
 }
 .prod.btnm,
@@ -428,4 +407,20 @@ table #dataTable tr span.deleted {
 }
 #PrinterInfo {
     float:left;color:white;background-color:#1E90FF;font-size:12px;
+}
+#PaidAmount, #BalanceAmount, #TotalAmount.billpage{
+    font-size:2.5em;
+    width:420px;
+    text-align:right;
+    padding-right:15px;
+}
+#PaidAmount {
+    color:green;
+}
+#BalanceAmount {
+    color:red;
+}
+#txtOrderId {
+    width: 200px;
+    font-size:1.8em;
 }

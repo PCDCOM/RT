@@ -115,6 +115,7 @@ $(function () {
             },
             success: function (result,typ,xhr) {
                 $.loader('close');
+                
                 if(xhr != undefined)
                     $.checkAuth(xhr);
 
@@ -128,15 +129,16 @@ $(function () {
                 $('#invoice .ord' + ordId).addClass('btn-info-mini');
 
                 $("#divOrderDetails").html(result);
-                //$.setOrderedProductEvents();
+                $.setOrderedProductEvents();
                 disablePayment(false);
                 disableOrder(true);
                 disableBill(false);
-                
+                $('#PaidAmount').focus();
 
             }
         });
     };
+
     $.arrangeOrders = function () {
         
 
@@ -150,6 +152,35 @@ $(function () {
             });
         });
     }
+    $.circleClick = function (e) {
+        var currentQty = trim($("#quantity").val());
+        var btnQty = $(this).html();
+        if (btnQty == "C") {
+            $("#quantity").val("");
+            return false;
+        }
+
+        if (isNumber(btnQty)) {
+            if (isNumber(currentQty)) {
+                $("#quantity").val(currentQty + "" + btnQty);
+            } else if (currentQty == null || currentQty == "") {
+                $("#quantity").val(btnQty);
+                var productId = $("#current-item-id").val();
+                var unitPrice = $("#current-item-unitprice").val();
+                var productName = $("#current-item-name").val();
+                if ($("#prev-added-item-id").val() == productId) {
+                    // ////alert("ipdateproduct::::");
+                    // need to investigate this method
+                    // updateProduct(productName, parseInt(btnQty) - 1,
+                    // productId);
+                    updateCurrentProduct(productName,
+                            parseInt(btnQty) - 1, productId);
+                }
+            }
+        }
+        return false;
+    };
+
     $.saveOrderClick =function (e) {
         
         e.preventDefault();
@@ -174,8 +205,11 @@ $(function () {
             success: function (result, typ, xhr) {
                 if(xhr != undefined)
                     $.checkAuth(xhr);
+
                 $.loader('close');
+                
                 $("#divOrderDetails").html(result);
+                $.setOrderedProductEvents();
                 setFloor();
                 removeAll();
             },
@@ -213,7 +247,9 @@ $(function () {
                 if(xhr != undefined)
                     $.checkAuth(xhr);
                 $.loader('close');
+                
                 $("#divOrderDetails").html(result);
+                $.setOrderedProductEvents();
                 setFloor();
                 removeAll();
             },
@@ -226,6 +262,11 @@ $(function () {
             },
         });
             
+    };
+    $.closePopup = function (e) {
+        $("#jquery-loader .popOk").unbind('click.closePopup');
+        $.loader('close');
+        $('#txtOrderId').focus();
     };
     $.savePaymentClick = function (e) {
         
@@ -241,15 +282,20 @@ $(function () {
             paidAmt = parseFloat( $("#PaidAmount").val());
         if ($.isNumeric($("#TotalAmount").val()))
             totAmount = parseFloat($("#TotalAmount").val());
+        if ($.isNumeric($("#BalanceAmount").val()))
+            balAmount = parseFloat($("#BalanceAmount").val());
         if (paidAmt < totAmount) {
             alert("Please enter paid amount greater than or equal to total amount");
             $("#PaidAmount").focus();
             return;
         }
+        if($("#PaidAmount").val() == "")
+             $("#PaidAmount").val(0)
         $.loader({
             className: "blue-with-image-2",
             content: ''
         });
+        
         $.ajax({
             
             type: "POST",
@@ -259,12 +305,25 @@ $(function () {
                 if(xhr != undefined)
                     $.checkAuth(xhr);
                 $.loader('close');
+                //var pophtml = "<div style='color:red;'>test content <div> <input type='button' value='OK'/>";
+                
+                var ldrHtml = "<div style='color:red;font-size:20px;padding:10px;'>Total Amount:  " + totAmount + "</div> ";
+                ldrHtml += "<div style='color:red;font-size:20px;padding:10px;'>Paid Amount:  " + paidAmt + "</div> ";
+                ldrHtml += "<div style='color:red;font-size:20px;padding:10px;'>Balance Amount:  " + balAmount + "</div> ";
 
-
+                ldrHtml += "<input class='popOk' type='button' value='OK' onclick=''/>"
+                $.loader({
+                    height: 190,
+                    width:380,
+                    content: ldrHtml
+                });
+                $("#jquery-loader .popOk").bind('click.closePopup', $.closePopup);
+                $("#jquery-loader .popOk").focus();
                 $("#divOrderDetails").html(result);
                 //loadOrders(result);
-                //$.setOrderedProductEvents();
+                $.setOrderedProductEvents();
                 removeAll();
+                
             },
             error: function (xhr, ajaxOptions, thrownError) {
                 $.loader('close');
@@ -276,11 +335,14 @@ $(function () {
         });
     };
 
-    //$.setOrderedProductEvents = function () {
-    //    $('#saveOrder').bind('click.saveOrderClick', $.saveOrderClick);
-    //    $('#saveBill'), bind('click.saveBillClick', $.saveBillClick);
-    //    $('#savePayment').bind('click.savePaymentClick', $.savePaymentClick);
-    //};
+    $.setOrderedProductEvents = function () {
+        //$('#saveOrder').bind('click.saveOrderClick', $.saveOrderClick);
+        //$('#saveBill'), bind('click.saveBillClick', $.saveBillClick);
+        //$('#savePayment').bind('click.savePaymentClick', $.savePaymentClick);
+        $('#product-adder td div.circle').unbind('click.circleClick');
+        $("#product-adder td div.circle").bind('click.circleClick', $.circleClick);
+
+    };
 });
 
 
@@ -296,7 +358,7 @@ $(document).ready(function () {
             $.loadOrder(ordId,"Order");
     });
 
-    //$.setOrderedProductEvents();
+    
     $('#txtOrderId').keypress(function (e) {
         
         var key = 0;
@@ -307,40 +369,13 @@ $(document).ready(function () {
         //evt.preventDefault();
         if (key == 13) {
             var ordId = $('#txtOrderId').val()
+            $('#txtOrderId').val("");
             if (ordId && $.isNumeric(ordId))
                 $.loadOrder(ordId, "Order");
         }
     });
 
-    $("#product-adder td div.circle").click(
-        function () {
-            var currentQty = trim($("#quantity").val());
-            var btnQty = $(this).html();
-            if (btnQty == "C") {
-                $("#quantity").val("");
-                return false;
-            }
-
-            if (isNumber(btnQty)) {
-                if (isNumber(currentQty)) {
-                    $("#quantity").val(currentQty + "" + btnQty);
-                } else if (currentQty == null || currentQty == "") {
-                    $("#quantity").val(btnQty);
-                    var productId = $("#current-item-id").val();
-                    var unitPrice = $("#current-item-unitprice").val();
-                    var productName = $("#current-item-name").val();
-                    if ($("#prev-added-item-id").val() == productId) {
-                        // ////alert("ipdateproduct::::");
-                        // need to investigate this method
-                        // updateProduct(productName, parseInt(btnQty) - 1,
-                        // productId);
-                        updateCurrentProduct(productName,
-                                parseInt(btnQty) - 1, productId);
-                    }
-                }
-            }
-            return false;
-        });
+    $.setOrderedProductEvents();
 
     $('#autoProduct').keyup(function (e) {
         var key = 0;

@@ -1,7 +1,8 @@
 ﻿@model RT.Models.Order
 @{
     Layout = null;
-    string TotalAmount = Model.TotalAmount.HasValue ? Model.TotalAmount.Value.ToString("#,##0.00#") : "";
+    Nullable<decimal> dtot = Model.OrderedProducts.Where(op => op.Status == 1).Sum(op => (op.Quantity * op.Price));
+    string TotalAmount = (dtot.HasValue && dtot > 0) ? dtot.Value.ToString("#,##0.00#") : "";
     bool anyDinining = Model.OrderedProducts.Where(i => i.Status == 1).Any(i => i.Type == 0);
 }
 @using (Html.BeginForm("Pay", "Bill", FormMethod.Post))
@@ -13,17 +14,17 @@
                 
                 <tr>
                     <td>
-                        <div id="invoice-payment-form">
+                        <div id="invoice-payment-form" style="padding-bottom:10px;">
                             @if (Model != null)
                             {
                                         
                                 @Html.HiddenFor(model => Model.Id);
-                                @Html.TextBoxFor(model => Model.Seats, new { @readonly = "true", @placeholder = "Seats" });
+                                @Html.HiddenFor(model => Model.Seats, new { @placeholder = "Seats"});
                                 <br />
-                                @Html.TextBoxFor(mode => TotalAmount, new { @readonly = "true", @placeholder = "Total" });
+                                @Html.TextBoxFor(mode => TotalAmount, new { @readonly = "true", @placeholder = "Total", @class="billpage" });
                                 <input type="text" placeholder="PAY AMOUNT" onclick="setBalanceAmount()" onkeypress="enterPlaceBill(event)" onkeyup="setBalanceAmount()" onkeydown="setBalanceAmountValue()" value="" id="PaidAmount" disabled="disabled" name="PaidAmount" />
                                         
-                                <input type="text" value="" placeholder="BALANCE" id="BalanceAmount" name="BalanceAmount" readonly="true"/>
+                                <input type="text" value="" placeholder="BALANCE" id="BalanceAmount" name="BalanceAmount" readonly="true" disabled="disabled" />
                                         
                             }
                         </div>
@@ -36,6 +37,37 @@
                         </div>
                     </td>
                 </tr>
+                <tr align="left">
+                                    <td colspan="2">
+                                        <input type="hidden" id="current-item-id">
+                                        <input type="hidden" id="current-item-name">
+                                        <input type="hidden" id="prev-added-item-id">
+                                        <input type="hidden" id="current-item-unitprice">
+                                        <input type="hidden" id="current-item-type">
+                                        <table id="product-adder" style="margin-top: 0;">
+                                            <tbody>
+                                                <tr>
+                                                    <td nowrap="nowrap">
+                                                        <div id="circleButton" class="circle">0</div>
+                                                        <div id="circleButton" class="circle">1</div>
+                                                        <div id="circleButton" class="circle">2</div>
+                                                        <div id="circleButton" class="circle">3</div>
+                                                        <div id="circleButton" class="circle">4</div>
+                                                        <div id="circleButton" class="circle">5</div>
+                                                        <div id="circleButton" class="circle">6</div>
+                                                        <div id="circleButton" class="circle">7</div>
+                                                        <div id="circleButton" class="circle">8</div>
+                                                        <div id="circleButton" class="circle">9</div>
+                                                        <div id="circleButton" class="circle">C</div>
+                                                    </td>
+                                                    <td nowrap="nowrap">
+                                                        <input id="quantity" name="quantity" size="2">
+                                                        <input type="button" onclick="addProductsWithQuantitySelection();" name="add-product" id="add-product" value="+"></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
                 <tr>
                     <td>
 

@@ -1,0 +1,56 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="ReportMaster.Master.cs" Inherits="ReportList.ReportMaster_" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title></title>
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body>
+    <form id="form1" runat="server">
+     <table style ="width:900px">
+    <tr>
+    <td valign ="middle" style ="background-color:#5B93CE; color:White;height: 90px;" align ="center">
+    <span style ="font-size:60px">Reports</span>
+    </td>
+    </tr>
+    <tr>
+    <td style="height: 7px">
+    <table style="width: 892px">
+    <tr>
+    <td><asp:Menu ID="Menu1" runat="server" BackColor="#F7F6F3" DynamicHorizontalOffset="2"
+            Font-Names="Verdana" Font-Size="0.8em" ForeColor="#7C6F57" Height="21px" Orientation="Horizontal"
+            StaticSubMenuIndent="10px" Width="80px">
+            <StaticSelectedStyle BackColor="#5D7B9D" />
+            <StaticMenuItemStyle HorizontalPadding="5px" VerticalPadding="2px" />
+            <DynamicHoverStyle BackColor="#7C6F57" ForeColor="White" />
+            <DynamicMenuStyle BackColor="#F7F6F3" />
+            <DynamicSelectedStyle BackColor="#5D7B9D" />
+            <DynamicMenuItemStyle HorizontalPadding="5px" VerticalPadding="2px" />
+            <StaticHoverStyle BackColor="#7C6F57" ForeColor="White" />
+            <Items>
+                <asp:MenuItem Text="Home" Value="Home"></asp:MenuItem>
+            </Items>
+        </asp:Menu></td>
+        <td>
+        <a href ="Login.aspx" id ="login" runat ="server">Login</a>
+        </td>
+    <td><asp:Label ID="lblWelcome" runat="server" Text="Welcome "></asp:Label> <asp:LoginName ID="LoginName2" runat="server" /></td>
+    <td style="width: 37px"> <asp:LoginStatus ID="LoginStatus1" runat="server" /></td>
+    </tr>
+    </table>
+    </td>    
+    </tr>
+    <tr>
+    <td>
+        <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+            <br />
+        </asp:ContentPlaceHolder>
+    </td>    
+    </tr>
+    </table>
+    </form>
+</body>
+</html>

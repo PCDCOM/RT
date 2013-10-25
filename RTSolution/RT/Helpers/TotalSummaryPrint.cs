@@ -57,7 +57,7 @@ namespace PrintingSystem
             int Offset = 5;
             graphics.DrawString("RESTORAN MUTHU", new Font("Courier New", 13, FontStyle.Bold),
                                 new SolidBrush(Color.Black), startX, startY + Offset);
-            graphics.DrawString(TodaysDate.ToShortDateString(),
+            graphics.DrawString(TodaysDate.ToShortDateString() + TodaysDate.ToShortTimeString(),
                font,
                     new SolidBrush(Color.Black), startX + 180, startY + Offset);
             Offset = Offset + 30;

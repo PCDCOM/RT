@@ -49,7 +49,7 @@ namespace RT.Controllers
                         Type = newOrderedProduct.Type,
                         Price = newOrderedProduct.Price,
                         CreatedBy = (Guid)user.ProviderUserKey,
-                        Amount = newOrderedProduct.Amount,
+                        
                         ProductName = newOrderedProduct.ProductName,
                         Status = newOrderedProduct.Status
                     };
@@ -57,21 +57,14 @@ namespace RT.Controllers
                 }
                 else
                 {
-                    //if (matchedOrder.Price != newOrderedProduct.Price)
-                    //{
-                    //    needBill = true;
-                    //    matchedOrder.Price += newOrderedProduct.Price;
-                    //}
                     if (matchedOrder.Quantity != newOrderedProduct.Quantity)
                     {
                         needBill = true;
                         matchedOrder.Quantity += newOrderedProduct.Quantity;
                     }
-                    if (matchedOrder.Amount != newOrderedProduct.Amount)
-                    {
-                        needBill = true;
-                        matchedOrder.Amount += newOrderedProduct.Amount;
-                    }
+
+
+
                 }
             }
 
@@ -122,11 +115,27 @@ namespace RT.Controllers
                     createdBy = Membership.GetUser(order.OrderedProducts.First().CreatedBy).UserName;
                 else
                     createdBy = Membership.GetUser().UserName;
+
+                string forcePrinter = string.Empty;
+
+                if (Request.Cookies["printerfullname"] != null)
+                {
+
+                    //var encryptedBytes = Convert.FromBase64String(Request.Cookies["printerfullname"].Value);
+                    //var decryptedBytes = System.Security.Cryptography.ProtectedData.Unprotect(encryptedBytes, null, System.Security.Cryptography.DataProtectionScope.CurrentUser);
+                    forcePrinter = HttpUtility.UrlDecode(Request.Cookies["printerfullname"].Value);
+
+
+                }
                 PrintingSystem.ReceiptPrint rcpt = new PrintingSystem.ReceiptPrint();
+                if (string.IsNullOrEmpty(forcePrinter) || forcePrinter.Equals("Dynamic"))
+                {
+                    forcePrinter = ConfigurationManager.AppSettings["CommonPrinter"].ToString();
+                }
 
-                rcpt.PrinterName = ConfigurationManager.AppSettings["CommonPrinter"].ToString();
+                rcpt.PrinterName = forcePrinter;
 
-                rcpt.TotalAmount = order.TotalAmount;
+                rcpt.TotalAmount = order.OrderedProducts.Where(op => op.Status == 1).Sum(op => (op.Quantity * op.Price));
                 rcpt.OrderNo = Id;
                 rcpt.CreatedBy = createdBy;
                 rcpt.Seats = order.Seats;
@@ -134,19 +143,19 @@ namespace RT.Controllers
                 rcpt.OrderedProducts = orderedProducts;
                 
                 Task.Run(() => rcpt.print());
-                
+                //.print();
             }
 
             
         }
         private long Save(long Id, ref Order orderToUpdate, StatusType statustype, OrderedProduct[] newItems, string Seats,
-            decimal TotalAmount, OrderedProduct[] oldItems, int Status = 0)
+            OrderedProduct[] oldItems, int Status = 0)
         {
             bool needbill = false;
-            return Save(Id, ref orderToUpdate, StatusType.New, newItems, Seats, TotalAmount, oldItems, ref needbill, Status);
+            return Save(Id, ref orderToUpdate, StatusType.New, newItems, Seats, oldItems, ref needbill, Status);
         }
         private long Save(long Id, ref Order orderToUpdate, StatusType statustype, OrderedProduct[] newItems, string Seats, 
-            decimal TotalAmount,OrderedProduct[] oldItems,ref bool needBill, int Status = 0)
+            OrderedProduct[] oldItems,ref bool needBill, int Status = 0)
         {
             long newId = 0;
             
@@ -162,7 +171,7 @@ namespace RT.Controllers
                 {
                     UpdateOrderedProducts(newItems, orderToUpdate, ref needBill);
                 }
-                orderToUpdate.TotalAmount = TotalAmount;
+                
                 orderToUpdate.Seats = Seats;
                 orderToUpdate.SetStatusType(statustype);
                 if (Id == 0)
@@ -184,15 +193,18 @@ namespace RT.Controllers
             return newId;
         }
         [HttpPost]
-        public ActionResult Pay(long Id, OrderedProduct[] newItems, decimal TotalAmount, decimal PaidAmount,
-            decimal BalanceAmount, string Seats,OrderedProduct[] oldItems, int Status = 0)
+        public ActionResult Pay(long Id, decimal PaidAmount, string Seats, OrderedProduct[] newItems,  
+             OrderedProduct[] oldItems, int Status = 0)
         {
-
+            LogAdapter.Info("Id" + Id.ToString() + "PaidAmount : " + PaidAmount.ToString() + "Seats: " + Seats, "BillConntroller", "Pay");
+            LogAdapter.Info("Cash drawer start initialise: orderId" + Id.ToString(), "BillConntroller", "Pay");
             RTCashDrawer cd = new RTCashDrawer();
+            LogAdapter.Info("Cash drawer stop initialise: orderId" + Id.ToString(), "BillConntroller", "Pay");
+            LogAdapter.Info("Cash drawer start open orderid : " + Id.ToString(), "BillConntroller", "Pay");
             cd.OpenDrawer();
+            LogAdapter.Info("Cash drawer stop open orderid : " + Id.ToString(), "BillConntroller", "Pay");
             cd.Dispose();
-
-            bool needPrint = false;
+            LogAdapter.Info("Cash drawer disposed" + Id.ToString(), "BillConntroller", "Pay");
             Order orderToUpdate = null;
             if (Id == 0)
             {
@@ -203,10 +215,23 @@ namespace RT.Controllers
             {
                 orderToUpdate = db.Orders.Where(i => i.Id == Id).Single();
             }
+            decimal TotalAmount = orderToUpdate.OrderedProducts.Where(op => op.Status == 1).Sum(op => (op.Quantity * op.Price)).Value;
+            decimal BalanceAmount = PaidAmount - TotalAmount;
+
+            PoleDisplay pole = new PoleDisplay();
+
+            //pole.ClearDisplay();
+            pole.DisplayPaid(string.Format("{0,20}", "Paid: " + string.Format(PaidAmount.ToString("0.00"))), string.Format("{0,20}", "Bal: " + string.Format(BalanceAmount.ToString("0.00"))));
+            pole.Dispose();
+
+
+            bool needPrint = false;
+
             if (orderToUpdate.Status != (byte)StatusType.Bill)
                 needPrint = true;
+            
             UpdateBillForOrder(newItems, TotalAmount, PaidAmount, BalanceAmount, ref orderToUpdate);
-            long newId = Save(Id, ref orderToUpdate, StatusType.Paid, newItems, Seats, TotalAmount, oldItems,ref needPrint, Status );
+            long newId = Save(Id, ref orderToUpdate, StatusType.Paid, newItems, Seats, oldItems,ref needPrint, Status );
 
 
             
@@ -215,14 +240,11 @@ namespace RT.Controllers
             }
             PushToClient(newId);
 
-
-            
-
             ModelState.Clear();
             return View("OrderedProducts", new Order());
         }
         [HttpPost]
-        public ActionResult SaveOrder(long Id, FormCollection formcollection, OrderedProduct[] newItems, string Seats, decimal TotalAmount, 
+        public ActionResult SaveOrder(long Id, FormCollection formcollection, OrderedProduct[] newItems, string Seats, 
             OrderedProduct[] oldItems, int Status = 0)
         {
             
@@ -236,7 +258,7 @@ namespace RT.Controllers
             {
                 orderToUpdate = db.Orders.Where(i => i.Id == Id).Single();
             }
-            long newId = Save(Id, ref orderToUpdate, StatusType.New, newItems, Seats, TotalAmount, oldItems, Status);
+            long newId = Save(Id, ref orderToUpdate, StatusType.New, newItems, Seats, oldItems, Status);
             //Todo: Need to pass userid here
             if (Id == 0)
             {
@@ -264,20 +286,39 @@ namespace RT.Controllers
             }
         }
         [HttpGet]
-        public ActionResult OrderedProducts(int id)
+        public ActionResult OrderedProducts(Nullable<int> id)
         {
             Order order = null;
-            if (id == 0)
+            if (id == null || id == 0)
                 order = new Order();
             else
             {
                 order = db.Orders.Where(x => x.Id == id && (x.Status == (byte)StatusType.New || x.Status == (byte)StatusType.Bill)).SingleOrDefault<Order>();
                 if (order == null)
                 {
-                    order = new Order();
-                    throw new Exception("Could not load order");
+                    order = db.Orders.Where(x => x.Id == id).SingleOrDefault<Order>();
+                    if (order != null && order.Status == (byte)StatusType.Paid)
+                    {
+                        throw new Exception("Paid already - Could not order/bill again");
+                    }
+                    else
+                    {
+                        string strId = string.Empty;
+                        strId = id.ToString();
+                        throw new Exception("Invalid order Id" + strId);
+                    }
+                }else{
+                    PoleDisplay pole = new PoleDisplay();
+                    
+                    //pole.ClearDisplay();
+                    Nullable<decimal> Total = order.OrderedProducts.Where(op => op.Status == 1).Sum(op => (op.Quantity * op.Price));
+                    pole.DisplayTotal(string.Format("{0,20}", "Total: " + string.Format(Total.Value.ToString("0.00"))));
+                    pole.Dispose();
                 }
+
             }
+
+
             ModelState.Clear();
             return View("OrderedProducts", order);
         }

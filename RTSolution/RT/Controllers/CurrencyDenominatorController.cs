@@ -30,11 +30,11 @@ namespace Controllers
 
         public ActionResult DenominationCalculation()
         {
-            IEnumerable<Order> newOrders = db.Orders.Where(i => (i.Status == (byte)StatusType.New) || (i.Status == (byte)StatusType.Bill));
-            if (newOrders.Count() > 0)
-            {
-                throw new Exception("Still there are some un Paid Orders");
-            }
+            //IEnumerable<Order> newOrders = db.Orders.Where(i => (i.Status == (byte)StatusType.New) || (i.Status == (byte)StatusType.Bill));
+            //if (newOrders.Count() > 0)
+            //{
+            //    throw new Exception("Still there are some un Paid Orders");
+            //}
             return View(db.CurrencyDenominations.ToList());
         }
 
@@ -69,7 +69,7 @@ namespace Controllers
             SqlParameter sqlparameter = null;
             //var ietsParameterEmpName = new SqlParameter("@EmpName", txtEmployeeName.Text);
             DateTime dt = DateTime.Parse(DateTime.Now.ToShortDateString());
-            ViewData["OrderTotal"] = db.Orders.Where(y => y.Status == 2).AsEnumerable().Sum(x => x.TotalAmount);
+            ViewData["OrderTotal"] = db.Orders.Where(y => y.Status == 2).AsEnumerable().Sum(x => x.OrderedProducts.Where(op => op.Status == 1).Sum(op => (op.Quantity * op.Price)));
             ViewData["DenominatorTotal"] = db.CurrencyDenominationTrans.Where(y => y.date == dt).AsEnumerable().Sum(x => x.denomitotal);
             db.Database.ExecuteSqlCommand("[usp_MoveToOld]", sqlparameter);
             return View("TodaysCashSummary");
@@ -193,10 +193,6 @@ namespace Controllers
             // ViewData["DenominatorTotal"] = db.CurrencyDenominationTrans.Where(y => DateTime.Compare(Convert.ToDateTime(y.date.Value.Date.ToShortDateString()), todaysdate) == 0).Count();
             // ViewData["FristDate"] = db.CurrencyDenominationTrans.First().date.Value.Date.ToShortDateString();
 
-
-            
-
-            
             //ViewData["OrderTotal"] = db.
 
             return View();

@@ -66,7 +66,7 @@ $(function () {
                                 }
                             }
                             );
-                        obj.append(btn);
+                        obj.prepend(btn);
                     } else if (obj.length > 0 ) {
                         //obj.find("option[text='ord" + ord.OrderId + "']").remove();
                         var objOrder = obj.find(".ord" + ord.OrderId).remove();
@@ -79,11 +79,23 @@ $(function () {
             };
             var loadTblBilled = function (ords, obj, status) {
                 $.each(ords, function (index, ord) {
+                    var seats = ord.Seats;
+                    if (ord.Seats.length > 40)
+                        seats = ord.Seats.substr(0, 40);
                     if (status == ord.Status) {
-                        var row = $('<tr></tr>', {'class' : 'ordTr' + ord.OrderId});
-                        var col1 = $("<td>" + ord.CreatedDate + "</td>");
-                        var col2 = $("<td>" + ord.Seats + "</td>");
-                        var col3 = $("<td>" + ord.Total + "</td>");
+                        obj.find(".ord" + ord.OrderId).remove();
+                        obj.find(".ordTr" + ord.OrderId).remove();
+
+                        var row = $('<tr></tr>', {
+                            'class': 'ordTr' + ord.OrderId,
+                            click: function () {
+                                var id = this.id.substr(3, this.id.length);
+                                $.loadOrder(ord.OrderId);
+                            }
+                        });
+                        var col1 = $("<td><a href='#'>" + ord.CreatedDate + "</a></td>");
+                        var col2 = $("<td><a href='#'>" + seats + "</a></td>");
+                        var col3 = $("<td><a href='#'>" + ord.Total + "</a></td>");
                         var btn = $('<a/>',
                             {
                                 html: ord.OrderId,
@@ -98,7 +110,7 @@ $(function () {
                         var col4 = $("<td></td>")
                         col4.append(btn);
                         row.append(col1).append(col2).append(col3).append(col4);
-                        obj.append(row);
+                        obj.prepend(row);
                     } else if (obj.length > 0) {
                         //obj.find("option[text='ord" + ord.OrderId + "']").remove();
                         obj.find(".ord" + ord.OrderId).remove();

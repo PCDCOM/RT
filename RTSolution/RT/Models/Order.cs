@@ -24,7 +24,6 @@ namespace RT.Models
         public long Id { get; set; }
         public Nullable<System.DateTime> CreatedDate { get; set; }
         public Nullable<byte> Status { get; set; }
-        public Nullable<decimal> TotalAmount { get; set; }
         public string Seats { get; set; }
         public Nullable<System.Guid> CreatedBy { get; set; }
     

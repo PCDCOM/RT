@@ -41,7 +41,7 @@ namespace RT.Server.Response
                     CreatedDate = createdDate, 
                     Status = item.GetStatusType(), User = "1",
                     Seats = item.Seats,
-                    Total = item.TotalAmount
+                    Total = item.OrderedProducts.Where(op => op.Status == 1).Sum(op => (op.Quantity * op.Price))
                 });
                 //seats.Add(item.SeatJson(SeatStatus.Locked));
                 //Todo: need to optimise this code

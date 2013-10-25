@@ -10,6 +10,7 @@ using System.Web.Security;
 using Microsoft.Win32;
 using Restaurant.Models;
 using RT;
+using RT.Models;
 
 namespace Restaurant.Controllers
 {
@@ -35,8 +36,16 @@ namespace Restaurant.Controllers
         {
             if (ModelState.IsValid)
             {
-
-
+                // "74DE2BDDAF73BFEBFBFF000206A7AcerBase BoardLXRSE02074146020742000"
+                //"08606E822BE5BFEBFBFF000306A9ASUSTeK COMPUTER INC.Base Board121003409109189"
+                //Alan Marketing system
+                //RestaurantEntities db = new RestaurantEntities();
+                //if (Check.getValue() != "74DE2BDDAF73BFEBFBFF000206A7AcerBase BoardLXRSE02074146020742000" || db.Orders.Count() > 40)
+                //{
+                //    throw new Exception("Custom Error: The software is not genunie");
+                //}
+                //**************************
+                //MusthuRestaurant System
                 //if (Check.getValue() != "08606E822BE5BFEBFBFF000306A9ASUSTeK COMPUTER INC.Base Board121003409109189")
                 //{
                 //    throw new Exception("Custom Error: The software is not genunie");

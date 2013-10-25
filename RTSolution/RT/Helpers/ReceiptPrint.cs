@@ -82,9 +82,14 @@ namespace PrintingSystem
 
             Offset = Offset + 20;
 
-            graphics.DrawString(string.Format("Tel: 07-2214113        Bill No : {0}", OrderNo),
+            graphics.DrawString(string.Format("{0}", OrderNo),
+            new Font("Verdana", 12, FontStyle.Bold),
+            new SolidBrush(Color.Black), startX , startY + Offset);
+            
+            graphics.DrawString(string.Format("Tel: 07-2214113"),
                fontBold,
-                    new SolidBrush(Color.Black), startX, startY + Offset);
+                new SolidBrush(Color.Black), startX + 160, startY + Offset);
+
             Offset = Offset + 20;
             graphics.DrawString(string.Format("Service: {0}             {1}", CreatedBy, Seats),
                 font,
@@ -99,9 +104,9 @@ namespace PrintingSystem
             
             foreach (OrderedProduct item in OrderedProducts)
             {
-
+                decimal? tot = item.Price * item.Quantity;
                 string[] rowTxt = { (++Sno).ToString(), item.ProductName, item.Quantity.ToString(), 
-                                      String.Format("{0:0.00}", item.Price), String.Format("{0:0.00}",item.Amount)};
+                                      String.Format("{0:0.00}", item.Price), String.Format("{0:0.00}",tot)};
                 DrawRow(startX, startY = startY + 20, graphics, lightPen, rowTxt, font);
                 
             }
@@ -114,11 +119,17 @@ namespace PrintingSystem
             stringFormat.LineAlignment = StringAlignment.Center;
 
             graphics.DrawString("Total: RM " + String.Format("{0:0.00}", TotalAmount), new Font("Verdana", 12, FontStyle.Bold), Brushes.Blue, rf, stringFormat);
+            bool isAppendStar;
+            bool.TryParse(ConfigurationManager.AppSettings["AppendStarInBarcode"], out isAppendStar);
+            string strOrderNo = OrderNo.ToString();
+            if (isAppendStar)
+            {
+                strOrderNo = "*" + OrderNo.ToString() + "*";
+            }
 
-            
-                graphics.DrawString("*" + OrderNo.ToString() + "*",
-               new Font("IDAutomationHC39M",8),
-                    new SolidBrush(Color.Black), 120, startY + Offset);
+            graphics.DrawString(strOrderNo,
+                new Font("IDAutomationHC39M", 16),
+                new SolidBrush(Color.Black), 80, startY + Offset);
         }
 
         void DrawRow(int startX, int startY, Graphics graphics, Pen lightPen, string[] txts, Font font)

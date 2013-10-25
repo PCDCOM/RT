@@ -31,7 +31,7 @@ namespace RT.Server.Response
                 CreatedDate = order.CreatedDate.Value.ToString("HH: mm tt"), 
                 Seats = order.Seats,
                 Status = order.GetStatusType(), User = createdBy ,
-                Total = order.TotalAmount
+                Total = order.OrderedProducts.Where(op => op.Status == 1).Sum(op => (op.Quantity * op.Price))
             });
             KeyValuePair<string, List<ReturnObjects.NotifyOrder>> ret = new KeyValuePair<string, List<ReturnObjects.NotifyOrder>>(this.Key +  @"/1", notifyorders);
             this.Message = JsonConvert.SerializeObject(ret);

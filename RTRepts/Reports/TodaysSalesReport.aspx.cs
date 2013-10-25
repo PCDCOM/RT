@@ -13,25 +13,24 @@ using System.Reflection;
 using System.Web.Security;
 namespace RT
 {
-    public partial class ServedByDrillDownReport : System.Web.UI.Page
+    public partial class TodaysSalesReport : System.Web.UI.Page
     {
         protected void Page_Load(object sender, EventArgs e)
         {
 
             if (! HttpContext.Current.User.IsInRole("admin"))
             {
-                Response.Redirect("~/Home/AccessDenied");
+               
+                Response.Redirect("~/Unauthorized.aspx");
             }
 
-            if (! Page.IsPostBack)
+            if (!Page.IsPostBack)
             {
-                
-                txtFromDate.Text = DateTime.Today.ToString("dd/MM/yyyy");
-                txtToDate.Text = DateTime.Today.ToString("dd/MM/yyyy");
+                txtFromDate.Text = DateTime.Today.AddDays(-1).ToString("dd/MM/yyyy");
+                txtToDate.Text = DateTime.Today.AddDays(-1).ToString("dd/MM/yyyy");
+
                 LoadReport();
             }
-           
-            
         }
      
         protected void btnViewReport_Click(object sender, EventArgs e)
@@ -41,8 +40,8 @@ namespace RT
 
         private void LoadReport()
         {
-            rptVwrServedByDrillDown.Visible = true;
-            rptVwrServedByDrillDown.LocalReport.ReportPath = string.Format(Server.MapPath(@"Content\Report\ServedByDrillDownReport.rdl"));
+            rptVwrTodaysSales.Visible = true;
+            rptVwrTodaysSales.LocalReport.ReportPath = string.Format(Server.MapPath(@"rdl\TodaysSalesReport.rdl"));
 
             SqlCommand cmd = new SqlCommand();
 
@@ -63,7 +62,7 @@ namespace RT
 
             cmd.Connection = thisConnection;
 
-            cmd.CommandText = "usp_getServedByReport";
+            cmd.CommandText = "usp_getTodaysSales";
             cmd.CommandType = CommandType.StoredProcedure;
             SqlDataAdapter da = new SqlDataAdapter(cmd);
 
@@ -75,9 +74,9 @@ namespace RT
             /* Associate thisDataSet  (now loaded with the stored 
                procedure result) with the  ReportViewer datasource */
 
-            ReportDataSource datasource = new ReportDataSource("dtsetServedByDrillDown", thisDataSet.Tables[0]);
-            rptVwrServedByDrillDown.LocalReport.DataSources.Clear();
-            rptVwrServedByDrillDown.LocalReport.DataSources.Add(datasource);
+            ReportDataSource datasource = new ReportDataSource("dtsetTodaysSales", thisDataSet.Tables[0]);
+            rptVwrTodaysSales.LocalReport.DataSources.Clear();
+            rptVwrTodaysSales.LocalReport.DataSources.Add(datasource);
 
 
 
@@ -88,9 +87,10 @@ namespace RT
 
 
 
-            using (StreamReader rdlcSR = new StreamReader(Server.MapPath(@"Content\Report\SalesDrillDownReport.rdl")))
+            using (StreamReader rdlcSR = new StreamReader(Server.MapPath(@"rdl\TodaysSalesReport.rdl")))
             {
-                rptVwrServedByDrillDown.LocalReport.LoadReportDefinition(rdlcSR);
+                rptVwrTodaysSales.LocalReport.LoadReportDefinition(rdlcSR);
+
                 List<ReportParameter> lst = new List<ReportParameter>();
 
                 ReportParameter rptParam1 = new ReportParameter("FromDay", dtFromDate.Day.ToString());
@@ -101,6 +101,7 @@ namespace RT
                 ReportParameter rptParam5 = new ReportParameter("ToMonth", dtToDate.Month.ToString());
                 ReportParameter rptParam6 = new ReportParameter("ToYear", dtToDate.Year.ToString());
 
+
                 lst.Add(rptParam1);
                 lst.Add(rptParam2);
                 lst.Add(rptParam3);
@@ -108,8 +109,8 @@ namespace RT
                 lst.Add(rptParam5);
                 lst.Add(rptParam6);
 
-                rptVwrServedByDrillDown.LocalReport.SetParameters(lst);
-                rptVwrServedByDrillDown.LocalReport.Refresh();
+                rptVwrTodaysSales.LocalReport.SetParameters(lst);
+                rptVwrTodaysSales.LocalReport.Refresh();
             }
         }
 

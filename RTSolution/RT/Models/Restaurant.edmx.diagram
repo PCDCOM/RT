@@ -4,23 +4,23 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="f0f0cd51b28046c2b232e7d28f5c9279" Name="Diagram1">
+      <Diagram DiagramId="df110a9c63c34101b8e92afb2fc298bd" Name="Diagram1">
         <EntityTypeShape EntityType="RestaurantModel.Bill" Width="1.5" PointX="8.25" PointY="9.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="RestaurantModel.CurrencyDenomination" Width="1.5" PointX="8.75" PointY="1.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="RestaurantModel.CurrencyDenominationTran" Width="1.5" PointX="10.75" PointY="1.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="RestaurantModel.Kitchen" Width="1.5" PointX="0.75" PointY="5.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="RestaurantModel.Log" Width="1.5" PointX="10.75" PointY="4.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="RestaurantModel.OldBill" Width="1.5" PointX="5.25" PointY="10.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="RestaurantModel.OldCurrencyDenominationTran" Width="1.5" PointX="10.75" PointY="8.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="RestaurantModel.OldOrder" Width="1.5" PointX="3" PointY="11.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="RestaurantModel.CurrencyDenomination" Width="1.5" PointX="8.75" PointY="1.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="RestaurantModel.CurrencyDenominationTran" Width="1.5" PointX="10.75" PointY="1.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="RestaurantModel.Kitchen" Width="1.5" PointX="0.75" PointY="5.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="RestaurantModel.Log" Width="1.5" PointX="10.75" PointY="4.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="RestaurantModel.OldBill" Width="1.5" PointX="5.25" PointY="9.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="RestaurantModel.OldCurrencyDenominationTran" Width="1.5" PointX="10.75" PointY="8.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="RestaurantModel.OldOrder" Width="1.5" PointX="3" PointY="10.75" IsExpanded="true" />
         <EntityTypeShape EntityType="RestaurantModel.OldOrderedProduct" Width="1.5" PointX="5.25" PointY="4.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="RestaurantModel.OldRePrint" Width="1.5" PointX="5.25" PointY="13.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="RestaurantModel.OldRePrint" Width="1.5" PointX="5.25" PointY="12.75" IsExpanded="true" />
         <EntityTypeShape EntityType="RestaurantModel.Order" Width="1.5" PointX="6" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="RestaurantModel.OrderedProduct" Width="1.5" PointX="8.25" PointY="4.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="RestaurantModel.Printer" Width="1.5" PointX="10.75" PointY="11.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="RestaurantModel.Product" Width="1.5" PointX="3" PointY="3" IsExpanded="true" />
-        <EntityTypeShape EntityType="RestaurantModel.ProductGroup" Width="1.5" PointX="0.75" PointY="1.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="RestaurantModel.RePrint" Width="1.5" PointX="8.25" PointY="12.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="RestaurantModel.Printer" Width="1.5" PointX="10.75" PointY="11.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="RestaurantModel.Product" Width="1.5" PointX="3" PointY="2.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="RestaurantModel.ProductGroup" Width="1.5" PointX="0.75" PointY="1.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="RestaurantModel.RePrint" Width="1.5" PointX="8.25" PointY="12.625" IsExpanded="true" />
         <AssociationConnector Association="RestaurantModel.FK_Bill_Order" ManuallyRouted="false" />
         <AssociationConnector Association="RestaurantModel.FK_Product_Kitchen" ManuallyRouted="false" />
         <AssociationConnector Association="RestaurantModel.FK_OldBill_OldOrder" ManuallyRouted="false" />

@@ -196,7 +196,6 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\KitchenController.cs" />
     <Compile Include="Controllers\PrinterController.cs" />
-    <Compile Include="Controllers\ReportController.cs" />
     <Compile Include="CustomHandleErrorAttribute.cs" />
     <Compile Include="Encryption.cs" />
     <Compile Include="FileReadWrite.cs" />
@@ -292,20 +291,6 @@
     </Compile>
     <Compile Include="Models\Validation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SalesDrillDownReport.aspx.cs">
-      <DependentUpon>SalesDrillDownReport.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="SalesDrillDownReport.aspx.designer.cs">
-      <DependentUpon>SalesDrillDownReport.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="ServedByDrillDownReport.aspx.cs">
-      <DependentUpon>ServedByDrillDownReport.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="ServedByDrillDownReport.aspx.designer.cs">
-      <DependentUpon>ServedByDrillDownReport.aspx</DependentUpon>
-    </Compile>
     <Compile Include="Server\Process\ProcessObject.cs" />
     <Compile Include="Server\Process\ProcessInit.cs" />
     <Compile Include="Server\NotificationEngine.cs" />
@@ -383,7 +368,6 @@
     <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
-    <Content Include="SalesDrillDownReport.aspx" />
     <Content Include="Scripts\jquery.signalR-2.0.0-rc1.js" />
     <Content Include="Scripts\jquery.signalR-2.0.0-rc1.min.js" />
     <Content Include="Scripts\orderscripts.js" />
@@ -402,6 +386,7 @@
     </Content>
     <Content Include="Content\Report\SalesDrillDownReport.rdl" />
     <Content Include="Content\Report\ServedByDrillDownReport.rdl" />
+    <Content Include="Content\Report\TodaysSalesReport.rdl" />
     <EntityDeploy Include="Models\Restaurant.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>Restaurant.Designer.cs</LastGenOutput>
@@ -438,7 +423,6 @@
     <Content Include="Scripts\knockout-2.1.0.debug.js" />
     <Content Include="Scripts\knockout-2.1.0.js" />
     <Content Include="Scripts\modernizr-2.5.3.js" />
-    <Content Include="ServedByDrillDownReport.aspx" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -504,7 +488,6 @@
     <Content Include="Views\Printer\Create.cshtml" />
     <Content Include="Views\Printer\Edit.cshtml" />
     <Content Include="Views\Printer\Delete.cshtml" />
-    <Content Include="Views\Report\Index.cshtml" />
     <Content Include="Views\Shared\AccessDenied.cshtml" />
   </ItemGroup>
   <ItemGroup>

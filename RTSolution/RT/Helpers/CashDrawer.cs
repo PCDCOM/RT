@@ -20,10 +20,27 @@ namespace RT.Helpers
 
         }
         public void OpenDrawer() {
-            if (srPort.IsOpen)
+            try
             {
-                srPort.Write("open");
-                srPort.Close();
+                if (srPort.IsOpen)
+                {
+                    LogAdapter.Info("Cash drawer port now opening", "CashDrawer", "OpenDrawer");
+                    srPort.Write("open");
+                    srPort.Close();
+                    LogAdapter.Info("Cash drawer now closed", "CashDrawer", "OpenDrawer");
+                }
+                else
+                {
+                    LogAdapter.Info("Cash drawer port still closed", "CashDrawer", "OpenDrawer");
+                }
+            }
+            catch(Exception ex){
+                LogAdapter.Error(ex.Message, "CashDrawer", "OpenDrawer");
+                if (srPort.IsOpen) {
+                    LogAdapter.Info("Cash drawer port open", "CashDrawer", "OpenDrawer Inside Catch");
+                    srPort.Close();
+                    LogAdapter.Info("Cash drawer port closed", "CashDrawer", "OpenDrawer Inside Catch");
+                }
             }
         }
     }

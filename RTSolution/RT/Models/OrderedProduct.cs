@@ -22,7 +22,6 @@ namespace RT.Models
         public int Type { get; set; }
         public Nullable<System.Guid> CreatedBy { get; set; }
         public string ProductName { get; set; }
-        public Nullable<decimal> Amount { get; set; }
         public Nullable<int> Status { get; set; }
         public string Reason { get; set; }
     

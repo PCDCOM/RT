@@ -8,10 +8,9 @@
 //------------------------------------------------------------------------------
 
 namespace RT {
-
-
-    public partial class ServedByDrillDownReport
-    {
+    
+    
+    public partial class DenominatorTransactionReport {
         
         /// <summary>
         /// form1 control.
@@ -68,12 +67,12 @@ namespace RT {
         protected global::System.Web.UI.WebControls.HyperLink Home;
         
         /// <summary>
-        /// rptVwrSalesDrillDown control.
+        /// rptVwrDenominatorTransaction control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::Microsoft.Reporting.WebForms.ReportViewer rptVwrServedByDrillDown;
+        protected global::Microsoft.Reporting.WebForms.ReportViewer rptVwrDenominatorTransaction;
     }
 }

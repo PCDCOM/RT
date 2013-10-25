@@ -7,7 +7,8 @@
     string deletedSpanClass = (Model.Status == 0) ? "deleted" : "";
     string infoClass = (Model.Status == 0) ? "info deleted " : "info none";
     string ProductDisplayName = (Model.Status == 0) ? Model.ProductName + " ~" + Model.Reason : Model.ProductName  ;
-    string trimedProdName = System.Text.RegularExpressions.Regex.Replace(Model.ProductName, @"\s+", ""); 
+    string trimedProdName = System.Text.RegularExpressions.Regex.Replace(Model.ProductName, @"\s+", "");
+    string Amount = (Model.Quantity * Model.Price).Value.ToString("#,##0.00#");
 }
 
 
@@ -55,7 +56,7 @@
         </td>
         <td id='unitTotal'>
             <span class="@deletedSpanClass">
-            @Html.DisplayFor(modelItem => Model.Amount)
+            @Html.DisplayFor(modelItem => Amount)
             </span>
         </td>
         <td>

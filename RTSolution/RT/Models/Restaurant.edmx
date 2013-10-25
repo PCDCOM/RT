@@ -149,7 +149,6 @@
           <Property Name="Id" Type="bigint" Nullable="false" />
           <Property Name="CreatedDate" Type="datetime" />
           <Property Name="Status" Type="tinyint" />
-          <Property Name="TotalAmount" Type="money" />
           <Property Name="Seats" Type="varchar" MaxLength="200" />
           <Property Name="CreatedBy" Type="uniqueidentifier" />
         </EntityType>
@@ -165,7 +164,6 @@
           <Property Name="Type" Type="int" Nullable="false" />
           <Property Name="CreatedBy" Type="uniqueidentifier" />
           <Property Name="ProductName" Type="varchar" MaxLength="50" />
-          <Property Name="Amount" Type="money" />
           <Property Name="Status" Type="int" />
           <Property Name="Reason" Type="varchar" MaxLength="50" />
         </EntityType>
@@ -185,7 +183,6 @@
           <Property Name="Id" Type="bigint" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="CreatedDate" Type="datetime" />
           <Property Name="Status" Type="tinyint" />
-          <Property Name="TotalAmount" Type="money" />
           <Property Name="Seats" Type="varchar" MaxLength="200" />
           <Property Name="CreatedBy" Type="uniqueidentifier" />
         </EntityType>
@@ -201,7 +198,6 @@
           <Property Name="Type" Type="int" Nullable="false" />
           <Property Name="CreatedBy" Type="uniqueidentifier" />
           <Property Name="ProductName" Type="varchar" MaxLength="50" />
-          <Property Name="Amount" Type="money" />
           <Property Name="Status" Type="int" />
           <Property Name="Reason" Type="varchar" MaxLength="50" />
         </EntityType>
@@ -549,7 +545,6 @@
           <Property Name="Id" Type="Int64" Nullable="false" />
           <Property Name="CreatedDate" Type="DateTime" Precision="3" />
           <Property Name="Status" Type="Byte" />
-          <Property Name="TotalAmount" Type="Decimal" Precision="19" Scale="4" />
           <Property Name="Seats" Type="String" MaxLength="200" Unicode="false" FixedLength="false" />
           <Property Name="CreatedBy" Type="Guid" />
           <NavigationProperty Name="OldBills" Relationship="RestaurantModel.FK_OldBill_OldOrder" FromRole="OldOrder" ToRole="OldBill" />
@@ -568,7 +563,6 @@
           <Property Name="Type" Type="Int32" Nullable="false" />
           <Property Name="CreatedBy" Type="Guid" />
           <Property Name="ProductName" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
-          <Property Name="Amount" Type="Decimal" Precision="19" Scale="4" />
           <Property Name="Status" Type="Int32" />
           <Property Name="Reason" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
           <NavigationProperty Name="OldOrder" Relationship="RestaurantModel.FK_OldOrderedProducts_OldOrder" FromRole="OldOrderedProduct" ToRole="OldOrder" />
@@ -591,7 +585,6 @@
           <Property Name="Id" Type="Int64" Nullable="false" p1:StoreGeneratedPattern="Identity" />
           <Property Name="CreatedDate" Type="DateTime" Precision="3" />
           <Property Name="Status" Type="Byte" />
-          <Property Name="TotalAmount" Type="Decimal" Precision="19" Scale="4" />
           <Property Name="Seats" Type="String" MaxLength="200" Unicode="false" FixedLength="false" />
           <Property Name="CreatedBy" Type="Guid" />
           <NavigationProperty Name="Bills" Relationship="RestaurantModel.FK_Bill_Order" FromRole="Order" ToRole="Bill" />
@@ -610,7 +603,6 @@
           <Property Name="Type" Type="Int32" Nullable="false" />
           <Property Name="CreatedBy" Type="Guid" />
           <Property Name="ProductName" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
-          <Property Name="Amount" Type="Decimal" Precision="19" Scale="4" />
           <Property Name="Status" Type="Int32" />
           <Property Name="Reason" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
           <NavigationProperty Name="Order" Relationship="RestaurantModel.FK_OrderedProducts_Order" FromRole="OrderedProduct" ToRole="Order" />
@@ -908,7 +900,6 @@
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
                 <ScalarProperty Name="Seats" ColumnName="Seats" />
                 <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
               </MappingFragment>
@@ -925,7 +916,6 @@
                 <ScalarProperty Name="Type" ColumnName="Type" />
                 <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
                 <ScalarProperty Name="ProductName" ColumnName="ProductName" />
-                <ScalarProperty Name="Amount" ColumnName="Amount" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="Reason" ColumnName="Reason" />
               </MappingFragment>
@@ -947,7 +937,6 @@
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
                 <ScalarProperty Name="Seats" ColumnName="Seats" />
                 <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
               </MappingFragment>
@@ -964,7 +953,6 @@
                 <ScalarProperty Name="Type" ColumnName="Type" />
                 <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
                 <ScalarProperty Name="ProductName" ColumnName="ProductName" />
-                <ScalarProperty Name="Amount" ColumnName="Amount" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="Reason" ColumnName="Reason" />
               </MappingFragment>

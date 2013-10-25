@@ -13,22 +13,24 @@ using System.Reflection;
 using System.Web.Security;
 namespace RT
 {
-    public partial class SalesDrillDownReport : System.Web.UI.Page
+    public partial class DenominatorTransactionReport : System.Web.UI.Page
     {
         protected void Page_Load(object sender, EventArgs e)
         {
 
             if (! HttpContext.Current.User.IsInRole("admin"))
             {
-                Response.Redirect("~/Home/AccessDenied");
+                Response.Redirect("~/Unauthorized.aspx");
             }
 
-            if (!Page.IsPostBack)
+            if (! Page.IsPostBack)
             {
                 txtFromDate.Text = DateTime.Today.ToString("dd/MM/yyyy");
                 txtToDate.Text = DateTime.Today.ToString("dd/MM/yyyy");
                 LoadReport();
             }
+           
+            
         }
      
         protected void btnViewReport_Click(object sender, EventArgs e)
@@ -38,8 +40,8 @@ namespace RT
 
         private void LoadReport()
         {
-            rptVwrSalesDrillDown.Visible = true;
-            rptVwrSalesDrillDown.LocalReport.ReportPath = string.Format(Server.MapPath(@"Content\Report\SalesDrillDownReport.rdl"));
+            rptVwrDenominatorTransaction.Visible = true;
+            rptVwrDenominatorTransaction.LocalReport.ReportPath = string.Format(Server.MapPath(@"rdl\DenominatorTransactionReport.rdl"));
 
             SqlCommand cmd = new SqlCommand();
 
@@ -60,7 +62,7 @@ namespace RT
 
             cmd.Connection = thisConnection;
 
-            cmd.CommandText = "usp_getLocationReport";
+            cmd.CommandText = "usp_getDenominationReport";
             cmd.CommandType = CommandType.StoredProcedure;
             SqlDataAdapter da = new SqlDataAdapter(cmd);
 
@@ -72,9 +74,9 @@ namespace RT
             /* Associate thisDataSet  (now loaded with the stored 
                procedure result) with the  ReportViewer datasource */
 
-            ReportDataSource datasource = new ReportDataSource("dtsetSalesDrillDown", thisDataSet.Tables[0]);
-            rptVwrSalesDrillDown.LocalReport.DataSources.Clear();
-            rptVwrSalesDrillDown.LocalReport.DataSources.Add(datasource);
+            ReportDataSource datasource = new ReportDataSource("dtSetCurrencyTransactions", thisDataSet.Tables[0]);
+            rptVwrDenominatorTransaction.LocalReport.DataSources.Clear();
+            rptVwrDenominatorTransaction.LocalReport.DataSources.Add(datasource);
 
 
 
@@ -85,10 +87,9 @@ namespace RT
 
 
 
-            using (StreamReader rdlcSR = new StreamReader(Server.MapPath(@"Content\Report\SalesDrillDownReport.rdl")))
+            using (StreamReader rdlcSR = new StreamReader(Server.MapPath(@"rdl\DenominatorTransactionReport.rdl")))
             {
-                rptVwrSalesDrillDown.LocalReport.LoadReportDefinition(rdlcSR);
-
+                rptVwrDenominatorTransaction.LocalReport.LoadReportDefinition(rdlcSR);
                 List<ReportParameter> lst = new List<ReportParameter>();
 
                 ReportParameter rptParam1 = new ReportParameter("FromDay", dtFromDate.Day.ToString());
@@ -99,7 +100,6 @@ namespace RT
                 ReportParameter rptParam5 = new ReportParameter("ToMonth", dtToDate.Month.ToString());
                 ReportParameter rptParam6 = new ReportParameter("ToYear", dtToDate.Year.ToString());
 
-
                 lst.Add(rptParam1);
                 lst.Add(rptParam2);
                 lst.Add(rptParam3);
@@ -107,8 +107,8 @@ namespace RT
                 lst.Add(rptParam5);
                 lst.Add(rptParam6);
 
-                rptVwrSalesDrillDown.LocalReport.SetParameters(lst);
-                rptVwrSalesDrillDown.LocalReport.Refresh();
+                rptVwrDenominatorTransaction.LocalReport.SetParameters(lst);
+                rptVwrDenominatorTransaction.LocalReport.Refresh();
             }
         }
 
