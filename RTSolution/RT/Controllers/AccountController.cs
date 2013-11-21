@@ -85,6 +85,87 @@ namespace Restaurant.Controllers
         }
 
         //
+        // GET: /Account/Relogin
+        [HttpGet]
+        public ActionResult Relogin(string id)
+        {
+            //ViewData["waiters"] = Roles.GetUsersInRole("Waiter");
+            if (id != "")
+            {
+                LogOnModel logonmodel = new LogOnModel();
+                logonmodel.UserName = id;
+                return View(logonmodel);
+            }
+            else
+                return View();
+
+        }
+
+
+        //
+        // POST: /Account/Relogin
+        [HttpPost]
+        public ActionResult Relogin(LogOnModel model, string returnUrl)
+        {
+            //ViewData["waiters"] = Roles.GetUsersInRole("Waiter");
+            if (ModelState.IsValid)
+            {
+
+                //string securityData = ConfigurationManager.AppSettings["SecurityKey"].ToString();
+                //string securityFile = Environment.GetFolderPath(Environment.SpecialFolder.System) + "\\RTSetp.dbf";
+                //FileInfo f = new FileInfo(securityFile);
+                //if (f.Exists)
+                //    LogAdapter.Info("file exisits", "Account", "LogOn");
+                //else
+                //    LogAdapter.Info("File does no exists in " + securityFile, "Account", "LogOn");
+
+                //LogAdapter.Info("Key name" + FileReadWrite.ReadFile(securityFile), "Account", "LogOn");
+
+                //if (!f.Exists || securityData != FileReadWrite.ReadFile(securityFile))
+                //{
+                //    throw new Exception("The software is not genunie");
+                //}
+
+                if (returnUrl != null && returnUrl.IndexOf("/user/login", StringComparison.OrdinalIgnoreCase) >= 0)
+                    returnUrl = null;
+
+                if (Membership.ValidateUser(model.UserName, model.Password))
+                {
+                    FormsAuthentication.SetAuthCookie(model.UserName, model.RememberMe);
+
+                    if (!String.IsNullOrEmpty(returnUrl))
+                    {
+                        //return this.Redirect(returnUrl);
+                        Response.Redirect(Server.MapPath("/Bill"));
+                    }
+                    else
+                    {
+                        string[] roles = Roles.GetRolesForUser(model.UserName);
+                        return this.DialogResult("");
+                        //if (roles.Contains("Waiter"))
+                        //{
+                        //    return this.RedirectToAction("Index", "Order");
+                        //}
+                        //else if (roles.Contains("Cashier"))
+                        //{
+                        //    return this.RedirectToAction("Index", "Bill");
+                        //}
+                        //else
+                        //    return this.RedirectToAction("Index", "Home");
+
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError("", "UserName/Password is incorrect");
+                }
+            }
+
+            // If we got this far, something failed, redisplay form
+            return PartialView(model);
+        }
+
+        //
         // GET: /Account/LogOff
 
         [OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")]

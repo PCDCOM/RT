@@ -25,8 +25,8 @@ namespace RT
                  "~/Scripts/jquery.channel.js",
                 "~/Scripts/orderscripts.js",
                 "~/Scripts/common.js",
-                "~/Scripts/notification.js"
-
+                "~/Scripts/notification.js",
+                "~/Scripts/modaldialog.js"
             ));
 
             bundles.Add(new ScriptBundle("~/bundles/denomination").Include(
@@ -45,7 +45,8 @@ namespace RT
                 ));
             bundles.Add(new StyleBundle("~/Content/Ordercss").Include(
                 "~/Content/jquery.loader.css",
-                
+                "~/Content/themes/base/jquery.ui.all.css",
+                "~/Content/themes/base/jquery.ui.dialog.css",
                 "~/Content/buttons.css",
                 "~/Content/navigation.css",
                 "~/Content/circle.css",

@@ -202,15 +202,18 @@
     <Compile Include="Helpers\CashDrawer.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Helpers\MiniOrderPrint.cs" />
     <Compile Include="Helpers\OrderPrint.cs" />
     <Compile Include="Helpers\PoleDisplay.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Helpers\POS.cs" />
+    <Compile Include="Helpers\MiniReceiptPrint.cs" />
     <Compile Include="Helpers\ReceiptPrint.cs" />
     <Compile Include="Helpers\TotalSummaryPrint.cs" />
     <Compile Include="LogActionFilter.cs" />
     <Compile Include="LogAdapter.cs" />
+    <Compile Include="ModalDialogExtensions.cs" />
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="App_Start\AuthConfig.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
@@ -370,6 +373,7 @@
     <Content Include="Global.asax" />
     <Content Include="Scripts\jquery.signalR-2.0.0-rc1.js" />
     <Content Include="Scripts\jquery.signalR-2.0.0-rc1.min.js" />
+    <Content Include="Scripts\modaldialog.js" />
     <Content Include="Scripts\orderscripts.js" />
     <Content Include="Content\navigation.css" />
     <Content Include="Scripts\common.js" />
@@ -489,6 +493,7 @@
     <Content Include="Views\Printer\Edit.cshtml" />
     <Content Include="Views\Printer\Delete.cshtml" />
     <Content Include="Views\Shared\AccessDenied.cshtml" />
+    <Content Include="Views\Account\Relogin.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

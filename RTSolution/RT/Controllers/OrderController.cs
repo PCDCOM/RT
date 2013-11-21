@@ -25,6 +25,8 @@ namespace RT.Controllers
         
         public ActionResult Index(long id = 0)
         {
+
+            ViewData["waiters"] = Roles.GetUsersInRole("Waiter");
             //Order order = new Order();
             return View();
         }
@@ -37,7 +39,8 @@ namespace RT.Controllers
             MembershipUser user = Membership.GetUser(HttpContext.User.Identity.Name);
             foreach (OrderedProduct newOrderedProduct in newOrderedProducts)
             {
-                OrderedProduct matchedOrder = orderToUpdate.OrderedProducts.SingleOrDefault(i => i.ProductId == newOrderedProduct.ProductId && i.Status == newOrderedProduct.Status && i.Type == newOrderedProduct.Type);
+                OrderedProduct matchedOrder = orderToUpdate.OrderedProducts.
+                    SingleOrDefault(i => i.ProductId == newOrderedProduct.ProductId && i.Status == newOrderedProduct.Status && i.Type == newOrderedProduct.Type);
                 if (matchedOrder == null)
                 {
                     OrderedProduct orderedProduct = new OrderedProduct()
@@ -95,6 +98,15 @@ namespace RT.Controllers
         }
         private long Save(long Id, ref Order orderToUpdate, StatusType statustype, FormCollection formcollection, OrderedProduct[] newItems, string Seats, OrderedProduct[] oldItems, int Status = 0)
         {
+
+            //Alan for marketing System 
+            //RestaurantEntities db = new RestaurantEntities();
+            //if (db.OrderedProducts.Count() > 200)
+            //{
+            //    return db.Orders.Max(o => o.Id);
+            //}
+
+
             long newId = 0;
             MembershipUser user = Membership.GetUser(HttpContext.User.Identity.Name);
             if (Id == 0)
@@ -196,24 +208,37 @@ namespace RT.Controllers
 
                 if (orderedProducts != null && orderedProducts.Count > 0)
                 {
-                    PrintingSystem.ReceiptPrint rcpt = new PrintingSystem.ReceiptPrint();
-                    rcpt.Seats = order.Seats;
-                    char firstSeatNo = rcpt.Seats.FirstOrDefault();
-                    bool anyDinining = order.OrderedProducts.Where(i => i.Status == 1).Any(i => i.Type == 0);
-                    //TOD: Need to change this hardcode to dynamic
-                    rcpt.PrinterName = getPrinterName(anyDinining, firstSeatNo);
-                    rcpt.TotalAmount = order.OrderedProducts.Where(op => op.Status == 1).Sum(op => (op.Quantity * op.Price));
-                    rcpt.OrderNo = Id;
-                    rcpt.CreatedBy = createdBy;
-
-                    rcpt.CreateDate = order.CreatedDate.Value.ToString("dd-MM-yyyy HH:mm");
-                    rcpt.OrderedProducts = orderedProducts;
-
-
-
-
-                    Task.Run(() => rcpt.print());
+                    string seats = order.Seats;
                     
+                    char firstSeatNo = seats.FirstOrDefault();
+                    bool anyDinining = order.OrderedProducts.Where(i => i.Status == 1).Any(i => i.Type == 0);
+                    string printername = getPrinterName(anyDinining, firstSeatNo); 
+                    //TOD: Need to change this hardcode to dynamic
+                    if (printername.StartsWith("Datecs"))
+                    {
+                        PrintingSystem.MiniReceiptPrint rcpt = new PrintingSystem.MiniReceiptPrint();
+                        rcpt.Seats = seats;
+                        rcpt.PrinterName = printername;
+                        rcpt.TotalAmount = order.OrderedProducts.Where(op => op.Status == 1).Sum(op => (op.Quantity * op.Price));
+                        rcpt.OrderNo = Id;
+                        rcpt.CreatedBy = createdBy;
+
+                        rcpt.CreateDate = order.CreatedDate.Value.ToString("dd-MM-yyyy HH:mm");
+                        rcpt.OrderedProducts = orderedProducts;
+                        Task.Run(() => rcpt.print());
+                    }
+                    else {
+                        PrintingSystem.ReceiptPrint rcpt = new PrintingSystem.ReceiptPrint();
+                        rcpt.Seats = seats;
+                        rcpt.PrinterName = printername;
+                        rcpt.TotalAmount = order.OrderedProducts.Where(op => op.Status == 1).Sum(op => (op.Quantity * op.Price));
+                        rcpt.OrderNo = Id;
+                        rcpt.CreatedBy = createdBy;
+
+                        rcpt.CreateDate = order.CreatedDate.Value.ToString("dd-MM-yyyy HH:mm");
+                        rcpt.OrderedProducts = orderedProducts;
+                        Task.Run(() => rcpt.print());
+                    }
                 }
             
         }
@@ -221,12 +246,20 @@ namespace RT.Controllers
 
             if (newItems != null || oldItems != null)
             {
-                PrintingSystem.OrderPrint rcpt = new PrintingSystem.OrderPrint() { NewItems=newItems,OldItems=oldItems,Seats=Seats,OrderId=OrderId};
-                
                 char firstSeatNo = Seats.FirstOrDefault();
                 string PrinterName = getPrinterName(true, firstSeatNo);
-                rcpt.PrinterName = PrinterName;
-                Task.Run(() => rcpt.print());
+
+                if (PrinterName.StartsWith("Datecs"))
+                {
+                    PrintingSystem.MiniOrderPrint rcpt = new PrintingSystem.MiniOrderPrint() { NewItems = newItems, OldItems = oldItems, Seats = Seats, OrderId = OrderId };
+                    rcpt.PrinterName = PrinterName;
+                    Task.Run(() => rcpt.print());
+                }
+                else {
+                    PrintingSystem.OrderPrint rcpt = new PrintingSystem.OrderPrint() { NewItems = newItems, OldItems = oldItems, Seats = Seats, OrderId = OrderId };
+                    rcpt.PrinterName = PrinterName;
+                    Task.Run(() => rcpt.print());
+                }
             }
 
         }
@@ -281,13 +314,13 @@ namespace RT.Controllers
                     order = db.Orders.Where(x => x.Id == id).SingleOrDefault<Order>();
                     if (order != null && order.Status == (byte)StatusType.Paid)
                     {
-                        throw new Exception("Paid already - Could not order/bill again");
+                        throw new Exception("Custom : Paid already - Could not order/bill again");
                     }
                     else
                     {
                         string strId = string.Empty;
                         strId = id.ToString();
-                        throw new Exception("Invalid order Id" + strId);
+                        throw new Exception("Custom : Invalid order Id" + strId);
                     }
                 }
 

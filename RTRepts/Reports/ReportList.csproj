@@ -28,6 +28,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DeployIisAppPath>Default Web Site/ReportList</DeployIisAppPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -135,6 +136,7 @@
     <Content Include="rdl\ServedByDrillDownReport.rdl" />
     <Content Include="rdl\TodaysSalesReport.rdl" />
     <Content Include="ReportMaster.Master" />
+    <None Include="Properties\PublishProfiles\RTReports.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -1,4 +1,9 @@
-﻿<!DOCTYPE html>
+﻿@{
+
+    string RestaurantName = System.Configuration.ConfigurationManager.AppSettings["RestaurantName"];
+   
+}
+<!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="utf-8" />
@@ -6,28 +11,47 @@
 <meta http-equiv="Expires" content="-1">
 <meta http-equiv="CACHE-CONTROL" content="NO-CACHE">
 
-        <title>Restoran Muthu</title>
+        <title>@RestaurantName</title>
         <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
         <meta name="viewport" content="width=device-width" />
         @Styles.Render("~/Content/css")
+        
+        @Scripts.Render("~/bundles/jquery")
+        @Scripts.Render("~/bundles/jqueryui")
         @Scripts.Render("~/bundles/modernizr")
+        <script type="text/javascript">
+
+            $(document).ready(function () {
+                
+                $("#ShowReport").click(function () {
+                    
+                    var reportUrl;
+
+                    reportUrl = "http://localhost/RTRepts/Logon.aspx";
+
+                    window.open(reportUrl, "popupWindow", 'height=800, width=800, left=300, top=100, resizable=yes, scrollbars=yes, toolbar=yes, menubar=no, location=no, directories=no, status=yes');
 
 
+                });
+            });
+    </script>
     </head>
     <body>
 <div class="page">
         <header>
             <div id="title">
-                <h1>Restoran Muthu</h1>
+                <h1>@RestaurantName</h1>
             </div>
             <div id="logindisplay">
                 @Html.Partial("_LogOnPartial")
+
             </div>
             <nav>
                 <ul id="menu">
                     @if (Context.User.IsInRole("Admin")){
                         <li>@Html.ActionLink("Register","Register","Account")</li>
-                       <li><a href="http://localhost/RTRepts/Logon.aspx" >Reports</a></li>
+                       
+                        <li><a id="ShowReport" href="#" >Reports</a></li>
                     }
                     @if (Context.User.IsInRole("Admin") || Context.User.IsInRole("Cashier"))
                     {
@@ -43,6 +67,9 @@
 
                     @if (Context.User.IsInRole("Admin") || Context.User.IsInRole("Cashier") || Context.User.IsInRole("Waiter"))
                     {
+                        
+                            <li>@Html.ActionLink("Change Password", "ChangePassword", "Account")</li>
+                        
                         <li>@Html.ActionLink("Printers", "Index", "Printer")</li>
                         <li>@Html.ActionLink("Order", "Index", "Order")</li>
                         <li>@Html.ActionLink("Home", "Index", "Home")</li>

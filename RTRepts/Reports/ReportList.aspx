@@ -16,7 +16,7 @@
                 <asp:HyperLink ID="ServedByDrillDown" runat="server" NavigateUrl="~/ServedByDrillDownReport.aspx">Server By DrillDown Report</asp:HyperLink>
             </li>
              <li>
-                <asp:HyperLink ID="DenominatorTransaction" runat="server" NavigateUrl="~/DenominatorTransactionReport.aspx">Denominator Transaction Report</asp:HyperLink>
+                <%--<asp:HyperLink ID="DenominatorTransaction" runat="server" NavigateUrl="~/DenominatorTransactionReport.aspx">Denominator Transaction Report</asp:HyperLink>--%>
             </li>
         </ul>
         

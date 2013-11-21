@@ -127,12 +127,13 @@ namespace RT.Controllers
 
 
                 }
-                PrintingSystem.ReceiptPrint rcpt = new PrintingSystem.ReceiptPrint();
+                
                 if (string.IsNullOrEmpty(forcePrinter) || forcePrinter.Equals("Dynamic"))
                 {
                     forcePrinter = ConfigurationManager.AppSettings["CommonPrinter"].ToString();
                 }
 
+                PrintingSystem.ReceiptPrint rcpt = new PrintingSystem.ReceiptPrint();
                 rcpt.PrinterName = forcePrinter;
 
                 rcpt.TotalAmount = order.OrderedProducts.Where(op => op.Status == 1).Sum(op => (op.Quantity * op.Price));
@@ -299,13 +300,13 @@ namespace RT.Controllers
                     order = db.Orders.Where(x => x.Id == id).SingleOrDefault<Order>();
                     if (order != null && order.Status == (byte)StatusType.Paid)
                     {
-                        throw new Exception("Paid already - Could not order/bill again");
+                        throw new Exception("Custom : Paid already - Could not order/bill again");
                     }
                     else
                     {
                         string strId = string.Empty;
                         strId = id.ToString();
-                        throw new Exception("Invalid order Id" + strId);
+                        throw new Exception("Custom : Invalid order Id" + strId);
                     }
                 }else{
                     PoleDisplay pole = new PoleDisplay();

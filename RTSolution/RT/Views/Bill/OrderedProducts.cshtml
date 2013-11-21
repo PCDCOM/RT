@@ -22,7 +22,7 @@
                                 @Html.HiddenFor(model => Model.Seats, new { @placeholder = "Seats"});
                                 <br />
                                 @Html.TextBoxFor(mode => TotalAmount, new { @readonly = "true", @placeholder = "Total", @class="billpage" });
-                                <input type="text" placeholder="PAY AMOUNT" onclick="setBalanceAmount()" onkeypress="enterPlaceBill(event)" onkeyup="setBalanceAmount()" onkeydown="setBalanceAmountValue()" value="" id="PaidAmount" disabled="disabled" name="PaidAmount" />
+                                <input type="text" placeholder="PAY AMOUNT" id="PaidAmount" name="PaidAmount" />
                                         
                                 <input type="text" value="" placeholder="BALANCE" id="BalanceAmount" name="BalanceAmount" readonly="true" disabled="disabled" />
                                         

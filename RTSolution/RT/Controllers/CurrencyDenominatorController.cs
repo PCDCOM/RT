@@ -85,10 +85,17 @@ namespace Controllers
             tspt.DenominatorTotl = denominatortotal;
             tspt.TodaysDate = DateTime.Now;
             tspt.Difference = ordertotal - denominatortotal;
-            LogAdapter.Info("Before Print", "CurrencyDenominator", "TotalSummaryPrint");
+            LogAdapter.Info("Before Summary Print", "CurrencyDenominator", "TotalSummaryPrint");
             Task.Run(() => tspt.print());
-            LogAdapter.Info("After print", "CurrencyDenominator", "TotalSummaryPrint");
-         
+            LogAdapter.Info("After Summary print", "CurrencyDenominator", "TotalSummaryPrint");
+
+            LogAdapter.Info("Start Basic Report Print", "CurrencyDenominator", "TotalSummaryPrint");
+            DateTime dtFilter = DateTime.Now;
+            if (dtFilter.Hour < 4)
+                dtFilter = DateTime.Now.AddDays(-1);
+            //Todo: need to generate reports
+
+            LogAdapter.Info("End Basic Report Print", "CurrencyDenominator", "TotalSummaryPrint");
         }
 
         // GET: /CurrencyDenominator/Details/5

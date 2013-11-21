@@ -7,6 +7,9 @@
 @{
     int inxcolor = 1;
     int inxUl = 0;
+
+    int nextmultipleof4 = (Model.Count() + 3) & ~0x3;
+    int countinarow = nextmultipleof4 / 4;
   }
 @foreach (var item in Model.Where(i => i.MasterProductID == null && i.Status == true).OrderBy(p => p.Sno))
 {
@@ -16,7 +19,7 @@
             @:<ul class="cButton1">
         }
 
-    if (inxUl % 12 == 0 && inxUl != 0)
+    if (inxUl % countinarow == 0 && inxUl != 0)
     {
             @:</ul>
             @:<ul class="cButton1">
@@ -31,7 +34,7 @@
         int val = inxcolor % 5;
 
 
-    if (inxUl % 12 == 0 && inxUl != 0)
+        if (inxUl % countinarow == 0 && inxUl != 0)
     {
             @:</ul>
             @:<ul class="cButton1">

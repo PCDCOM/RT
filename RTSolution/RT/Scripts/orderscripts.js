@@ -97,11 +97,14 @@ $(function () {
         }
     };
     $.loadOrder = function (ordId, from) {
+
+        
+
         $.loader({
             className: "blue-with-image-2",
             content: ''
         });
-        $.arrangeOrders();
+        //$.arrangeOrders();
         $.ajax({
             //"/" + from +"/OrderedProducts/"
             
@@ -113,9 +116,11 @@ $(function () {
                 alert(msg);
                 
             },
-            success: function (result,typ,xhr) {
-                $.loader('close');
+            success: function (result, typ, xhr) {
                 
+
+                $.loader('close');
+                $('#PaidAmount').focus();
                 if(xhr != undefined)
                     $.checkAuth(xhr);
 
@@ -1083,6 +1088,7 @@ function addRowRecord(value, id) {
         $('.csChkAll').removeAttr('checked');
         $('#txtOrderId').val('');
         //$('#parceloptionID').removeAttr('checked');
+
         disableOrder(true);
         disableBill(true);
     }

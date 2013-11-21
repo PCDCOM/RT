@@ -1,0 +1,80 @@
+﻿@model Restaurant.Models.LogOnModel
+@using RT;
+@{
+    ViewBag.Title = "Relogin";
+    Layout = null;
+}
+  
+
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $("#tdpwdbutton .circle").each(function () {
+            $(this).unbind('click.pinCircle');
+
+            $(this).bind('click.pinCircle', function () {
+                var pwdBox = $(".CSSEditTableGenerator #Password");
+                if ($(this).html() == "C") {
+                    pwdBox.val("");
+                } else {
+                    pwdBox.val(pwdBox.val() + $(this).html())
+                }
+            });
+            
+        });
+    });
+    </script>
+@using (Ajax.BeginModalDialogForm())
+{   
+@Html.ValidationSummary()
+  
+    <div> 
+            <div class="CSSEditTableGenerator"> 
+            <table  style="width:100%">
+            <tr>
+                <td>
+                    @Html.LabelFor(m => m.UserName)
+                </td>
+                <td>
+                   @Html.TextBoxFor(m => m.UserName)
+
+
+                </td>
+            </tr>
+            <tr>
+                <td>
+                   @Html.LabelFor(m => m.Password)
+                </td>
+                <td >
+                  <input type="password" id="Password" readonly="true" name="Password"/>
+                </td>
+            </tr>
+              <tr nowrap="nowrap" id="tdpwdbutton">
+                  
+                  <td colspan="2">
+                        <div id="circleButton" class="circle">0</div>
+                        <div id="circleButton" class="circle">1</div>
+                        <div id="circleButton" class="circle">2</div>
+                        <div id="circleButton" class="circle">3</div>
+                        <div id="circleButton" class="circle">4</div>
+                        <div id="circleButton" class="circle">5</div>
+                        <div id="circleButton" class="circle">6</div>
+                        <div id="circleButton" class="circle">7</div>
+                        <div id="circleButton" class="circle">8</div>
+                        <div id="circleButton" class="circle">9</div>
+                        <div id="circleButton" class="circle">C</div>
+                  </td>
+              </tr>
+            </table>
+            </div>
+
+
+
+
+            <p>
+                <input type="submit" value="Log On" />
+            </p>
+        
+    </div>
+}

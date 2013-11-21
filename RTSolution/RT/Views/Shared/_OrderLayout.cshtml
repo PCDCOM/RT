@@ -1,3 +1,9 @@
+@using RT;
+@{
+
+    string RestaurantName = System.Configuration.ConfigurationManager.AppSettings["RestaurantName"];
+   
+}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,15 +13,24 @@
 <meta http-equiv="Expires" content="-1">
 <meta http-equiv="CACHE-CONTROL" content="NO-CACHE">
 
-    @Styles.Render("~/Content/css")
 
-    @Styles.Render("~/Content/Ordercss")
 
+
+   @Scripts.Render("~/bundles/modernizr")
+   @Styles.Render("~/Content/css")
+
+   @Styles.Render("~/Content/Ordercss")
+
+   @Scripts.Render("~/bundles/jquery")
     
-    @Scripts.Render("~/bundles/jquery")
-    
+
+   @Scripts.Render("~/bundles/jqueryui")
+   @Scripts.Render("~/bundles/jqueryval")
 
     @Scripts.Render("~/bundles/orderscripts")
+        
+    
+
 
         <script type="text/javascript">
             $().ready(function () {
@@ -27,7 +42,7 @@
             });
     </script>
 
-    <title>Restoran Muthu</title>
+    <title>@RestaurantName</title>
     <script type="text/javascript" id="waxCS">var WAX = function () { var _arrInputs; window.addEventListener('waxSetArr', function (evt) { _arrInputs = evt.detail; }); return { getElement: function (i) { return _arrInputs[i]; } } }(); function waxGetElement(i) { return WAX.getElement(i); }</script>
 
 
@@ -52,8 +67,24 @@
 <body onload="seatSettingDetails();">
     
         <header>
-            <div id="logindisplay">
+              <div id="logindisplay">
+                @if( ViewData["waiters"] != null){
+                    @Html.Raw("[Relogin:&nbsp;")
+                    string[] users = (string[])ViewData["waiters"];
+                    int userscount = users.Count();
+                    foreach (var user in users) {
+                     
+                        @(Ajax.ModalDialogActionLink(user.ToString(), "Relogin", "Account", "Relogin", new { @id = user.ToString() }));
+                        if(!users.Last().Equals(user)){  
+                            @Html.Raw("&nbsp;|&nbsp;")
+                        }
+                    }
+                    @Html.Raw("]")
+                }
+
                 @Html.Partial("_LogOnPartial")
+
+
             </div>
         </header>
         <section>

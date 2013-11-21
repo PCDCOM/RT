@@ -56,7 +56,9 @@ namespace PrintingSystem
             int startX = 3;
             int startY = 2;
             int Offset = 5;
-            graphics.DrawString("RESTORAN MUTHU", new Font("Verdana", 10, FontStyle.Bold),
+            string RestaurantName = ConfigurationManager.AppSettings["RestaurantName"];
+
+            graphics.DrawString(RestaurantName, new Font("Verdana", 10, FontStyle.Bold),
                                 new SolidBrush(Color.Black), startX, startY + Offset);
             graphics.DrawString(DateTime.Now.ToShortDateString(),
                font,

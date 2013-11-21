@@ -1,4 +1,5 @@
-﻿
+﻿/// <reference path="jquery.validate.unobtrusive.js" />
+
 $(function () {
     
     var connection = $.connection('/Restaurant/echo');
@@ -55,6 +56,7 @@ $(function () {
 
                 $.each(ords, function (index, ord) {
                     if (status == ord.Status) {
+                        var objOrder = obj.find(".ord" + ord.OrderId).remove();
                         var btn = $('<a/>',
                             {
                                 html: ord.OrderId,
@@ -100,11 +102,8 @@ $(function () {
                             {
                                 html: ord.OrderId,
                                 'class': 'btn btn-mini orderButton ord' + ord.OrderId,
-                                Id: "ord" + ord.OrderId,
-                                click: function () {
-                                    var id = this.id.substr(3, this.id.length);
-                                    $.loadOrder(id);
-                                }
+                                Id: "ord" + ord.OrderId
+
                             }
                             );
                         var col4 = $("<td></td>")
